@@ -1,15 +1,27 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { useAuth } from '@hooks/useAuth';
 import { colors } from '@theme/colors';
 
 export default function ParentalZoneScreen() {
   const { logout } = useAuth();
 
+  const handleLogout = () => {
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Logout', onPress: logout },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Parental Zone</Text>
-      <Button title="Logout" onPress={logout} color={colors.primary[900]} />
+      <Button title="Logout" onPress={handleLogout} color={colors.primary[900]} />
     </View>
   );
 }
