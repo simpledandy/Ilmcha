@@ -37,7 +37,7 @@ export default function LoginScreen() {
 
     try {
       await login(email, password);
-      router.replace('../(app)'); // Replace with your main app route
+      router.replace('./'); // Replace with your main app route
     } catch (err) {
       setError('Login xatoligi yuz berdi');
     } finally {
@@ -72,7 +72,7 @@ export default function LoginScreen() {
         {/* Image Section */}
         <View style={styles.imageSection}>
           <Image
-            source={Images.penguin.poses.welcomingPink}
+            source={Images.penguin.poses.wavingGray}
             style={styles.welcomeImage}
             resizeMode="contain"
           />

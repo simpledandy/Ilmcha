@@ -44,7 +44,7 @@ export default function SignupScreen() {
 
     try {
       await signup(name, email, password);
-      router.replace('./'); // Replace with your main app route
+      router.replace('../(app)'); // Replace with your main app route
     } catch (err) {
       setError('Ro\'yxatdan o\'tishda xatolik yuz berdi');
     } finally {
@@ -79,7 +79,7 @@ export default function SignupScreen() {
         {/* Image Section */}
         <View style={styles.imageSection}>
           <Image
-            source={Images.penguin.poses.registering}
+            source={Images.penguin.poses.withLaptopPink}
             style={styles.welcomeImage}
             resizeMode="contain"
           />

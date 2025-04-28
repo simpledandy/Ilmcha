@@ -70,7 +70,7 @@ export default function ForgotPasswordScreen() {
         {/* Image Section */}
         <View style={styles.imageContainer}>
           <Image
-            source={Images.penguin.poses.holdingPencil}
+            source={Images.penguin.poses.holdingPencilPink}
             style={styles.welcomeImage}
             resizeMode="contain"
           />

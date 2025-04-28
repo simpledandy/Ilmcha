@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await storage.clearAuth();
       setUser(null);
       setIsAuthenticated(false);
-      router.replace('/(auth)/login');
+      router.replace('/');
     } catch (error) {
       console.error('Logout error:', error);
     }

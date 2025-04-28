@@ -42,7 +42,7 @@ export default function WelcomeScreen() {
         {/* Image Section */}
         <View style={styles.imageSection}>
           <Image
-            source={Images.penguin.poses.welcomingPink}
+            source={Images.penguin.poses.wavingPink}
             style={styles.welcomeImage}
             resizeMode="contain"
           />
