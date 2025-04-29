@@ -10,12 +10,14 @@ import { router } from 'expo-router';
 import Text from '@components/Text';
 import Button from '@components/Button';
 import Images from '@constants/images';
+import { playAudio } from '@utils/audio'; // Adjust the import path as necessary
 
 const { width, height } = Dimensions.get('window');
 
 export default function WelcomeScreen() {
   const handleLogin = () => {
     router.push('/login');
+    playAudio('sleepReminder');
   };
 
   const handleSignup = () => {
