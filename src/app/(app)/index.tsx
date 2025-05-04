@@ -24,7 +24,7 @@ export default function HomeScreen() {
       {/* Settings Icon */}
       <TouchableOpacity
         style={styles.settingsIcon}
-        onPress={() => router.push('/(app)/parental-zone')}
+        onPress={() => router.push('/parental-zone')}
       >
         <Image
           source={require('@assets/images/lock-icon.png')}

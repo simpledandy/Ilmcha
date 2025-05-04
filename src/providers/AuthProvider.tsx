@@ -47,9 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
         // Redirect based on onboarding status
         if (userData.needsOnboarding) {
-          router.replace('/(auth)/onboarding');
+          router.replace('/(app)/onboarding');
         } else {
-          router.replace('/(app)/home');
+          router.replace('/(app)');
         }
       }
     } catch (error) {
@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await storage.setAuthToken(mockToken);
       setUser(mockUser);
       setIsAuthenticated(true);
-      router.replace('/(app)/home');
+      router.replace('/(app)');
     } catch (error) {
       throw {
         message: error instanceof Error ? error.message : 'An unknown error occurred during login.',
@@ -112,7 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const updatedUser = { ...user, needsOnboarding: false };
         await storage.setUserData(updatedUser);
         setUser(updatedUser);
-        router.replace('/(app)/home');
+        router.replace('/(app)');
       }
     } catch (error) {
       console.error('Failed to complete onboarding:', error);
@@ -124,7 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await storage.clearAuth();
       setUser(null);
       setIsAuthenticated(false);
-      router.replace('/(auth)/welcome');
+      router.replace('/(auth)');
     } catch (error) {
       console.error('Logout error:', error);
     }

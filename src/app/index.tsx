@@ -15,5 +15,5 @@ export default function Index() {
   }
 
   // Redirect based on auth state
-  return <Redirect href={isAuthenticated ? "/(app)/home" : "/(auth)/welcome"} />;
+  return <Redirect href={isAuthenticated ? "/(app)" : "/(auth)"} />;
 }

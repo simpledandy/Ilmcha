@@ -2,11 +2,12 @@ import { useLocalSearchParams } from 'expo-router';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { tales } from '@constants/tales';
 import i18n from 'i18n';
+import { playAudio } from '@/src/utils/audio';
 
 export default function TaleScreen() {
   const { tale } = useLocalSearchParams<{ tale: string }>();
   const story = tales.find((t) => t.id === tale);
-
+  playAudio(story?.audio);
   if (!story) {
     return (
       <View style={styles.center}>

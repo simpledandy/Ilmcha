@@ -1,13 +1,14 @@
-import React from 'react';
-import { View, StyleSheet, Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, Image, FlatList, Dimensions, TouchableOpacity, Animated } from 'react-native';
 import Text from '@components/Text';
 import Button from '@components/Button';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 const { width } = Dimensions.get('window');
+const ITEM_WIDTH = 100;
+const SPACING = 20;
 
 const dummyChildren = [
   { id: '1', avatar: require('@assets/images/boy-avatar.png') },
@@ -17,45 +18,62 @@ const dummyChildren = [
 
 export default function ParentalZoneScreen() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
+
+  const handleScroll = (event) => {
+    const index = Math.round(event.nativeEvent.contentOffset.x / (ITEM_WIDTH + 2 * SPACING));
+    setSelectedIndex(index);
+  };
+
+  const handleReportsPress = () => {
+    const selectedChild = dummyChildren[selectedIndex];
+    router.push({ pathname: '/reports', params: { childId: selectedChild.id } });
+  };
 
   return (
     <View style={styles.container}>
       <Image source={require('@assets/images/backgrounds/auth/white.png')} style={styles.bgTop} />
 
       <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text variant="heading1" weight="bold" style={styles.title}>
           {t('parentalZoneTitle')}
         </Text>
-        <TouchableOpacity onPress={() => {
-            router.push('/settings');
-          }}>
+        <TouchableOpacity onPress={() => router.push('/settings')}>
           <Ionicons name="settings-outline" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.swiperContainer}>
         <FlatList
+          ref={flatListRef}
           horizontal
           data={dummyChildren}
           keyExtractor={(item) => item.id}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View style={styles.avatarWrapper}>
-              <Image source={item.avatar} style={styles.avatar} />
-            </View>
-          )}
+          snapToInterval={ITEM_WIDTH-SPACING}
+          decelerationRate='fast'
+          contentContainerStyle={{ paddingHorizontal: (width - ITEM_WIDTH) / 2, paddingVertical: 0 }}
+          onScroll={handleScroll}
+          renderItem={({ item, index }) => {
+            const isActive = index === selectedIndex;
+            return (
+              <View style={[styles.avatarWrapper, isActive && styles.activeAvatar]}>
+                <Image source={item.avatar} style={styles.avatar} />
+              </View>
+            );
+          }}
         />
       </View>
 
       <View style={styles.buttonsContainer}>
-        <Button>{t('reports')}</Button>
-        <Button>{t('blockFunctions')}</Button>
-        <Button>{t('screenTime')}</Button>
-        <Button>{t('otherDevices')}</Button>
+        <Button variant="secondary" onPress={handleReportsPress}>{t('reports')}</Button>
+        <Button variant="secondary">{t('blockFunctions')}</Button>
+        <Button variant="secondary">{t('screenTime')}</Button>
+        <Button variant="secondary">{t('otherDevices')}</Button>
       </View>
 
       <Image source={require('@assets/images/cloud-left.png')} style={styles.cloudLeft} />
@@ -89,19 +107,33 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   swiperContainer: {
-    height: 100,
-    marginBottom: 20,
-  },
-  avatarWrapper: {
-    marginHorizontal: 10,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: '#fff',
+    height: 140,
+    marginBottom: 40,
+    backgroundColor: '#fef0e1',
+    borderColor: '#1d99ed',
+    borderRadius: 60,
     overflow: 'hidden',
   },
+  avatarWrapper: {
+    width: ITEM_WIDTH,
+    height: ITEM_WIDTH,
+    borderRadius: 60,
+    margin: SPACING,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#fff',
+    backgroundColor: '#fff',
+    transform: [{ scale: 0.8 }],
+  },
+  activeAvatar: {
+    transform: [{ scale: 1.2 }],
+    borderColor: '#1d99ed',
+    overflow: 'visible',
+  },
   avatar: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     resizeMode: 'contain',
   },
   buttonsContainer: {

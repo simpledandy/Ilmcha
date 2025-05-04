@@ -16,6 +16,7 @@ import Button from '@components/Button';
 import Images from '@constants/images';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '@hooks/useAuth'
+import i18n from '@/i18n';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,7 +29,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError('Email va parol kiritilishi shart');
+      setError(i18n.t('loginError'));
       return;
     }
 
@@ -37,9 +38,9 @@ export default function LoginScreen() {
 
     try {
       await login(email, password);
-      router.replace('./');
+      router.replace('/');
     } catch (err) {
-      setError('Login xatoligi yuz berdi');
+      setError(i18n.t('loginError'));
     } finally {
       setLoading(false);
     }
@@ -62,10 +63,7 @@ export default function LoginScreen() {
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text variant="heading2" style={styles.title}>
-            Qaytib kelganingizdan xursandmiz!
-          </Text>
-          <Text variant="body" style={styles.subtitle}>
-            Ilmchaga kirish uchun ma'lumotlaringizni kiriting
+            {i18n.t('loginTitle')}
           </Text>
         </View>
 
@@ -81,7 +79,7 @@ export default function LoginScreen() {
         {/* Form Section */}
         <View style={styles.formSection}>
           <Input
-            placeholder="Email"
+            placeholder={i18n.t('emailPlaceholder')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -89,7 +87,7 @@ export default function LoginScreen() {
             error={error}
           />
           <Input
-            placeholder="Parol"
+            placeholder={i18n.t('passwordPlaceholder')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -97,13 +95,13 @@ export default function LoginScreen() {
           />
           
           <Button
-            variant="primary"
+            variant="secondary"
             size="large"
             style={styles.loginButton}
             onPress={handleLogin}
             loading={loading}
           >
-            Kirish
+            {i18n.t('loginButton')}
           </Button>
 
           <Pressable
@@ -111,7 +109,7 @@ export default function LoginScreen() {
             onPress={() => router.push('/forgot-password')}
           >
             <Text style={styles.forgotPasswordText}>
-              Parolni unutdingizmi?
+              {i18n.t('forgotPassword')}
             </Text>
           </Pressable>
 
@@ -120,7 +118,7 @@ export default function LoginScreen() {
             onPress={handleSignup}
           >
             <Text style={styles.signupLinkText}>
-              Akkauntingiz yo'qmi? Ro'yxatdan o'ting
+              {i18n.t('noAccount')}
             </Text>
           </Pressable>
         </View>
@@ -142,27 +140,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageSection: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    maxHeight: '40%',
   },
   formSection: {
     padding: 20,
   },
   welcomeImage: {
-    width: '80%',
-    height: '80%',
+    width: width * 0.6,
+    height: height * 0.2,
+    marginBottom: 24,
   },
   title: {
-    color: 'white',
+    color: '#1d99ed',
     textAlign: 'center',
     marginBottom: 12,
-  },
-  subtitle: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
-    maxWidth: '80%',
   },
   loginButton: {
     marginTop: 24,
@@ -180,6 +172,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signupLinkText: {
+    width: '80%',
     color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
   },
 }); 

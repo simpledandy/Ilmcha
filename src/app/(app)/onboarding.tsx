@@ -19,7 +19,7 @@ export default function Onboarding() {
     // Validate and save info, maybe to AsyncStorage
     if (name && age) {
       // save logic here
-      router.replace('/(app)/home');
+      router.replace('/(app)');
     }
   };
 

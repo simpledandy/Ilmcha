@@ -19,11 +19,11 @@ export default function SettingsScreen() {
       <Text variant="heading1" weight="bold" style={styles.title}>
         {t('settings')}
       </Text>
-      <Button onPress={toggleLanguage}>
+      <Button onPress={toggleLanguage} style={{ marginBottom: 20 }} variant="outline">
         {i18n.language === 'uz' ? 'Switch to English' : "O'zbekchaga o‘tish"}
       </Button>
       <Button onPress={logout} variant="outline">
-        Logout
+        {i18n.t('logout')}
       </Button>
     </View>
   );

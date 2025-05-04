@@ -11,6 +11,7 @@ export const PenguinImages = {
     wavingPink: require('@assets/images/penguin/waving-pink.png'),
     wavingGray: require('@assets/images/penguin/waving-gray.png'),
     withLaptopPink: require('@assets/images/penguin/with-laptop-questioning-pink.png'),
+    withLaptopGreen: require('@assets/images/penguin/with-laptop-questioning-green.png'),
     holdingPencilPink: require('@assets/images/penguin/holding-pencil-pink.png'),
     holdingPencilGreen: require('@assets/images/penguin/holding-pencil-green.png'),
     flyingOnPlane: require('@assets/images/penguin/flying-open-eye-pink.png'),

@@ -20,6 +20,33 @@ const resources = {
       screenTime: 'Manage Screen Time',
       otherDevices: 'Other Devices',
       settings: 'Settings',
+
+      // New translations from signup.tsx
+      signupTitle: 'Ready for a new adventure?',
+      signupButton: 'Sign Up',
+      haveAccount: 'Already have an account? Log In',
+      namePlaceholder: 'Your Name',
+      emailPlaceholder: 'Email',
+      passwordPlaceholder: 'Password',
+      confirmPasswordPlaceholder: 'Confirm Password',
+      allFieldsRequired: 'All fields are required',
+      passwordsDontMatch: 'Passwords do not match',
+      signupError: 'Error during signup',
+      
+      // New translations from login.tsx
+      loginTitle: 'Welcome back!',
+      loginButton: 'Log In',
+      noAccount: "Don't have an account? Create one",
+      forgotPassword: 'Forgot password?',
+      loginError: 'Login error occurred',
+
+      // New translations from onboarding.tsx
+      newAccount: 'New Account',
+      back: '← Back',
+      childNamePlaceholder: "Your child's name",
+      childAgePlaceholder: "Your child's age",
+      save: 'SAVE',
+      logout: 'Log Out',
     },
   },
   uz: {
@@ -38,6 +65,33 @@ const resources = {
       screenTime: 'Ekran vaqtini boshqarish',
       otherDevices: 'Boshqa qurilmalar',
       settings: 'Sozlamalar',
+
+      // New translations from signup.tsx
+      signupTitle: 'Yangi sarguzashtga tayyormisiz?',
+      signupButton: "Ro'yxatdan o'tish",
+      haveAccount: "Akkauntingiz bormi? Kiring",
+      namePlaceholder: 'Ismingiz',
+      emailPlaceholder: 'Email',
+      passwordPlaceholder: 'Parol',
+      confirmPasswordPlaceholder: 'Parolni tasdiqlang',
+      allFieldsRequired: "Barcha maydonlar to'ldirilishi shart",
+      passwordsDontMatch: 'Parollar mos kelmadi',
+      signupError: "Ro'yxatdan o'tishda xatolik yuz berdi",
+
+      // New translations from login.tsx
+      loginTitle: 'Qaytib kelganingizdan xursandmiz!',
+      loginButton: 'Kirish',
+      noAccount: "Akkauntingiz yo'qmi? Ro'yxatdan o'ting",
+      forgotPassword: 'Parolni unutdingizmi?',
+      loginError: 'Login xatoligi yuz berdi',
+
+      // New translations from onboarding.tsx
+      newAccount: 'Yangi Hisob',
+      back: '← Orqaga',
+      childNamePlaceholder: "Farzandingiz ismi",
+      childAgePlaceholder: "Farzandingiz yoshi",
+      save: 'SAQLASH',
+      logout: 'Chiqish',
     },
   },
 };

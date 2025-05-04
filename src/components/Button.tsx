@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1d99ed',
   },
   secondary: {
-    backgroundColor: 'white',
+    backgroundColor: '#fef0e1',
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: '#1d99ed',
   },
   small: {
     paddingVertical: 8,
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   primaryText: {
-    color: 'white',
+    color: '#fef0e1',
   },
   secondaryText: {
-    color: '#007AFF',
+    color: '#1d99ed',
   },
   outlineText: {
-    color: 'white',
+    color: '#1d99ed',
   },
 });
 
