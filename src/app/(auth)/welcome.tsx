@@ -1,28 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Image,
   StyleSheet,
   Dimensions,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import Text from '@components/Text';
 import Button from '@components/Button';
 import Images from '@constants/images';
-import { playAudio } from '@utils/audio'; // Adjust the import path as necessary
+import i18n from 'i18n';
 
 const { width, height } = Dimensions.get('window');
 
 export default function WelcomeScreen() {
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+
   const handleLogin = () => {
     router.push('/login');
-    playAudio('sleepReminder');
   };
 
   const handleSignup = () => {
     router.push('/signup');
   };
+
+  const changeLanguage = (lng: 'en' | 'uz') => {
+    i18n.changeLanguage(lng).then(() => {
+      setCurrentLanguage(lng);
+    });
+  };
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      setCurrentLanguage(i18n.language);
+    };
+
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, []);
 
   return (
     <ImageBackground
@@ -31,13 +50,29 @@ export default function WelcomeScreen() {
     >
       {/* Content Container */}
       <View style={styles.content}>
+        {/* Language Selector */}
+        <View style={styles.languageSelector}>
+          <Pressable
+            onPress={() => changeLanguage('uz')}
+            style={[styles.languageButton, currentLanguage === 'uz' && styles.activeLanguage]}
+          >
+            <Text style={styles.languageText}>O'zbekcha</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => changeLanguage('en')}
+            style={[styles.languageButton, currentLanguage === 'en' && styles.activeLanguage]}
+          >
+            <Text style={styles.languageText}>English</Text>
+          </Pressable>
+        </View>
+
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text variant="heading1" style={styles.title}>
-            Ilmchaga xush kelibsiz!
+            {i18n.t('welcome')}
           </Text>
           <Text variant="body" style={styles.subtitle}>
-            Farzandingiz uchun eng yaxshi o'quv platforma
+            {i18n.t('welcomeSubtitle')}
           </Text>
         </View>
 
@@ -58,7 +93,7 @@ export default function WelcomeScreen() {
             style={styles.button}
             onPress={handleLogin}
           >
-            Akkauntim bor
+            {i18n.t('login')}
           </Button>
 
           <Button
@@ -67,7 +102,7 @@ export default function WelcomeScreen() {
             style={styles.button}
             onPress={handleSignup}
           >
-            Akkaunt yaratish
+            {i18n.t('signup')}
           </Button>
         </View>
       </View>
@@ -83,11 +118,32 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  languageSelector: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  languageButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginHorizontal: 5,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  activeLanguage: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'white',
+  },
+  languageText: {
+    color: 'white',
+  },
   textSection: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 60, // Add some padding from the top
+    paddingTop: 60,
   },
   imageSection: {
     flex: 2,

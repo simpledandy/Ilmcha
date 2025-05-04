@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primary: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#1d99ed',
   },
   secondary: {
     backgroundColor: 'white',

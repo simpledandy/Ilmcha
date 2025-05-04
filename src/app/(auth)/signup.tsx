@@ -1,3 +1,4 @@
+// src/app/(auth)/signup.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -43,8 +44,13 @@ export default function SignupScreen() {
     setError('');
 
     try {
-      await signup(name, email, password);
-      router.replace('../(app)'); // Replace with your main app route
+      const result = await signup(name, email, password);
+      if (result.success) {
+        // The AuthProvider will handle the navigation to onboarding
+        // based on the needsOnboarding flag
+      } else {
+        setError(result.error || 'Ro\'yxatdan o\'tishda xatolik yuz berdi');
+      }
     } catch (err) {
       setError('Ro\'yxatdan o\'tishda xatolik yuz berdi');
     } finally {
@@ -116,7 +122,7 @@ export default function SignupScreen() {
             secureTextEntry
             error={error}
           />
-          
+
           <Button
             variant="primary"
             size="large"
@@ -140,6 +146,8 @@ export default function SignupScreen() {
     </ImageBackground>
   );
 }
+
+// ... keep your existing styles
 
 const styles = StyleSheet.create({
   container: {

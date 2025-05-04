@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { MapView } from '@components/MapView';
 import { colors } from '@theme/colors';
 import { Ionicons } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
@@ -8,12 +8,29 @@ import { router } from 'expo-router';
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
+      {/* Tales Part */}
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}
+        onPress={() => router.push('../tale')}
+      >
+        <Image
+          source={require('@assets/images/tale-icon.png')}
+          style={{ width: 40, height: 40 }}
+          resizeMode="contain"
+        />
+      </TouchableOpacity> 
+
+
       {/* Settings Icon */}
       <TouchableOpacity
         style={styles.settingsIcon}
         onPress={() => router.push('/(app)/parental-zone')}
       >
-        <Ionicons name="settings-outline" size={28} color={colors.primary[900]} />
+        <Image
+          source={require('@assets/images/lock-icon.png')}
+          style={{ width: 40, height: 40 }}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
 
       {/* Map View */}

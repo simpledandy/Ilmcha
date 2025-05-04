@@ -37,7 +37,7 @@ export default function LoginScreen() {
 
     try {
       await login(email, password);
-      router.replace('./'); // Replace with your main app route
+      router.replace('./');
     } catch (err) {
       setError('Login xatoligi yuz berdi');
     } finally {
