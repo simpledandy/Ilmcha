@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import i18n from '@/i18n';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -23,29 +24,39 @@ export interface IslandData {
 
 export const islands: IslandData[] = [
   {
-    id: 'basics',
-    title: 'Salomlashish',
-    subtitle: 'Greetings & Basics',
-    x: MAP_WIDTH * 0.55,
-    y: MAP_HEIGHT * 0.55,
+    id: 'numbers',
+    title: 'islandNumbersTitle',
+    subtitle: 'islandNumbersSubtitle',
+    x: MAP_WIDTH * 0.6,
+    y: MAP_HEIGHT * 0.50,
     size: 'large',
     status: 'unlocked',
     imageSource: require('@assets/images/backgrounds/islands/numeriya.png'),
   },
   {
-    id: 'numbers',
-    title: 'Raqamlar',
-    subtitle: 'Numbers',
-    x: MAP_WIDTH * 0.6,
-    y: MAP_HEIGHT * 0.50,
-    size: 'medium',
+    id: 'alphabet',
+    title: 'islandAlphabetTitle',
+    subtitle: 'islandAlphabetSubtitle',
+    x: MAP_WIDTH * 0.65,
+    y: MAP_HEIGHT * 0.45,
+    size: 'large',
     status: 'locked',
     imageSource: require('@assets/images/backgrounds/islands/alifbo.png'),
   },
   {
+    id: 'basics',
+    title: 'islandBasicsTitle',
+    subtitle: 'islandBasicsSubtitle',
+    x: MAP_WIDTH * 0.60,
+    y: MAP_HEIGHT * 0.35,
+    size: 'large',
+    status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
+  },
+  {
     id: 'family',
-    title: 'Oila',
-    subtitle: 'Family',
+    title: 'islandFamilyTitle',
+    subtitle: 'islandFamilySubtitle',
     x: MAP_WIDTH * 0.50,
     y: MAP_HEIGHT * 0.45,
     size: 'medium',
@@ -54,8 +65,8 @@ export const islands: IslandData[] = [
   },
   {
     id: 'food',
-    title: 'Taom',
-    subtitle: 'Food & Drinks',
+    title: 'islandFoodTitle',
+    subtitle: 'islandFoodSubtitle',
     x: MAP_WIDTH * 0.65,
     y: MAP_HEIGHT * 0.6,
     size: 'medium',
@@ -64,12 +75,12 @@ export const islands: IslandData[] = [
   },
   {
     id: 'conversation',
-    title: 'Suhbat',
-    subtitle: 'Conversations',
+    title: 'ilandConversationTitle',
+    subtitle: 'islandConversationSubtitle',
     x: MAP_WIDTH * 0.45,
     y: MAP_HEIGHT * 0.6,
     size: 'large',
     status: 'locked',
     imageSource: require('@assets/images/backgrounds/islands/blank.png'),
   },
-]; 
+];

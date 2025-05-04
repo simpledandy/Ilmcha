@@ -1,45 +1,67 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import Text from '@components/Text';
-import { Ionicons } from '@expo/vector-icons';
-import { router, useLocalSearchParams } from 'expo-router';
+import Button from '@components/Button';
+import Images from '@constants/images';
+import { router } from 'expo-router';
+import i18n from 'i18n';
 
 const { width } = Dimensions.get('window');
 
 export default function ReportsScreen() {
-  const { childId } = useLocalSearchParams();
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="blue" />
-        <Text style={{ color: 'blue', marginLeft: 6 }}>Orqaga</Text>
-      </TouchableOpacity>
+      <Button
+        variant="outline"
+        size="small"
+        onPress={() => router.back()}
+        style={styles.backButton}
+      >
+        {i18n.t('back')}
+      </Button>
 
-      <Text style={styles.title}>Hisobotlar</Text>
+      <Text variant="heading1" style={styles.title}>
+        {i18n.t('reports')}
+      </Text>
 
       <View style={styles.profileCircle}>
         <Image source={require('@assets/images/girl-avatar.png')} style={styles.avatar} />
       </View>
 
       <View style={styles.reportBox}>
-        <Text style={styles.label}>HARFLAR:</Text>
-        <Text style={styles.value}>78%</Text>
+        <Text variant="body" style={styles.label}>
+          {i18n.t('letters')}:
+        </Text>
+        <Text variant="body" style={styles.value}>
+          78%
+        </Text>
       </View>
 
       <View style={styles.reportBox}>
-        <Text style={styles.label}>RAQAMLAR:</Text>
-        <Text style={styles.value}>94%</Text>
+        <Text variant="body" style={styles.label}>
+          {i18n.t('numbers')}:
+        </Text>
+        <Text variant="body" style={styles.value}>
+          94%
+        </Text>
       </View>
 
       <View style={styles.reportBox}>
-        <Text style={styles.label}>UMUMIY BALLAR:</Text>
-        <Text style={styles.value}>200 🪙</Text>
+        <Text variant="body" style={styles.label}>
+          {i18n.t('totalPoints')}:
+        </Text>
+        <Text variant="body" style={styles.value}>
+          200 🪙
+        </Text>
       </View>
 
       <View style={styles.reportBox}>
-        <Text style={styles.label}>UMUMIY NATIJA:</Text>
-        <Text style={styles.value}>86%</Text>
+        <Text variant="body" style={styles.label}>
+          {i18n.t('overallResult')}:
+        </Text>
+        <Text variant="body" style={styles.value}>
+          86%
+        </Text>
       </View>
     </View>
   );
@@ -53,15 +75,11 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
     alignSelf: 'flex-start',
     marginLeft: 20,
     marginBottom: 10,
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
     marginBottom: 20,
     color: '#2F2FA2',
   },
@@ -87,12 +105,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   label: {
-    fontSize: 18,
     color: '#2F2FA2',
-    fontWeight: 'bold',
   },
   value: {
-    fontSize: 18,
     fontWeight: 'bold',
   },
 });

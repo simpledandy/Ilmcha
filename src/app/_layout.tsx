@@ -1,16 +1,16 @@
 import 'react-native-gesture-handler';
 import { Slot } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { AuthProvider } from '@providers/AuthProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
+import { View, ActivityIndicator } from 'react-native';
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     // Regular Sono variants
     'Sono-Regular': require('@assets/fonts/Sono-Regular.ttf'),
     'Sono-Light': require('@assets/fonts/Sono-Light.ttf'),
@@ -30,17 +30,25 @@ export default function RootLayout() {
     'Sono_Proportional-ExtraBold': require('@assets/fonts/Sono_Proportional-ExtraBold.ttf'),
   });
 
+  const [navigationReady, setNavigationReady] = useState(false);
   useEffect(() => {
-    if (loaded) {
+    if (fontsLoaded) {
+      setNavigationReady(true);
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) return null;
+  if (!fontsLoaded || !navigationReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
+      <AuthProvider navigationReady={navigationReady}>
         <Slot />
       </AuthProvider>
     </GestureHandlerRootView>

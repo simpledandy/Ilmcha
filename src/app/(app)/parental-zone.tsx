@@ -37,13 +37,13 @@ export default function ParentalZoneScreen() {
 
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
+          <Ionicons name="arrow-back" size={24} color="fef0e1" />
         </TouchableOpacity>
         <Text variant="heading1" weight="bold" style={styles.title}>
           {t('parentalZoneTitle')}
         </Text>
         <TouchableOpacity onPress={() => router.push('/settings')}>
-          <Ionicons name="settings-outline" size={24} color="black" />
+          <Ionicons name="settings-outline" size={24} color="fef0e1" />
         </TouchableOpacity>
       </View>
 
@@ -85,7 +85,7 @@ export default function ParentalZoneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#D6EFFF',
+    backgroundColor: '#1d99ed',
     alignItems: 'center',
     paddingTop: 50,
   },
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: '#000',
+    color: '#fef0e1',
   },
   swiperContainer: {
     height: 140,

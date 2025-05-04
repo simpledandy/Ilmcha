@@ -23,7 +23,7 @@ const MAP_WIDTH = TILE_WIDTH * (TILE_SPREAD * 2 + 1);
 const MAP_HEIGHT = TILE_HEIGHT * (TILE_SPREAD * 2 + 1);
 
 export const MapView = () => {
-  const currentIsland = islands.find((island) => island.id === 'basics'); // You define this
+  const currentIsland = islands.find((island) => island.id === 'alphabet'); // You define this
 
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);

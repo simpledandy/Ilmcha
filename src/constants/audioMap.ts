@@ -19,21 +19,21 @@ export const audioMap = {
     ten: require('@assets/audios/en/ten-en.aac'),
     
     // Activities
-    countingFish: require('@assets/audios/en/counting-fish-en.ogg'),
-    islandNumeriya: require('@assets/audios/en/island-numeriya-en.ogg'),
+    countingFish: require('@assets/audios/en/counting-fish-en.mp3'),
+    islandNumeriya: require('@assets/audios/en/island-numeriya-en.mp3'),
     
     // System
-    congrats: require('@assets/audios/en/congrats-en.ogg'),
-    dailyGift: require('@assets/audios/en/daily-gift-en.ogg'),
-    giftWheel: require('@assets/audios/en/gift-wheel-en.ogg'),
-    letsGo: require('@assets/audios/en/lets-go-en.ogg'),
-    navigation: require('@assets/audios/en/navigation-en.ogg'),
-    profile: require('@assets/audios/en/profile-en.ogg'),
-    sleepReminder: require('@assets/audios/en/sleep-reminder-en.ogg'),
-    store: require('@assets/audios/en/store-en.ogg'),
-    tracker: require('@assets/audios/en/tracker-en.ogg'),
-    welcomeTales: require('@assets/audios/en/welcome-tales-en.ogg'),
-    whereToFly: require('@assets/audios/en/where-to-fly-en.ogg'),
+    congrats: require('@assets/audios/en/congrats-en.mp3'),
+    dailyGift: require('@assets/audios/en/daily-gift-en.mp3'),
+    giftWheel: require('@assets/audios/en/gift-wheel-en.mp3'),
+    letsGo: require('@assets/audios/en/lets-go-en.mp3'),
+    navigation: require('@assets/audios/en/navigation-en.mp3'),
+    profile: require('@assets/audios/en/profile-en.mp3'),
+    sleepReminder: require('@assets/audios/en/sleep-reminder-en.mp3'),
+    store: require('@assets/audios/en/store-en.mp3'),
+    tracker: require('@assets/audios/en/tracker-en.mp3'),
+    welcomeTales: require('@assets/audios/en/welcome-tales-en.mp3'),
+    whereToFly: require('@assets/audios/en/where-to-fly-en.mp3'),
     
     // Fallback
     unavailable: require('@assets/audios/en/unavailable-en.mp3')

@@ -1,11 +1,10 @@
+import { audioMap } from "./audioMap";
+
 export const tales = [
     {
       id: 'snowy-island-hero',
       image: require('@assets/images/hero-tale.png'),
-      audio: {
-        uz: require('@assets/audios/uz/hero-tale-uz.mp3'),
-        en: require('@assets/audios/en/hero-tale-en.mp3'),
-      },
+      audio: 'heroTale',
       title: {
         uz: 'Qorli orol qahramoni',
         en: 'Snowy Island Hero',
@@ -27,10 +26,7 @@ Ilmcha just smiled and said: “Doing good is the happiest game of all!”`,
     {
       id: 'mysterious-friend',
       image: require('@assets/images/friend-tale.png'),
-      audio: {
-        uz: require('@assets/audios/uz/friend-tale-uz.mp3'),
-        en: require('@assets/audios/en/friend-tale-en.mp3'),
-      },
+      audio: 'friendTale',
       title: {
         uz: 'Notanish “do’st”',
         en: 'The Mysterious “Friend”',
@@ -64,10 +60,7 @@ Seeing him upset, his mother asked what was wrong.
     {
       id: 'happy-clouds',
       image: require('@assets/images/clouds-tale.png'),
-      audio: {
-        uz: require('@assets/audios/uz/clouds-tale-uz.mp3'),
-        en: require('@assets/audios/en/clouds-tale-en.mp3'),
-      },
+      audio: 'cloudsTale',
       title: {
         uz: 'Quvnoq bulutlar',
         en: 'Happy Clouds',
@@ -97,10 +90,7 @@ Suddenly, it started to rain — it was the joyful rain of the happy clouds! Chi
     {
       id: 'butterfly-sun-quest',
       image: require('@assets/images/butterfly-tale.png'),
-      audio: {
-        uz: require('@assets/audios/uz/butterfly-tale-uz.mp3'),
-        en: require('@assets/audios/en/butterfly-tale-en.mp3'),
-      },
+      audio: 'butterflyTale',
       title: {
         uz: 'Quyoshni izlagan Kapalak',
         en: 'The Butterfly Who Looked for the Sun',

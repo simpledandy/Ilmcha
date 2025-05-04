@@ -3,10 +3,15 @@ import React, { createContext, useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import { storage } from '@utils/storage';
 
+interface AuthProviderProps {
+  children: React.ReactNode;
+  navigationReady: boolean;
+}
+
 interface User {
   name?: string;
   email: string;
-  needsOnboarding?: boolean; // Add this field
+  needsOnboarding?: boolean;
 }
 
 export interface AuthContextType {
@@ -16,7 +21,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  completeOnboarding: () => Promise<void>; // Add this method
+  completeOnboarding: () => Promise<void>;
 }
 
 interface AuthError {
@@ -26,31 +31,19 @@ interface AuthError {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-
-  // Check for existing session on app load
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   const checkAuth = async () => {
     try {
       const userData = await storage.getUserData();
       const token = await storage.getAuthToken();
-  
+
       if (userData && token) {
         setUser(userData);
         setIsAuthenticated(true);
-  
-        // Redirect based on onboarding status
-        if (userData.needsOnboarding) {
-          router.replace('/(app)/onboarding');
-        } else {
-          router.replace('/(app)');
-        }
       }
     } catch (error) {
       console.error('Auth check failed:', error);
@@ -59,17 +52,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  useEffect(() => {
+    if (navigationReady) {
+      checkAuth();
+    }
+  }, [navigationReady]);
+
+  useEffect(() => {
+    if (navigationReady && isAuthenticated && user) {
+      if (user.needsOnboarding) {
+        router.replace('/(app)/onboarding');
+      } else {
+        router.replace('/(app)');
+      }
+    }
+  }, [isAuthenticated, user, navigationReady]);
+
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const mockUser = { email, needsOnboarding: false }; // Assume already onboarded for login
+      const mockUser = { email, needsOnboarding: false };
       const mockToken = 'mock_token_' + Date.now();
       await storage.setUserData(mockUser);
       await storage.setAuthToken(mockToken);
       setUser(mockUser);
       setIsAuthenticated(true);
-      router.replace('/(app)');
     } catch (error) {
       throw {
         message: error instanceof Error ? error.message : 'An unknown error occurred during login.',
@@ -84,16 +92,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const mockUser = { name, email, needsOnboarding: true }; // New users need onboarding
+      const mockUser = { name, email, needsOnboarding: true };
       const mockToken = 'mock_token_' + Date.now();
       await storage.setUserData(mockUser);
       await storage.setAuthToken(mockToken);
       setUser(mockUser);
       setIsAuthenticated(true);
-  
-      // Re-check auth to trigger the correct redirection
-      await checkAuth();
-  
       return { success: true };
     } catch (err) {
       const error: AuthError = {
@@ -129,10 +133,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Logout error:', error);
     }
   };
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <AuthContext.Provider

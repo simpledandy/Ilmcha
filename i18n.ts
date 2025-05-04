@@ -47,6 +47,25 @@ const resources = {
       childAgePlaceholder: "Your child's age",
       save: 'SAVE',
       logout: 'Log Out',
+
+      letters: 'LETTERS',
+      numbers: 'NUMBERS',
+      totalPoints: 'TOTAL POINTS',
+      overallResult: 'OVERALL RESULT',
+
+      // Island Names and Subtitles
+      islandAlphabetTitle: 'Alifboland',
+      islandAlphabetSubtitle: 'Alphabet & Basic Words',
+      islandBasicsTitle: 'Greetings',
+      islandBasicsSubtitle: 'Greetings & Basics',
+      islandNumbersTitle: 'Numeria',
+      islandNumbersSubtitle: 'Numbers 1-10',
+      islandFamilyTitle: 'Coming Soon',
+      islandFamilySubtitle: 'Coming Soon',
+      islandFoodTitle: 'Coming Soon',
+      islandFoodSubtitle: 'Coming Soon',
+      islandConversationTitle: 'Coming Soon',
+      islandConversationSubtitle: 'Coming Soon',
     },
   },
   uz: {
@@ -92,6 +111,25 @@ const resources = {
       childAgePlaceholder: "Farzandingiz yoshi",
       save: 'SAQLASH',
       logout: 'Chiqish',
+
+      letters: 'HARFLAR',
+      numbers: 'RAQAMLAR',
+      totalPoints: 'UMUMIY BALLAR',
+      overallResult: 'UMUMIY NATIJA',
+
+      // Island Names and Subtitles
+      islandAlphabetTitle: 'Alifboland',
+      islandAlphabetSubtitle: 'Alifbo va Asosiy so\'zlar',
+      islandBasicsTitle: 'Salomlashish',
+      islandBasicsSubtitle: 'Salomlashish va Asosiy so\'zlar',
+      islandNumbersTitle: 'Numeriya',
+      islandNumbersSubtitle: '1-10 gacha raqamlar',
+      islandFamilyTitle: 'Tez Kunda',
+      islandFamilySubtitle: 'Tez Kunda',
+      islandFoodTitle: 'Tez Kunda',
+      islandFoodSubtitle: 'Tez Kunda',
+      islandConversationTitle: 'Tez Kunda',
+      islandConversationSubtitle: 'Tez Kunda',
     },
   },
 };

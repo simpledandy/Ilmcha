@@ -1,66 +1,68 @@
 import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  SafeAreaView,
-} from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import Button from '@components/Button';
+import Input from '@components/Input';
+import Text from '@components/Text';
+import Images from '@constants/images';
+import i18n from 'i18n';
 
 export default function Onboarding() {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const router = useRouter();
 
   const handleSave = () => {
-    // Validate and save info, maybe to AsyncStorage
     if (name && age) {
-      // save logic here
       router.replace('/(app)');
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.backText} onPress={() => router.back()}>← Orqaga</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Text style={styles.backText}>{i18n.t('back')}</Text>
+      </TouchableOpacity>
 
-      <Text style={styles.title}>Yangi Hisob</Text>
+      <Text variant="heading1" style={styles.title}>
+        {i18n.t('newAccount')}
+      </Text>
 
       <View style={styles.avatarWrapper}>
         <Image
-          source={require('@/assets/images/avatar-placeholder.jpg')} // Replace with your avatar image
+          source={require('@assets/images/boy-avatar.png')}
           style={styles.avatar}
+          resizeMode="contain"
         />
       </View>
 
       <View style={styles.form}>
-        <TextInput
-          placeholder="Farzandingiz ismi"
-          placeholderTextColor="#BFE4FF"
-          style={styles.input}
+        <Input
+          placeholder={i18n.t('childNamePlaceholder')}
           value={name}
           onChangeText={setName}
-        />
-        <TextInput
-          placeholder="Farzandingiz yoshi"
-          placeholderTextColor="#BFE4FF"
           style={styles.input}
-          keyboardType="numeric"
+        />
+        <Input
+          placeholder={i18n.t('childAgePlaceholder')}
           value={age}
           onChangeText={setAge}
+          keyboardType="numeric"
+          style={styles.input}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>SAQLASH</Text>
-        </TouchableOpacity>
+        <Button
+          variant="primary"
+          size="large"
+          onPress={handleSave}
+          style={styles.button}
+        >
+          {i18n.t('save')}
+        </Button>
       </View>
 
       <View style={styles.clouds}>
-        <Image source={require('@/assets/images/cloud-left.png')} style={styles.cloud} />
-        <Image source={require('@/assets/images/cloud-right.png')} style={styles.cloud} />
+        <Image source={require('@assets/images/cloud-left.png')} style={styles.cloud} />
+        <Image source={require('@assets/images/cloud-right.png')} style={styles.cloud} />
       </View>
     </SafeAreaView>
   );
@@ -73,18 +75,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 40,
   },
-  backText: {
+  backButton: {
     alignSelf: 'flex-start',
     marginLeft: 20,
-    fontSize: 16,
+    marginBottom: 20,
+  },
+  backText: {
     color: '#007AFF',
+    fontSize: 16,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#3366CC',
     marginVertical: 16,
-    fontFamily: 'ComicSansMS', // use playful font if available
+    color: '#3366CC',
   },
   avatarWrapper: {
     backgroundColor: '#fff',
@@ -109,23 +111,12 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#71C9F8',
     borderRadius: 20,
-    padding: 12,
     width: '100%',
     marginBottom: 16,
-    fontSize: 16,
     color: 'white',
   },
   button: {
-    backgroundColor: '#FFEFE4',
-    borderRadius: 20,
-    paddingVertical: 14,
-    paddingHorizontal: 32,
     marginTop: 10,
-  },
-  buttonText: {
-    color: '#4DB8FF',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   clouds: {
     position: 'absolute',

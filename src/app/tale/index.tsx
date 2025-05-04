@@ -4,10 +4,11 @@ import { router } from 'expo-router';
 import { tales } from '@constants/tales';
 import TaleCard from '@components/TaleCard';
 import i18n from 'i18n';
+import { playAudio } from '@/src/utils/audio';
 
 export default function StoriesScreen() {
   const { t } = i18n;
-
+  playAudio('welcomeTales');
   return (
     <ImageBackground
       source={require('@assets/images/backgrounds/stories_bg.png')}

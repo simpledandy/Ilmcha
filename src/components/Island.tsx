@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, PressableProps } from 'react-native';
 import { Text } from './Text';
 import { colors } from '@theme/colors';
 import { Image } from 'expo-image';
+import i18n from '@/i18n';
 
 interface IslandProps extends PressableProps {
   title: string;
@@ -51,7 +52,7 @@ export const Island: React.FC<IslandProps> = ({
     >
       <Image
         source={imageSource} // Replace with your image path
-        style={{ width: '100%', height: '100%', borderRadius: 20 }}
+        style={{ width: '100%', height: '100%'}}
         contentFit="contain"
       />
       <Text 
@@ -61,7 +62,7 @@ export const Island: React.FC<IslandProps> = ({
           status === 'locked' && styles.lockedText
         ]}
       >
-        {title}
+        {i18n.t(title)}
       </Text>
       {subtitle && (
         <Text 
@@ -71,7 +72,7 @@ export const Island: React.FC<IslandProps> = ({
             status === 'locked' && styles.lockedText
           ]}
         >
-          {subtitle}
+          {i18n.t(subtitle)}
         </Text>
       )}
     </Pressable>
@@ -80,9 +81,6 @@ export const Island: React.FC<IslandProps> = ({
 
 const styles = StyleSheet.create({
   island: {
-    borderRadius: 20,
-    margin: 100,
-    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,

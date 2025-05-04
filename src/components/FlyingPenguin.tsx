@@ -9,8 +9,10 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import Images from '@constants/images';
+import { playAudio } from '../utils/audio';
 
 export const FlyingPenguin = () => {
+  playAudio('whereToFly');
   const translateY = useSharedValue(0);
 
   React.useEffect(() => {
@@ -40,10 +42,11 @@ export const FlyingPenguin = () => {
 
 const styles = StyleSheet.create({
   penguin: {
-    width: 80,
-    height: 80,
+    width: 200,
+    height: 200,
     position: 'absolute',
     bottom: 40,
     right: 40,
+    zIndex: 5, // Ensure penguin stays above map but below buttons
   },
-}); 
+});

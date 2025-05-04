@@ -7,7 +7,7 @@ import { playAudio } from '@/src/utils/audio';
 export default function TaleScreen() {
   const { tale } = useLocalSearchParams<{ tale: string }>();
   const story = tales.find((t) => t.id === tale);
-  playAudio(story?.audio);
+
   if (!story) {
     return (
       <View style={styles.center}>
@@ -20,7 +20,7 @@ export default function TaleScreen() {
 
   const title = i18n.language === 'uz' ? story.title.uz : story.title.en;
   const text = i18n.language === 'uz' ? story.text.uz : story.text.en;
-
+  playAudio(story?.audio);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={story.image} style={styles.image} resizeMode="contain" />

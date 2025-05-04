@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
+import { playAudio } from '@/src/utils/audio';
 
 const lessons = [
   { id: '1', label: '1' },
@@ -12,7 +13,7 @@ const lessons = [
 
 export default function IslandScreen() {
   const { island } = useLocalSearchParams();
-
+  playAudio('islandNumeriya');
   const handlePress = (lessonId: string) => {
     router.push(`/(app)/${island}/${lessonId}`);
   };
