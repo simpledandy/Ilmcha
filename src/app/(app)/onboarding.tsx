@@ -29,7 +29,7 @@ export default function Onboarding() {
 
       <View style={styles.avatarWrapper}>
         <Image
-          source={require('@assets/images/boy-avatar.png')}
+          source={require('@assets/images/empty-avatar.png')}
           style={styles.avatar}
           resizeMode="contain"
         />

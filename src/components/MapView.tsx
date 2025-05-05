@@ -121,8 +121,9 @@ export const MapView = () => {
               subtitle={island.subtitle}
               size={island.size}
               status={island.status}
-              onPress={() =>
-                router.push({ pathname: '/(app)/[island]', params: { island: island.id } })
+              onPress={island.status == 'unlocked' ? () =>
+                router.push({ pathname: '/(app)/[island]', params: { island: island.id } }
+                ) : undefined
               }
               imageSource={island.imageSource}
               style={{
