@@ -95,7 +95,7 @@ export const islands: IslandData[] = [
   },
   {
     id: 'conversation',
-    title: 'ilandConversationTitle',
+    title: 'islandConversationTitle',
     subtitle: 'islandConversationSubtitle',
     x: MAP_WIDTH * 0.45,
     y: MAP_HEIGHT * 0.6,

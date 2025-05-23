@@ -1,15 +1,17 @@
 import 'react-native-gesture-handler';
-import { Slot } from 'expo-router';
+import { Slot, useNavigation } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { AuthProvider } from '@providers/AuthProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View, ActivityIndicator } from 'react-native';
+import { stopAudio } from '@utils/audio';
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const navigation = useNavigation();
   const [fontsLoaded] = useFonts({
     // Regular Sono variants
     'Sono-Regular': require('@assets/fonts/Sono-Regular.ttf'),
@@ -37,6 +39,18 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
+
+  // Add cleanup effect
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('state', () => {
+      stopAudio();
+    });
+
+    return () => {
+      unsubscribe();
+      stopAudio();
+    };
+  }, [navigation]);
 
   if (!fontsLoaded || !navigationReady) {
     return (
