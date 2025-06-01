@@ -1,17 +1,20 @@
 import 'react-native-gesture-handler';
-import { Slot, useNavigation } from 'expo-router';
+import { Slot, useNavigation, usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { AuthProvider } from '@providers/AuthProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { View, ActivityIndicator } from 'react-native';
-import { stopAudio } from '@utils/audio';
+import { View, ActivityIndicator, AppState } from 'react-native';
+import { cleanupAudio, setNavigationState } from '@/src/utils/audio';
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const navigation = useNavigation();
+  const pathname = usePathname();
+  const [previousPath, setPreviousPath] = useState<string | null>(null);
+
   const [fontsLoaded] = useFonts({
     // Regular Sono variants
     'Sono-Regular': require('@assets/fonts/Sono-Regular.ttf'),
@@ -40,17 +43,36 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  // Add cleanup effect
   useEffect(() => {
-    const unsubscribe = navigation.addListener('state', () => {
-      stopAudio();
+    if (previousPath) {
+      // Check if we're navigating back by comparing path segments
+      const currentSegments = pathname.split('/').filter(Boolean);
+      const previousSegments = previousPath.split('/').filter(Boolean);
+      
+      // If current path has fewer segments than previous, we're going back
+      const isBack = currentSegments.length < previousSegments.length;
+      
+      // Special case: if we're going back to root ('/'), it's always a back navigation
+      if (pathname === '/') {
+        setNavigationState(false);
+      } else {
+        setNavigationState(isBack);
+      }
+    }
+    setPreviousPath(pathname);
+  }, [pathname, previousPath]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'background') {
+        setNavigationState(false);
+      }
     });
 
     return () => {
-      unsubscribe();
-      stopAudio();
+      subscription.remove();
     };
-  }, [navigation]);
+  }, []);
 
   if (!fontsLoaded || !navigationReady) {
     return (

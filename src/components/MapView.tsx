@@ -8,22 +8,23 @@ import Images from '@constants/images';
 import { colors } from '@theme/colors';
 import { islands } from '../constants/mapData';
 import { router } from 'expo-router';
-import { Image } from 'expo-image'; // use expo-image for fast loading
-import { clamp } from 'react-native-redash'; // Assuming you have a clamp function in utils
+import { Image } from 'expo-image';
+import { clamp } from 'react-native-redash';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Number of tiles on each side of center
 const TILE_SPREAD = 3; // 3 left, 3 right, 3 up, 3 down
 
+// Calculate tile dimensions to ensure no gaps
 const TILE_WIDTH = SCREEN_WIDTH;
-const TILE_HEIGHT = SCREEN_HEIGHT * 0.5105;
+const TILE_HEIGHT = SCREEN_WIDTH * 0.5105; // Maintain aspect ratio
 
 const MAP_WIDTH = TILE_WIDTH * (TILE_SPREAD * 2 + 1);
 const MAP_HEIGHT = TILE_HEIGHT * (TILE_SPREAD * 2 + 1);
 
 export const MapView = () => {
-  const currentIsland = islands.find((island) => island.id === 'alphabet'); // You define this
+  const currentIsland = islands.find((island) => island.id === 'alphabet');
 
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
@@ -35,13 +36,6 @@ export const MapView = () => {
   );
   const savedTranslateX = useSharedValue(translateX.value);
   const savedTranslateY = useSharedValue(translateY.value);
-
-  // const translateX = useSharedValue(-MAP_WIDTH / 2 + SCREEN_WIDTH / 2);
-  // const translateY = useSharedValue(-MAP_HEIGHT / 2 + SCREEN_HEIGHT / 2);
-  // const savedTranslateX = useSharedValue(translateX.value);
-  // const savedTranslateY = useSharedValue(translateY.value);
-  
-  
 
   const MIN_SCALE = 1;
   const MAX_SCALE = 3;
@@ -55,7 +49,7 @@ export const MapView = () => {
       savedScale.value = scale.value;
     });
   
-    const panGesture = Gesture.Pan()
+  const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       const nextX = savedTranslateX.value + e.translationX;
       const nextY = savedTranslateY.value + e.translationY;
@@ -85,7 +79,6 @@ export const MapView = () => {
   }));
 
   const tiles = [];
-
   for (let row = -TILE_SPREAD; row <= TILE_SPREAD; row++) {
     for (let col = -TILE_SPREAD; col <= TILE_SPREAD; col++) {
       tiles.push({ row, col });
@@ -96,7 +89,6 @@ export const MapView = () => {
     <View style={styles.container}>
       <GestureDetector gesture={composed}>
         <Animated.View style={[styles.mapContainer, animatedStyle]}>
-          
           {/* Tiled background */}
           {tiles.map(({ row, col }) => (
             <Image
@@ -109,7 +101,8 @@ export const MapView = () => {
                 left: (col + TILE_SPREAD) * TILE_WIDTH,
                 top: (row + TILE_SPREAD) * TILE_HEIGHT,
               }}
-              contentFit="contain" // expo-image syntax
+              contentFit="cover"
+              transition={0}
             />
           ))}
 
@@ -121,10 +114,9 @@ export const MapView = () => {
               subtitle={island.subtitle}
               size={island.size}
               status={island.status}
-              onPress={island.status == 'unlocked' ? () =>
-                router.push({ pathname: '/(app)/[island]', params: { island: island.id } }
-                ) : undefined
-              }
+              onPress={island.status === 'unlocked' ? () =>
+                router.push({ pathname: '/(app)/[island]', params: { island: island.id } })
+              : undefined}
               imageSource={island.imageSource}
               style={{
                 position: 'absolute',
@@ -133,7 +125,6 @@ export const MapView = () => {
               }}
             />
           ))}
-
         </Animated.View>
       </GestureDetector>
     </View>

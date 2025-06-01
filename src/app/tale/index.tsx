@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { tales } from '@constants/tales';
 import TaleCard from '@components/TaleCard';
+import Text from '@components/Text';
 import i18n from 'i18n';
 import { playAudio } from '@/src/utils/audio';
 
@@ -16,7 +17,7 @@ export default function StoriesScreen() {
     >
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>{t('welcomeTales')}</Text>
+          <Text variant="heading2">{t('welcomeTales')}</Text>
         </View>
 
         <View style={styles.grid}>

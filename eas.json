@@ -1,9 +1,24 @@
 {
-    "build": {
-      "preview": {
-        "android": {
-          "buildType": "apk"
-        }
+  "cli": {
+    "version": ">= 5.9.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
       }
-    }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
   }
+}

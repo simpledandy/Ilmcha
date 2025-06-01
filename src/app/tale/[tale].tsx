@@ -1,17 +1,28 @@
 import { useLocalSearchParams } from 'expo-router';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { tales } from '@constants/tales';
 import i18n from 'i18n';
-import { playAudio } from '@/src/utils/audio';
+import { playAudio, cleanupAudio } from '@/src/utils/audio';
+import Text from '@components/Text';
+import { useEffect } from 'react';
 
 export default function TaleScreen() {
   const { tale } = useLocalSearchParams<{ tale: string }>();
   const story = tales.find((t) => t.id === tale);
 
+  useEffect(() => {
+    if (story?.audio) {
+      playAudio(story.audio);
+    }
+    return () => {
+      cleanupAudio();
+    };
+  }, [story?.audio]);
+
   if (!story) {
     return (
       <View style={styles.center}>
-        <Text style={styles.error}>
+        <Text variant="body" style={styles.error}>
           {i18n.t('taleNotFound', { defaultValue: 'Tale not found' })}
         </Text>
       </View>
@@ -20,12 +31,12 @@ export default function TaleScreen() {
 
   const title = i18n.language === 'uz' ? story.title.uz : story.title.en;
   const text = i18n.language === 'uz' ? story.text.uz : story.text.en;
-  playAudio(story?.audio);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={story.image} style={styles.image} resizeMode="contain" />
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.text}>{text}</Text>
+      <Text variant="heading1" proportional style={styles.title}>{title}</Text>
+      <Text variant="body" style={styles.text}>{text}</Text>
     </ScrollView>
   );
 }
@@ -51,8 +62,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
     color: '#3b3b3b',
     marginBottom: 10,
     textAlign: 'center',

@@ -1,9 +1,27 @@
-import { playAudio } from '@/src/utils/audio';
-import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { playAudio, cleanupAudio } from '@/src/utils/audio';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import Text from '@components/Text';
+import i18n from 'i18n';
 
 export default function CountingLesson() {
-  playAudio('countingFish');
+  const [isChestOpen, setIsChestOpen] = useState(false);
+  const { t } = i18n;
+
+  useEffect(() => {
+    playAudio('countingFish');
+    
+    // Cleanup audio when component unmounts
+    return () => {
+      cleanupAudio();
+    };
+  }, []);
+
+  const handleChestPress = () => {
+    setIsChestOpen(true);
+    playAudio('five');
+  };
+
   return (
     <ImageBackground
       source={require('@assets/images/counting_bg.png')}
@@ -11,20 +29,19 @@ export default function CountingLesson() {
     >
       {/* Stars and Buttons */}
       <View style={styles.topBar}>
-        <Text style={styles.lessonLabel}>5-DARS</Text>
+        <Text variant="heading3" style={styles.lessonLabel}>{t('lesson5')}</Text>
         <View style={styles.stars}>
           <Text style={styles.star}>⭐</Text>
           <Text style={styles.star}>⭐</Text>
           <Text style={styles.star}>⭐</Text>
         </View>
         <TouchableOpacity style={styles.nextButton}>
-          <Text style={styles.nextButtonText}>KEYINGISI</Text>
+          <Text variant="button" style={styles.nextButtonText}>{t('next')}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Penguin and Instruction */}
       <View style={styles.centerArea}>
-        {}
         <Image
           source={require('@assets/images/penguin/waving-explorer.png')}
           style={styles.penguin}
@@ -34,11 +51,27 @@ export default function CountingLesson() {
 
       {/* Bottom chest */}
       <View style={styles.bottomArea}>
-        <Image
-          source={require('@assets/images/chest.png')}
-          style={styles.chest}
-          resizeMode="contain"
-        />
+        <TouchableOpacity onPress={handleChestPress} disabled={isChestOpen}>
+          <Image
+            source={isChestOpen ? require('@assets/images/chest-open.png') : require('@assets/images/chest.png')}
+            style={styles.chest}
+            resizeMode="contain"
+          />
+          {isChestOpen && (
+            <View style={styles.numberContainer}>
+              <Image
+                source={require('@assets/images/light.png')}
+                style={styles.lightEffect}
+                resizeMode="contain"
+              />
+              <Image
+                source={require('@assets/images/number-five.png')}
+                style={styles.number}
+                resizeMode="contain"
+              />
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -58,12 +91,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   lessonLabel: {
-    fontSize: 18,
     backgroundColor: '#fff0b3',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
-    fontWeight: 'bold',
   },
   stars: {
     flexDirection: 'row',
@@ -79,17 +110,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   nextButtonText: {
-    fontWeight: 'bold',
+    color: '#000',
   },
   centerArea: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  instruction: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
   },
   penguin: {
     width: 150,
@@ -102,5 +128,24 @@ const styles = StyleSheet.create({
   chest: {
     width: 80,
     height: 80,
+    left: '30%',
+  },
+  numberContainer: {
+    position: 'absolute',
+    top: -35,
+    left: '35%',
+    transform: [{ translateX: -20 }],
+    alignItems: 'center',
+  },
+  lightEffect: {
+    position: 'absolute',
+    top: -30,
+    width: 200,
+    height: 200,
+    opacity: 0.8,
+  },
+  number: {
+    width: 50,
+    height: 50,
   },
 });

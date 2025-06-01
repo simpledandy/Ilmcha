@@ -1,13 +1,14 @@
 // components/TaleCard.js
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { playAudio } from '../utils/audio';
+import Text from './Text';
 
 export default function TaleCard({ imageSource, title, onPress }) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={imageSource} style={styles.image} resizeMode="cover" />
-      <Text style={styles.title}>{title}</Text>
+      <Text variant="caption" style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
 }
@@ -30,8 +31,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 6,
     borderRadius: 6,
-    fontWeight: 'bold',
-    fontSize: 12,
     textAlign: 'center',
   },
 });

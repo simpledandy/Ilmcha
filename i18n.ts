@@ -78,6 +78,13 @@ const resources = {
       islandFoodSubtitle: 'Coming Soon',
       islandConversationTitle: 'Conversation',
       islandConversationSubtitle: 'Coming Soon',
+
+      lesson5: 'LESSON 5',
+      next: 'NEXT',
+
+      numbersQuiz: 'Numbers Quiz',
+      knowledgeBox: 'Knowledge Box',
+      letsCountTogether: "Let's count together!",
     },
   },
   uz: {
@@ -154,6 +161,13 @@ const resources = {
       islandFoodSubtitle: 'Tez Kunda',
       islandConversationTitle: 'Suhbatlashuv',
       islandConversationSubtitle: 'Tez Kunda',
+
+      lesson5: '5-DARS',
+      next: 'KEYINGISI',
+
+      numbersQuiz: 'Raqamlar testi',
+      knowledgeBox: 'Bilimlar sandigʻi',
+      letsCountTogether: 'Keling birga sanaymiz!',
     },
   },
 };
