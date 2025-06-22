@@ -29,14 +29,12 @@ export const MapView = () => {
 
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
-  const translateX = useSharedValue(
-    SCREEN_WIDTH / 2 - (currentIsland?.x ?? MAP_WIDTH / 2)
-  );
-  const translateY = useSharedValue(
-    SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2)
-  );
-  const savedTranslateX = useSharedValue(translateX.value);
-  const savedTranslateY = useSharedValue(translateY.value);
+  const initialTranslateX = SCREEN_WIDTH / 2 - (currentIsland?.x ?? MAP_WIDTH / 2);
+  const initialTranslateY = SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2);
+  const translateX = useSharedValue(initialTranslateX);
+  const translateY = useSharedValue(initialTranslateY);
+  const savedTranslateX = useSharedValue(initialTranslateX);
+  const savedTranslateY = useSharedValue(initialTranslateY);
 
   const MIN_SCALE = 1;
   const MAX_SCALE = 3;

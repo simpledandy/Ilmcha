@@ -16,6 +16,7 @@ import { TracingExercise } from '../../constants/lessonTypes';
 import { playAudio } from '../../utils/audio';
 import Text from '../Text';
 import i18n from '@/i18n';
+import { TracingLesson } from '../TracingLesson';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -114,6 +115,16 @@ export const TracingInteraction: React.FC<TracingInteractionProps> = ({
         )}
       </View>
 
+      {/* Tracing Canvas */}
+      {!isCompleted && (
+        <View style={{ width: '100%', flex: 1, marginVertical: 20 }}>
+          <TracingLesson
+            pathData={exercise.pathData}
+            onComplete={handleTracingComplete}
+          />
+        </View>
+      )}
+
       {/* Instructions */}
       <View style={styles.instructionsContainer}>
         <Text variant="heading3" style={styles.instructionText}>
@@ -132,25 +143,14 @@ export const TracingInteraction: React.FC<TracingInteractionProps> = ({
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
         {!isCompleted ? (
-          <>
-            <TouchableOpacity 
-              style={styles.traceButton}
-              onPress={() => handleTracingComplete(0.95)} // Simulate tracing completion
-            >
-              <Text variant="button" style={styles.traceButtonText}>
-                {t('trace')} {exercise.target}
-              </Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.hintButton}
-              onPress={handleShowHint}
-            >
-              <Text variant="button" style={styles.hintButtonText}>
-                💡 {t('hint')}
-              </Text>
-            </TouchableOpacity>
-          </>
+          <TouchableOpacity 
+            style={styles.hintButton}
+            onPress={handleShowHint}
+          >
+            <Text variant="button" style={styles.hintButtonText}>
+              💡 {t('hint')}
+            </Text>
+          </TouchableOpacity>
         ) : (
           <TouchableOpacity 
             style={styles.retryButton}

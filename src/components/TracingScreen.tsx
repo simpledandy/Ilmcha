@@ -24,15 +24,19 @@ export function TracingScreen({ category, language, onClose }: TracingScreenProp
     opacity.value = withTiming(1, { duration: 400 });
   }, [currentIndex, opacity]);
 
-  const handleComplete = useCallback(() => {
+  const handleComplete = useCallback((accuracy: number) => {
     opacity.value = withTiming(0, { duration: 400 }, (isFinished) => {
       if (isFinished) {
         if (currentIndex < tracingItems.length - 1) {
           runOnJS(setCurrentIndex)(i => i + 1);
         } else {
-          runOnJS(Alert.alert)(t('tracingComplete'), t('greatJob'), [
-            { text: t('next'), onPress: onClose },
-          ]);
+          runOnJS(Alert.alert)(
+            t('tracingComplete'),
+            `${t('greatJob')}\n${t('accuracy')}: ${(accuracy * 100).toFixed(0)}%`,
+            [
+              { text: t('next'), onPress: onClose },
+            ]
+          );
         }
       }
     });
