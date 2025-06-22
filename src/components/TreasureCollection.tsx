@@ -11,7 +11,6 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import { Treasure, Achievement } from '../constants/rewards';
@@ -36,7 +35,7 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
   const [progress, setProgress] = useState<any>({});
   const [activeTab, setActiveTab] = useState<'treasures' | 'achievements' | 'stats'>('treasures');
 
-  // Animation values
+  // Animate only the modal
   const scale = useSharedValue(0);
   const opacity = useSharedValue(0);
 
@@ -49,16 +48,13 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
       scale.value = 0;
       opacity.value = 0;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
 
   const loadData = async () => {
-    const collectedTreasures = rewardManager.getCollectedTreasures();
-    const userAchievements = rewardManager.getAchievements();
-    const userProgress = rewardManager.getProgress();
-    
-    setTreasures(collectedTreasures);
-    setAchievements(userAchievements);
-    setProgress(userProgress);
+    setTreasures(rewardManager.getCollectedTreasures() || []);
+    setAchievements(rewardManager.getAchievements() || []);
+    setProgress(rewardManager.getProgress() || {});
   };
 
   const modalAnimatedStyle = useAnimatedStyle(() => ({
@@ -77,51 +73,24 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
   };
 
   const getRarityCount = (rarity: string) => {
-    return treasures.filter(t => t.rarity === rarity).length;
+    return (treasures || []).filter(t => t.rarity === rarity).length;
   };
 
-  const renderTreasureItem = (treasure: Treasure, index: number) => {
-    const itemScale = useSharedValue(0);
-    
-    useEffect(() => {
-      if (isVisible) {
-        itemScale.value = withDelay(index * 100, withSpring(1, { damping: 10, stiffness: 200 }));
-      }
-    }, [isVisible]);
+  const renderTreasureItem = (treasure: Treasure) => (
+    <View key={treasure.id} style={styles.treasureItem}>
+      <View style={[styles.rarityIndicator, { backgroundColor: getRarityColor(treasure.rarity) }]} />
+      <Image source={treasure.imageSource} style={styles.treasureImage} resizeMode="contain" />
+      <View style={styles.treasureInfo}>
+        <Text variant="body" style={styles.treasureName}>{treasure.name}</Text>
+        <Text variant="caption" style={styles.treasureValue}>+{treasure.value} pts</Text>
+      </View>
+    </View>
+  );
 
-    const itemAnimatedStyle = useAnimatedStyle(() => ({
-      transform: [{ scale: itemScale.value }],
-    }));
-
-    return (
-      <Animated.View key={treasure.id} style={[styles.treasureItem, itemAnimatedStyle]}>
-        <View style={[styles.rarityIndicator, { backgroundColor: getRarityColor(treasure.rarity) }]} />
-        <Image source={treasure.imageSource} style={styles.treasureImage} resizeMode="contain" />
-        <View style={styles.treasureInfo}>
-          <Text variant="body" style={styles.treasureName}>{treasure.name}</Text>
-          <Text variant="caption" style={styles.treasureValue}>+{treasure.value} pts</Text>
-        </View>
-      </Animated.View>
-    );
-  };
-
-  const renderAchievementItem = (achievement: Achievement, index: number) => {
-    const itemScale = useSharedValue(0);
-    
-    useEffect(() => {
-      if (isVisible) {
-        itemScale.value = withDelay(index * 100, withSpring(1, { damping: 10, stiffness: 200 }));
-      }
-    }, [isVisible]);
-
-    const itemAnimatedStyle = useAnimatedStyle(() => ({
-      transform: [{ scale: itemScale.value }],
-    }));
-
+  const renderAchievementItem = (achievement: Achievement) => {
     const progressPercentage = (achievement.progress / achievement.maxProgress) * 100;
-
     return (
-      <Animated.View key={achievement.id} style={[styles.achievementItem, itemAnimatedStyle]}>
+      <View key={achievement.id} style={styles.achievementItem}>
         <View style={styles.achievementIcon}>
           <Text style={styles.achievementEmoji}>{achievement.icon}</Text>
         </View>
@@ -142,7 +111,7 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
             <Text style={styles.unlockedText}>✓</Text>
           </View>
         )}
-      </Animated.View>
+      </View>
     );
   };
 
@@ -152,22 +121,18 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
         <Text variant="heading2" style={styles.statValue}>{progress.totalTreasures || 0}</Text>
         <Text variant="body" style={styles.statLabel}>{t('totalTreasures')}</Text>
       </View>
-      
       <View style={styles.statCard}>
         <Text variant="heading2" style={styles.statValue}>{progress.totalPoints || 0}</Text>
         <Text variant="body" style={styles.statLabel}>{t('totalPoints')}</Text>
       </View>
-      
       <View style={styles.statCard}>
         <Text variant="heading2" style={styles.statValue}>{progress.bestStreak || 0}</Text>
         <Text variant="body" style={styles.statLabel}>{t('bestStreak')}</Text>
       </View>
-      
       <View style={styles.statCard}>
         <Text variant="heading2" style={styles.statValue}>{progress.achievementsUnlocked || 0}</Text>
         <Text variant="body" style={styles.statLabel}>{t('achievements')}</Text>
       </View>
-
       <View style={styles.rarityStats}>
         <Text variant="heading3" style={styles.rarityTitle}>{t('treasureBreakdown')}</Text>
         <View style={styles.rarityRow}>
@@ -191,7 +156,7 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
   );
 
   return (
-    <View style={[styles.container, { display: isVisible ? 'flex' : 'none' }]}>
+    <View style={[styles.container, { display: isVisible ? 'flex' : 'none' }]}> 
       <View style={styles.overlay} />
       <Animated.View style={[styles.modal, modalAnimatedStyle]}>
         {/* Header */}
@@ -201,7 +166,6 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
             <Text style={styles.closeText}>✕</Text>
           </TouchableOpacity>
         </View>
-
         {/* Tabs */}
         <View style={styles.tabs}>
           <TouchableOpacity
@@ -229,12 +193,11 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
             </Text>
           </TouchableOpacity>
         </View>
-
         {/* Content */}
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {activeTab === 'treasures' && (
             <View style={styles.treasuresGrid}>
-              {treasures.length > 0 ? (
+              {(treasures || []).length > 0 ? (
                 treasures.map(renderTreasureItem)
               ) : (
                 <View style={styles.emptyState}>
@@ -244,10 +207,9 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
               )}
             </View>
           )}
-
           {activeTab === 'achievements' && (
             <View style={styles.achievementsList}>
-              {achievements.length > 0 ? (
+              {(achievements || []).length > 0 ? (
                 achievements.map(renderAchievementItem)
               ) : (
                 <View style={styles.emptyState}>
@@ -257,7 +219,6 @@ export const TreasureCollection: React.FC<TreasureCollectionProps> = ({
               )}
             </View>
           )}
-
           {activeTab === 'stats' && renderStats()}
         </ScrollView>
       </Animated.View>

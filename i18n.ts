@@ -126,6 +126,17 @@ const resources = {
       noAchievementsYet: 'No achievements yet!',
       keepLearningToUnlock: 'Keep learning to unlock achievements',
       days: 'days',
+
+      // Lesson Interaction Translations
+      trace: 'Trace',
+      hint: 'Hint',
+      submit: 'Submit',
+      counted: 'Counted',
+      attempts: 'Attempts',
+      tooMany: 'Too many!',
+      notEnough: 'Not enough!',
+      youCountedCorrectly: 'You counted correctly',
+      items: 'items',
     },
   },
   uz: {
@@ -250,6 +261,17 @@ const resources = {
       noAchievementsYet: 'Hali yutuqlar yo\'q!',
       keepLearningToUnlock: 'Yutuqlarni ochish uchun o\'qishni davom eting',
       days: 'kun',
+
+      // Lesson Interaction Translations
+      trace: 'Chizish',
+      hint: 'Maslahat',
+      submit: 'Yuborish',
+      counted: 'Sanalgan',
+      attempts: 'Urinishlar',
+      tooMany: 'Juda ko\'p!',
+      notEnough: 'Yetarli emas!',
+      youCountedCorrectly: 'Siz to\'g\'ri sanadingiz',
+      items: 'elementlar',
     },
   },
 };
