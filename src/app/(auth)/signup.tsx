@@ -10,13 +10,13 @@ import {
   Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
-import Text from '@components/Text';
-import Input from '@components/Input';
-import Button from '@components/Button';
-import Images from '@constants/images';
+import Text from '../../components/Text';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import Images from '../../constants/images';
 import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '@hooks/useAuth';
-import i18n from '@/i18n';
+import { useAuth } from '../../hooks/useAuth';
+import i18n from '../../../i18n';
 
 const { width, height } = Dimensions.get('window');
 

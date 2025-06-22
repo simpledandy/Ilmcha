@@ -1,21 +1,26 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from 'react-native';
 import Animated, {
+  useSharedValue,
   useAnimatedStyle,
   withRepeat,
   withSequence,
   withTiming,
-  useSharedValue,
   withDelay,
 } from 'react-native-reanimated';
-import Images from '@constants/images';
+import Images from '../constants/images';
 import { playAudio } from '../utils/audio';
 
 export const FlyingPenguin = () => {
   playAudio('whereToFly');
   const translateY = useSharedValue(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     translateY.value = withRepeat(
       withSequence(
         withTiming(-20, { duration: 1000 }),
@@ -25,7 +30,7 @@ export const FlyingPenguin = () => {
       -1,
       true
     );
-  }, []);
+  }, [translateY]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],

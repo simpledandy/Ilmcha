@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { playAudio, cleanupAudio } from '@/src/utils/audio';
 import Text from '@components/Text';
 import i18n from 'i18n';
-
-const lessons = [
-  { id: '1', label: '1' },
-  { id: '2', label: '2' },
-  { id: '3', label: '3' },
-  { id: 'quiz', label: 'numbersQuiz' },
-  { id: 'box', label: 'knowledgeBox' },
-];
+import { TracingScreen } from '@/src/components/TracingScreen';
 
 export default function IslandScreen() {
   const { island } = useLocalSearchParams();
   const { t } = i18n;
+  const [isTracing, setIsTracing] = useState(false);
+  const [tracingType, setTracingType] = useState<'numbers' | 'letters'>('numbers');
 
   useEffect(() => {
     playAudio('islandNumeriya');
@@ -26,6 +21,11 @@ export default function IslandScreen() {
 
   const handlePress = (lessonId: string) => {
     router.push(`/(app)/${island}/${lessonId}`);
+  };
+
+  const handleTracingPress = (type: 'numbers' | 'letters') => {
+    setTracingType(type);
+    setIsTracing(true);
   };
 
   return (
@@ -58,6 +58,32 @@ export default function IslandScreen() {
       <TouchableOpacity style={[styles.lessonButton, { top: '70%', left: '60%' }]} onPress={() => handlePress('box')}>
         <Text variant="body" style={styles.smallText}>{t('knowledgeBox')}</Text>
       </TouchableOpacity>
+
+      {/* Number Tracing Activity */}
+      <TouchableOpacity 
+        style={[styles.tracingButton, { top: '25%', left: '15%' }]} 
+        onPress={() => handleTracingPress('numbers')}
+      >
+        <Text style={styles.tracingIcon}>✏️</Text>
+        <Text variant="body" style={styles.tracingText}>{t('numberTracing')}</Text>
+      </TouchableOpacity>
+
+      {/* Letter Tracing Activity */}
+      <TouchableOpacity 
+        style={[styles.tracingButton, { top: '60%', left: '25%' }]} 
+        onPress={() => handleTracingPress('letters')}
+      >
+        <Text style={styles.tracingIcon}>📝</Text>
+        <Text variant="body" style={styles.tracingText}>{t('letterTracing')}</Text>
+      </TouchableOpacity>
+      
+      <Modal visible={isTracing} animationType="slide">
+        <TracingScreen 
+          category={tracingType === 'numbers' ? 'number' : 'letter'} 
+          language="en" 
+          onClose={() => setIsTracing(false)} 
+        />
+      </Modal>
     </ImageBackground>
   );
 }
@@ -80,5 +106,28 @@ const styles = StyleSheet.create({
   },
   smallText: {
     color: '#333',
+  },
+  tracingButton: {
+    position: 'absolute',
+    padding: 12,
+    backgroundColor: 'rgba(76, 175, 80, 0.9)',
+    borderRadius: 15,
+    alignItems: 'center',
+    minWidth: 80,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  tracingIcon: {
+    fontSize: 20,
+    marginBottom: 5,
+  },
+  tracingText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

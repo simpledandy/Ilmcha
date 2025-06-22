@@ -9,13 +9,15 @@ import {
   TextStyle,
 } from 'react-native';
 import Text from './Text';
+import { colors } from '@theme/colors';
+import { textStyles } from '@theme/typography';
 
 interface ButtonProps extends PressableProps {
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   children: string;
 }
 
@@ -29,27 +31,44 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props 
 }) => {
+  // Theme-based color selection
+  const themeColors = colors.button[variant] || colors.button.primary;
+  const backgroundColor = disabled
+    ? themeColors.disabled
+    : themeColors.background;
+  const textColor = themeColors.text;
+  const pressedColor = themeColors.pressed;
+
   return (
     <Pressable 
       style={({ pressed }) => [
         styles.base,
         styles[variant],
         styles[size],
-        pressed && styles.pressed,
-        disabled && styles.disabled,
+        {
+          backgroundColor:
+            variant === 'outline'
+              ? colors.common.transparent
+              : pressed && !disabled
+              ? pressedColor
+              : backgroundColor,
+          borderColor: variant === 'outline' ? colors.button.primary.background : undefined,
+          borderWidth: variant === 'outline' ? 1 : undefined,
+          opacity: disabled ? 0.5 : 1,
+        },
         style,
       ]}
       disabled={disabled || loading}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? 'white' : '#007AFF'} />
+        <ActivityIndicator color={textColor} />
       ) : (
         <Text 
           style={[
-            styles.text,
-            styles[`${variant}Text`],
-            textStyle as StyleProp<TextStyle>
+            textStyles.button,
+            { color: variant === 'outline' ? colors.button.primary.background : textColor },
+            textStyle as StyleProp<TextStyle>,
           ]}
         >
           {children}
@@ -65,17 +84,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  primary: {
-    backgroundColor: '#1d99ed',
-  },
-  secondary: {
-    backgroundColor: '#fef0e1',
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#1d99ed',
-  },
+  primary: {},
+  secondary: {},
+  outline: {},
   small: {
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -87,24 +98,6 @@ const styles = StyleSheet.create({
   large: {
     paddingVertical: 16,
     paddingHorizontal: 32,
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  text: {
-    fontSize: 16,
-  },
-  primaryText: {
-    color: '#fef0e1',
-  },
-  secondaryText: {
-    color: '#1d99ed',
-  },
-  outlineText: {
-    color: '#1d99ed',
   },
 });
 

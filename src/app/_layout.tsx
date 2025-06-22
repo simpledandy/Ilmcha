@@ -2,13 +2,24 @@ import 'react-native-gesture-handler';
 import { Slot, useNavigation, usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
-import { AuthProvider } from '@providers/AuthProvider';
+import { AuthProvider } from '../providers/AuthProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View, ActivityIndicator, AppState } from 'react-native';
-import { cleanupAudio, setNavigationState } from '@/src/utils/audio';
+import { cleanupAudio, setNavigationState } from '../utils/audio';
+import { ErrorBoundary } from '../components/ErrorBoundary';
+import { initializeErrorReporting } from '../utils/errorReporting';
+
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
+
+// Initialize error reporting
+initializeErrorReporting({
+  enableReporting: !__DEV__, // Only enable in production
+  // Add your error reporting service configuration here
+  // serviceUrl: 'your-sentry-dsn',
+  // apiKey: 'your-api-key',
+});
 
 export default function RootLayout() {
   const navigation = useNavigation();
@@ -83,10 +94,12 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider navigationReady={navigationReady}>
-        <Slot />
-      </AuthProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AuthProvider navigationReady={navigationReady}>
+          <Slot />
+        </AuthProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

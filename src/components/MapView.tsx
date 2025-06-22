@@ -4,12 +4,13 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Island } from './Island';
-import Images from '@constants/images';
-import { colors } from '@theme/colors';
+import Images from '../constants/images';
+import { colors } from '../theme/colors';
 import { islands } from '../constants/mapData';
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import { clamp } from 'react-native-redash';
+import Text from './Text';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Text from '@components/Text';
-import Button from '@components/Button';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import Text from '../../components/Text';
+import Button from '../../components/Button';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function SettingsScreen() {
   const { logout } = useAuth();
@@ -20,7 +21,7 @@ export default function SettingsScreen() {
         {t('settings')}
       </Text>
       <Button onPress={toggleLanguage} style={{ marginBottom: 20 }} variant="outline">
-        {i18n.language === 'uz' ? 'Switch to English' : "O'zbekchaga o‘tish"}
+        {i18n.language === 'uz' ? 'Switch to English' : "O'zbekchaga o'tish"}
       </Button>
       <Button onPress={logout} variant="outline">
         {i18n.t('logout')}

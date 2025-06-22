@@ -1,7 +1,7 @@
 // src/providers/AuthProvider.tsx
 import React, { createContext, useState, useEffect } from 'react';
 import { router } from 'expo-router';
-import { storage } from '@utils/storage';
+import { storage } from '../utils/storage';
 
 interface AuthProviderProps {
   children: React.ReactNode;

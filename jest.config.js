@@ -1,0 +1,48 @@
+module.exports = {
+  preset: 'jest-expo',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
+  ],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@screens/(.*)$': '<rootDir>/src/app/screens/$1',
+    '^@assets/(.*)$': '<rootDir>/assets/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@hooks/(.*)$': '<rootDir>/src/hooks/$1',
+    '^@constants/(.*)$': '<rootDir>/src/constants/$1',
+    '^@theme/(.*)$': '<rootDir>/src/theme/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@providers/(.*)$': '<rootDir>/src/providers/$1',
+  },
+  testEnvironment: 'jsdom',
+  testMatch: [
+    '**/__tests__/**/*.(ts|tsx|js)',
+    '**/*.(test|spec).(ts|tsx|js)',
+  ],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/*.stories.{ts,tsx}',
+    '!src/**/index.{ts,tsx}',
+    '!src/app/_layout.tsx',
+    '!src/app/(app)/_layout.tsx',
+    '!src/app/(auth)/_layout.tsx',
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70,
+    },
+  },
+  coverageReporters: ['text', 'lcov', 'html'],
+  testTimeout: 10000,
+  verbose: true,
+  clearMocks: true,
+  restoreMocks: true,
+  resetMocks: true,
+}; 

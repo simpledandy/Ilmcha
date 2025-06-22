@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, PressableProps } from 'react-native';
 import { Text } from './Text';
-import { colors } from '@theme/colors';
+import { colors } from '../theme/colors';
 import { Image } from 'expo-image';
-import i18n from '@/i18n';
+import i18n from '../../i18n';
 
 interface IslandProps extends PressableProps {
   title: string;
