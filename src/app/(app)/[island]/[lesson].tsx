@@ -2,10 +2,14 @@ import { playAudio, cleanupAudio } from '@/src/utils/audio';
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import Text from '@components/Text';
+import { TreasureReward } from '@components/TreasureReward';
+import { rewardManager } from '@utils/rewardManager';
 import i18n from 'i18n';
 
 export default function CountingLesson() {
   const [isChestOpen, setIsChestOpen] = useState(false);
+  const [showReward, setShowReward] = useState(false);
+  const [rewardData, setRewardData] = useState<any>(null);
   const { t } = i18n;
 
   useEffect(() => {
@@ -17,9 +21,34 @@ export default function CountingLesson() {
     };
   }, []);
 
-  const handleChestPress = () => {
+  const handleChestPress = async () => {
+    if (isChestOpen) return;
+    
     setIsChestOpen(true);
     playAudio('five');
+    
+    // Award treasure after a short delay
+    setTimeout(async () => {
+      try {
+        const result = await rewardManager.awardTreasure(
+          'counting',
+          0.9, // Performance score (90%)
+          false, // Not perfect
+          true, // First time
+          1.0 // Speed
+        );
+        
+        setRewardData(result);
+        setShowReward(true);
+      } catch (error) {
+        console.error('Error awarding treasure:', error);
+      }
+    }, 1000);
+  };
+
+  const handleRewardClose = () => {
+    setShowReward(false);
+    setRewardData(null);
   };
 
   return (
@@ -73,6 +102,17 @@ export default function CountingLesson() {
           )}
         </TouchableOpacity>
       </View>
+
+      {/* Treasure Reward Modal */}
+      {rewardData && (
+        <TreasureReward
+          treasure={rewardData.treasure}
+          points={rewardData.points}
+          streak={rewardData.streak}
+          isVisible={showReward}
+          onClose={handleRewardClose}
+        />
+      )}
     </ImageBackground>
   );
 }
