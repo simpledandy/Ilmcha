@@ -21,7 +21,7 @@ const resources = {
       otherDevices: 'Other Devices',
       settings: 'Settings',
 
-      // New translations from signup.tsx
+      // Auth translations
       signupTitle: 'Ready for a new adventure?',
       signupButton: 'Sign Up',
       haveAccount: 'Already have an account? Log In',
@@ -32,14 +32,11 @@ const resources = {
       allFieldsRequired: 'All fields are required',
       passwordsDontMatch: 'Passwords do not match',
       signupError: 'Error during signup',
-      
-      // New translations from login.tsx
       loginTitle: 'Welcome back!',
       loginButton: 'Log In',
       noAccount: "Don't have an account? Create one",
       forgotPassword: 'Forgot password?',
       loginError: 'Login error occurred',
-
       forgotPasswordTitle: 'Reset Password',
       forgotPasswordSubtitle: 'Enter your email address. We will send you instructions to reset your password.',
       resetPasswordButton: 'Reset Password',
@@ -48,18 +45,39 @@ const resources = {
       emailRequiredError: 'Email is required',
       resetError: 'An error occurred. Please try again',
 
-      // New translations from onboarding.tsx
+      // Onboarding translations
       newAccount: 'New Account',
       back: '← Back',
       childNamePlaceholder: "Your child's name",
       childAgePlaceholder: "Your child's age",
       save: 'SAVE',
       logout: 'Log Out',
+      ageGroupLabel: 'Select Age Group',
+      ageGroup_2_3: '2-3 years',
+      ageGroup_4_5: '4-5 years',
+      ageGroup_6_7: '6-7 years',
+      ageGroup_7_plus: '7+ years',
 
+      // General UI
       letters: 'LETTERS',
       numbers: 'NUMBERS',
       totalPoints: 'TOTAL POINTS',
       overallResult: 'OVERALL RESULT',
+      lesson5: 'LESSON 5',
+      next: 'NEXT',
+      loading: 'Loading...',
+      error: 'Error',
+      continue: 'Continue',
+      complete: 'Complete',
+      goBack: 'Go Back',
+      cancel: 'Cancel',
+      leave: 'Leave',
+      congratulations: 'Congratulations!',
+      leaveStation: 'Leave Station?',
+      leaveStationMessage: 'Are you sure you want to leave? Your progress will be saved.',
+      stationCompleteMessage: 'You have completed this station! Great job!',
+      stationNotFound: 'Station not found',
+      taskCompletionError: 'Failed to complete task. Please try again.',
 
       // Island Names and Subtitles
       islandAlphabetTitle: 'Alifboland',
@@ -79,14 +97,12 @@ const resources = {
       islandConversationTitle: 'Conversation',
       islandConversationSubtitle: 'Coming Soon',
 
-      lesson5: 'LESSON 5',
-      next: 'NEXT',
-
+      // Lesson content
       numbersQuiz: 'Numbers Quiz',
       knowledgeBox: 'Knowledge Box',
       letsCountTogether: "Let's count together!",
 
-      // Tracing Activity Translations
+      // Tracing Activity
       numberTracing: 'Number Tracing',
       letterTracing: 'Letter Tracing',
       traceNumber: 'Trace the number {{number}}',
@@ -104,7 +120,7 @@ const resources = {
       tracingHint: 'Need help? Tap the lightbulb!',
       tracingDataUnavailable: 'Tracing data is not available for this item',
 
-      // Reward System Translations
+      // Reward System
       points: 'Points',
       streak: 'Streak',
       pointsEarned: 'Points Earned',
@@ -126,7 +142,7 @@ const resources = {
       keepLearningToUnlock: 'Keep learning to unlock achievements',
       days: 'days',
 
-      // Lesson Interaction Translations
+      // Lesson Interactions
       trace: 'Trace',
       hint: 'Hint',
       submit: 'Submit',
@@ -136,6 +152,95 @@ const resources = {
       notEnough: 'Not enough!',
       youCountedCorrectly: 'You counted correctly',
       items: 'items',
+      completeActivity: 'Complete the activity to continue!',
+
+      // Lesson Types
+      lessons: 'Lessons',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      tracing: 'Tracing',
+      counting: 'Counting',
+      matching: 'Matching',
+      quiz: 'Quiz',
+      listening: 'Listening',
+      speaking: 'Speaking',
+
+      // Lesson Screen
+      lessonNotFound: 'The lesson you are looking for could not be found',
+
+      // Universal Lesson
+      errorInvalidLessonData: 'Invalid lesson data',
+      errorStepNotFound: 'Step not found',
+      errorStepIndexOutOfBounds: 'Lesson step error',
+      skip: 'Skip',
+      replayAudio: 'Replay Audio',
+      skipButton: '⏭️ Skip',
+      nextButton: 'Next ➡️',
+      replayButton: '🔁 Replay Audio',
+
+      // Tracing Lesson
+      traceNumberInstruction: '✏️ Trace the number {{number}}',
+      tracingError: '⚠️ Tracing Error',
+      skipThis: 'Skip This',
+      progressComplete: '{{progress}}% Complete! 🎉',
+      skipTracing: '⏭️ Skip',
+
+      // Instruction Step
+      instructionProgress: '{{time}}s',
+      instructionSkip: '⏭️ Skip',
+      instructionNext: 'Next ➡️',
+      instructionReplay: '🔁 Replay Audio',
+
+      // Lesson Completion
+      lessonCompleted: 'Lesson Completed!',
+      youEarned: 'You earned {{points}} points!',
+      backToIsland: 'Back to Island',
+      nextLesson: 'Next Lesson',
+      unlockedItems: 'Unlocked Items',
+      bonusChallenge: 'Bonus Challenge',
+      specialChallengeUnlocked: 'You unlocked a special challenge!',
+      nextNumberTracing: 'Number {{number}} Tracing',
+      learnToWriteNumber: 'Learn to write the number {{number}}',
+      countToFish: 'Count to {{count}} Fish',
+      learnToCountFish: 'Learn to count {{count}} fish',
+
+      // Error Messages
+      errorAwardingTreasure: 'Error awarding treasure',
+      errorDuringLesson: 'An error occurred during the lesson',
+
+      // Counting Interaction
+      howManyFish: '🐟 How many fish do you see?',
+      countToNumber: 'Count to {{number}}!',
+      selectCorrectNumber: 'Select the correct number:',
+      correct: '🎉 Correct!',
+      countedFishPerfectly: 'You counted {{number}} fish perfectly!',
+      selectedButThereAre: 'You selected {{selected}}, but there are {{target}} fish.',
+      tryAgainButton: '🔄 Try Again',
+
+      // Tracing Interaction
+      tracingNotAvailable: '⚠️ Tracing not available for "{{target}}"',
+      tracingNotSupported: 'This character is not yet supported for tracing activities.',
+      perfect: '✨ Perfect! ✨',
+      attemptsLabel: 'Attempts: {{count}}',
+      strokeProgress: 'Stroke {{current}}/{{total}}',
+      accuracyLabel: 'Accuracy: {{accuracy}}%',
+
+      // Lesson Completion Flow
+      lessonComplete: 'Lesson Complete!',
+      perfectScore: '🎉 Perfect! Amazing job!',
+      greatWork: '🌟 Great work! Well done!',
+      goodEffort: '👍 Good effort! Keep practicing!',
+      newUnlocks: '🎁 New Unlocks!',
+      nextLessonButton: '➡️ Next Lesson',
+      backToIslandButton: '🏠 Back to Island',
+      islandMapButton: '📍 Island Map',
+
+      // BasicTracingCanvas Translations
+      tracingCompleted: 'Great job! You traced the {{type}} {{value}}',
+      traceAccessibilityLabel: 'Trace the {{type}} {{value}}',
+      traceAccessibilityHint: 'Tap to trace the {{type}}. You\'ve completed {{progress}}%',
+      tapToTrace: 'Tap to trace the {{type}}',
     },
   },
   uz: {
@@ -155,7 +260,7 @@ const resources = {
       otherDevices: 'Boshqa qurilmalar',
       settings: 'Sozlamalar',
 
-      // New translations from signup.tsx
+      // Auth translations
       signupTitle: 'Yangi sarguzashtga tayyormisiz?',
       signupButton: "Ro'yxatdan o'tish",
       haveAccount: "Akkauntingiz bormi? Kiring",
@@ -166,40 +271,58 @@ const resources = {
       allFieldsRequired: "Barcha maydonlar to'ldirilishi shart",
       passwordsDontMatch: 'Parollar mos kelmadi',
       signupError: "Ro'yxatdan o'tishda xatolik yuz berdi",
-
-      // New translations from login.tsx
       loginTitle: 'Qaytib kelganingizdan xursandmiz!',
       loginButton: 'Kirish',
       noAccount: "Akkauntingiz yo'qmi? Ro'yxatdan o'ting",
       forgotPassword: 'Parolni unutdingizmi?',
       loginError: 'Login xatoligi yuz berdi',
+      forgotPasswordTitle: 'Parolni tiklash',
+      forgotPasswordSubtitle: "Email manzilingizni kiriting. Biz sizga parolni tiklash bo'yicha ko'rsatmalarni yuboramiz.",
+      resetPasswordButton: 'Parolni tiklash',
+      backToLoginButton: 'Loginga qaytish',
+      resetSuccessMessage: "Parolni tiklash bo'yicha ko'rsatmalar emailingizga yuborildi",
+      emailRequiredError: 'Email kiritilishi shart',
+      resetError: "Xatolik yuz berdi. Qaytadan urinib ko'ring",
 
-      // New translations from onboarding.tsx
+      // Onboarding translations
       newAccount: 'Yangi Hisob',
       back: '← Orqaga',
       childNamePlaceholder: "Farzandingiz ismi",
       childAgePlaceholder: "Farzandingiz yoshi",
       save: 'SAQLASH',
       logout: 'Chiqish',
+      ageGroupLabel: 'Yosh toifasini tanlang',
+      ageGroup_2_3: '2-3 yosh',
+      ageGroup_4_5: '4-5 yosh',
+      ageGroup_6_7: '6-7 yosh',
+      ageGroup_7_plus: '7+ yosh',
 
-      forgotPasswordTitle: 'Parolni tiklash',
-      forgotPasswordSubtitle: 'Email manzilingizni kiriting. Biz sizga parolni tiklash bo\'yicha ko\'rsatmalarni yuboramiz.',
-      resetPasswordButton: 'Parolni tiklash',
-      backToLoginButton: 'Loginga qaytish',
-      resetSuccessMessage: 'Parolni tiklash bo\'yicha ko\'rsatmalar emailingizga yuborildi',
-      emailRequiredError: 'Email kiritilishi shart',
-      resetError: 'Xatolik yuz berdi. Qaytadan urinib ko\'ring',
-
+      // General UI
       letters: 'HARFLAR',
       numbers: 'RAQAMLAR',
       totalPoints: 'UMUMIY BALLAR',
       overallResult: 'UMUMIY NATIJA',
+      lesson5: '5-DARS',
+      next: 'KEYINGISI',
+      loading: 'Yuklanmoqda',
+      error: 'Xatolik',
+      continue: 'Davom etish',
+      complete: 'Tugatish',
+      goBack: 'Orqaga qaytish',
+      cancel: 'Bekor qilish',
+      leave: 'Chiqish',
+      congratulations: 'Tabriklaymiz!',
+      leaveStation: 'Stansiyadan chiqish?',
+      leaveStationMessage: 'Siz rostdan ham chiqmoqchimisiz? Sizning progressingiz saqlanadi.',
+      stationCompleteMessage: 'Siz bu stansiyani tugatingiz! Ajoyib ish!',
+      stationNotFound: 'Stansiya topilmadi',
+      taskCompletionError: 'Vazifani tugatishda xatolik yuz berdi. Iltimos, qaytadan urinib koring.',
 
       // Island Names and Subtitles
       islandAlphabetTitle: 'Alifboland',
-      islandAlphabetSubtitle: 'Alifbo va Asosiy so\'zlar',
+      islandAlphabetSubtitle: "Alifbo va Asosiy so'zlar",
       islandBasicsTitle: 'Salomlashish',
-      islandBasicsSubtitle: 'Salomlashish va Asosiy so\'zlar',
+      islandBasicsSubtitle: "Salomlashish va Asosiy so'zlar",
       islandNumbersTitle: 'Numeriya',
       islandNumbersSubtitle: '1-10 gacha raqamlar',
       islandShapesTitle: 'Shakllar',
@@ -213,14 +336,12 @@ const resources = {
       islandConversationTitle: 'Suhbatlashuv',
       islandConversationSubtitle: 'Tez Kunda',
 
-      lesson5: '5-DARS',
-      next: 'KEYINGISI',
-
+      // Lesson content
       numbersQuiz: 'Raqamlar testi',
       knowledgeBox: 'Bilimlar sandigʻi',
       letsCountTogether: 'Keling birga sanaymiz!',
 
-      // Tracing Activity Translations
+      // Tracing Activity
       numberTracing: 'Raqam chizish',
       letterTracing: 'Harf chizish',
       traceNumber: '{{number}} raqamini chizing',
@@ -231,14 +352,14 @@ const resources = {
       nextTracing: 'Keyingisi',
       previousTracing: 'Oldingisi',
       tracingComplete: 'Chizish tugadi!',
-      greatJob: 'Ajoyib ish!',
+      greatJob: 'Ajoyib ish',
       tryAgain: 'Qaytadan urinib koʻring',
       tracingInstructions: 'Shaklni chizish uchun barmogʻingizdan foydalaning',
       tracingProgress: 'Taraqqiyot',
       tracingHint: 'Yordam kerakmi? Chiroqni bosing!',
       tracingDataUnavailable: 'Bu element uchun chizish ma\'lumotlari mavjud emas',
 
-      // Reward System Translations
+      // Reward System
       points: 'Ballar',
       streak: 'Seriya',
       pointsEarned: 'Olingan ballar',
@@ -260,7 +381,7 @@ const resources = {
       keepLearningToUnlock: 'Yutuqlarni ochish uchun o\'qishni davom eting',
       days: 'kun',
 
-      // Lesson Interaction Translations
+      // Lesson Interactions
       trace: 'Chizish',
       hint: 'Maslahat',
       submit: 'Yuborish',
@@ -270,20 +391,107 @@ const resources = {
       notEnough: 'Yetarli emas!',
       youCountedCorrectly: 'Siz to\'g\'ri sanadingiz',
       items: 'elementlar',
+      completeActivity: 'Faoliyatni davom ettirish uchun tugating!',
+
+      // Lesson Types
+      lessons: 'Darslar',
+      easy: 'Oson',
+      medium: "O'rtacha",
+      hard: 'Qiyin',
+      tracing: 'Chizish',
+      counting: 'Sanash',
+      matching: 'Moslashtirish',
+      quiz: 'Test',
+      listening: 'Tinglash',
+      speaking: 'Gapirish',
+
+      // Lesson Screen
+      lessonNotFound: "Qidirayotgan darsingiz topilmadi",
+
+      // Universal Lesson
+      errorInvalidLessonData: 'Dars ma\'lumotlari noto\'g\'ri',
+      errorStepNotFound: 'Qadam topilmadi',
+      errorStepIndexOutOfBounds: 'Dars qadami xatosi',
+      skip: 'O\'tkazib yuborish',
+      replayAudio: 'Ovozni qayta o\'ynatish',
+      skipButton: '⏭️ O\'tkazib yuborish',
+      nextButton: 'Keyingisi ➡️',
+      replayButton: '🔁 Ovozni qayta o\'ynatish',
+
+      // Tracing Lesson
+      traceNumberInstruction: '✏️ {{number}} raqamini chizing',
+      tracingError: '⚠️ Chizish xatoligi',
+      skipThis: 'Buni o\'tkazib yuborish',
+      progressComplete: '{{progress}}% Tugadi! 🎉',
+      skipTracing: '⏭️ O\'tkazib yuborish',
+
+      // Instruction Step
+      instructionProgress: '{{time}}s',
+      instructionSkip: '⏭️ O\'tkazib yuborish',
+      instructionNext: 'Keyingisi ➡️',
+      instructionReplay: '🔁 Ovozni qayta o\'ynatish',
+
+      // Lesson Completion
+      lessonCompleted: 'Dars tugadi!',
+      youEarned: 'Siz {{points}} ball qo\'shdingiz!',
+      backToIsland: 'Orolga qaytish',
+      nextLesson: 'Keyingi dars',
+      unlockedItems: 'Ochilgan elementlar',
+      bonusChallenge: 'Bonus vazifa',
+      specialChallengeUnlocked: 'Siz maxsus vazifani ochdingiz!',
+      nextNumberTracing: '{{number}} raqamini chizish',
+      learnToWriteNumber: '{{number}} raqamini yozishni o\'rganing',
+      countToFish: '{{count}} baliqni sanash',
+      learnToCountFish: '{{count}} baliqni sanashni o\'rganing',
+
+      // Error Messages
+      errorAwardingTreasure: 'Xazina berishda xatolik',
+      errorDuringLesson: 'Dars davomida xatolik yuz berdi',
+
+      // Counting Interaction
+      howManyFish: '🐟 Qancha baliq ko\'rasiz?',
+      countToNumber: '{{number}} raqamini sanash',
+      selectCorrectNumber: 'To\'g\'ri raqamni tanlang:',
+      correct: '🎉 To\'g\'ri!',
+      countedFishPerfectly: 'Siz {{number}} baliqni to\'g\'ri sanadingiz!',
+      selectedButThereAre: 'Siz {{selected}} raqamni tanladingiz, lekin {{target}} baliq.',
+      tryAgainButton: '🔄 Qaytadan urinib ko\'ring',
+
+      // Tracing Interaction
+      tracingNotAvailable: '⚠️ "{{target}}" uchun chizish mavjud emas',
+      tracingNotSupported: 'Bu belgi hali chizish mashg\'ulotlari uchun qo\'llab-quvvatlanmaydi.',
+      perfect: '✨ Mukammal! ✨',
+      attemptsLabel: 'Urinishlar: {{count}}',
+      strokeProgress: 'Chiziq {{current}}/{{total}}',
+      accuracyLabel: 'Aniqlik: {{accuracy}}%',
+
+      // Lesson Completion Flow
+      lessonComplete: 'Dars tugadi!',
+      perfectScore: '🎉 Mukammal! Ajoyib ish!',
+      greatWork: '🌟 Ajoyib ish! Yaxshi qildingiz!',
+      goodEffort: '👍 Yaxshi harakat! Mashg\'ulotlarni davom eting!',
+      newUnlocks: '🎁 Yangi ochilganlar!',
+      nextLessonButton: '➡️ Keyingi dars',
+      backToIslandButton: '🏠 Orolga qaytish',
+      islandMapButton: '📍 Orol xaritasi',
+
+      // BasicTracingCanvas Translations
+      tracingCompleted: 'Ajoyib ish! Siz {{type}} {{value}} ni chizdingiz',
+      traceAccessibilityLabel: '{{type}} {{value}} ni chizish',
+      traceAccessibilityHint: '{{type}} ni chizish uchun bosing. Siz {{progress}}% tugatdingiz',
+      tapToTrace: '{{type}} ni chizish uchun bosing',
     },
   },
 };
 
 // Initialize i18n
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: Localization.locale.startsWith('uz') ? 'uz' : 'en',
-    fallbackLng: 'uz',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: Localization.locale.startsWith('uz') ? 'uz' : 'en',
+  fallbackLng: 'uz',
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export { i18n };

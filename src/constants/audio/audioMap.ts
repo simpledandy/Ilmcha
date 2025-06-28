@@ -1,136 +1,187 @@
+// If you see TypeScript errors about missing module declarations for audio files, add a global declaration file (e.g., audio.d.ts) with:
+// declare module '*.mp3';
+// declare module '*.aac';
+// declare module '*.m4a';
+// This is required for static asset imports in React Native/Expo projects.
+
+// Import all audio assets at the top
+import butterflyTaleEn from "@assets/audios/en/butterfly-tale-en.mp3";
+import cloudsTaleEn from "@assets/audios/en/clouds-tale-en.mp3";
+import friendTaleEn from "@assets/audios/en/friend-tale-en.mp3";
+import heroTaleEn from "@assets/audios/en/hero-tale-en.mp3";
+import oneEn from "@assets/audios/en/one-en.aac";
+import twoEn from "@assets/audios/en/two-en.aac";
+import threeEn from "@assets/audios/en/three-en.aac";
+import fourEn from "@assets/audios/en/four-en.aac";
+import fiveEn from "@assets/audios/en/five-en.aac";
+import sixEn from "@assets/audios/en/six-en.aac";
+import sevenEn from "@assets/audios/en/seven-en.aac";
+import eightEn from "@assets/audios/en/eight-en.aac";
+import nineEn from "@assets/audios/en/nine-en.aac";
+import tenEn from "@assets/audios/en/ten-en.aac";
+import countingFishEn from "@assets/audios/en/counting-fish-en.mp3";
+import islandNumeriyaEn from "@assets/audios/en/island-numeriya-en.mp3";
+import congratsEn from "@assets/audios/en/congrats-en.mp3";
+import dailyGiftEn from "@assets/audios/en/daily-gift-en.mp3";
+import giftWheelEn from "@assets/audios/en/gift-wheel-en.mp3";
+import letsGoEn from "@assets/audios/en/lets-go-en.mp3";
+import navigationEn from "@assets/audios/en/navigation-en.mp3";
+import profileEn from "@assets/audios/en/profile-en.mp3";
+import sleepReminderEn from "@assets/audios/en/sleep-reminder-en.mp3";
+import storeEn from "@assets/audios/en/store-en.mp3";
+import trackerEn from "@assets/audios/en/tracker-en.mp3";
+import welcomeTalesEn from "@assets/audios/en/welcome-tales-en.mp3";
+import whereToFlyEn from "@assets/audios/en/where-to-fly-en.mp3";
+import unavailableEn from "@assets/audios/en/unavailable-en.mp3";
+import congratsYouWonEn from "@assets/audios/en/congrats-you-won-en.mp3";
+import coinsEn from "@assets/audios/en/coins-en.mp3";
+// Uzbek assets
+import butterflyTaleUz from "@assets/audios/uz/butterfly-tale-uz.mp3";
+import cloudsTaleUz from "@assets/audios/uz/clouds-tale-uz.mp3";
+import friendTaleUz from "@assets/audios/uz/friend-tale-uz.mp3";
+import heroTaleUz from "@assets/audios/uz/hero-tale-uz.mp3";
+import oneUz from "@assets/audios/uz/one-uz.mp3";
+import twoUz from "@assets/audios/uz/two-uz.mp3";
+import threeUz from "@assets/audios/uz/three-uz.mp3";
+import fourUz from "@assets/audios/uz/four-uz.mp3";
+import fiveUz from "@assets/audios/uz/five-uz.m4a";
+import sixUz from "@assets/audios/uz/six-uz.mp3";
+import sevenUz from "@assets/audios/uz/seven-uz.mp3";
+import eightUz from "@assets/audios/uz/eight-uz.mp3";
+import nineUz from "@assets/audios/uz/nine-uz.mp3";
+import tenUz from "@assets/audios/uz/ten-uz.mp3";
+import letterAUz from "@assets/audios/uz/letter-a-uz.m4a";
+import countingFishUz from "@assets/audios/uz/counting-fish-uz.m4a";
+import islandNumeriyaUz from "@assets/audios/uz/island-numeriya-uz.m4a";
+import congratsUz from "@assets/audios/uz/congrats-uz.m4a";
+import dailyGiftUz from "@assets/audios/uz/daily-gift-uz.m4a";
+import giftWheelUz from "@assets/audios/uz/gift-wheel-uz.m4a";
+import letsGoUz from "@assets/audios/uz/lets-go-uz.m4a";
+import navigationUz from "@assets/audios/uz/navigation-uz.m4a";
+import profileUz from "@assets/audios/uz/profile-uz.m4a";
+import sleepReminderUz from "@assets/audios/uz/sleep-reminder-uz.m4a";
+import storeUz from "@assets/audios/uz/store-uz.m4a";
+import trackerUz from "@assets/audios/uz/tracker-uz.m4a";
+import welcomeTalesUz from "@assets/audios/uz/welcome-tales-uz.m4a";
+import whereToFlyUz from "@assets/audios/uz/where-to-fly-uz.m4a";
+import congratsYouWonUz from "@assets/audios/uz/congrats-you-won-uz.m4a";
+import coinsUz from "@assets/audios/uz/coins-uz.m4a";
+
 export const audioMap = {
   en: {
-    // Tales
-    butterflyTale: require('@assets/audios/en/butterfly-tale-en.mp3'),
-    cloudsTale: require('@assets/audios/en/clouds-tale-en.mp3'),
-    friendTale: require('@assets/audios/en/friend-tale-en.mp3'),
-    heroTale: require('@assets/audios/en/hero-tale-en.mp3'),
-    
-    // Numbers
-    one: require('@assets/audios/en/one-en.aac'),
-    two: require('@assets/audios/en/two-en.aac'),
-    three: require('@assets/audios/en/three-en.aac'),
-    four: require('@assets/audios/en/four-en.aac'),
-    five: require('@assets/audios/en/five-en.aac'),
-    six: require('@assets/audios/en/six-en.aac'),
-    seven: require('@assets/audios/en/seven-en.aac'),
-    eight: require('@assets/audios/en/eight-en.aac'),
-    nine: require('@assets/audios/en/nine-en.aac'),
-    ten: require('@assets/audios/en/ten-en.aac'),
-    
-    // Letters (using number audio as fallback for now)
-    letterA: require('@assets/audios/en/one-en.aac'),
-    letterB: require('@assets/audios/en/two-en.aac'),
-    letterC: require('@assets/audios/en/three-en.aac'),
-    letterD: require('@assets/audios/en/four-en.aac'),
-    letterE: require('@assets/audios/en/five-en.aac'),
-    letterF: require('@assets/audios/en/six-en.aac'),
-    letterG: require('@assets/audios/en/seven-en.aac'),
-    letterH: require('@assets/audios/en/eight-en.aac'),
-    letterI: require('@assets/audios/en/nine-en.aac'),
-    letterJ: require('@assets/audios/en/ten-en.aac'),
-    letterK: require('@assets/audios/en/one-en.aac'),
-    letterL: require('@assets/audios/en/two-en.aac'),
-    letterM: require('@assets/audios/en/three-en.aac'),
-    letterN: require('@assets/audios/en/four-en.aac'),
-    letterO: require('@assets/audios/en/five-en.aac'),
-    letterP: require('@assets/audios/en/six-en.aac'),
-    letterQ: require('@assets/audios/en/seven-en.aac'),
-    letterR: require('@assets/audios/en/eight-en.aac'),
-    letterS: require('@assets/audios/en/nine-en.aac'),
-    letterT: require('@assets/audios/en/ten-en.aac'),
-    letterU: require('@assets/audios/en/one-en.aac'),
-    letterV: require('@assets/audios/en/two-en.aac'),
-    letterW: require('@assets/audios/en/three-en.aac'),
-    letterX: require('@assets/audios/en/four-en.aac'),
-    letterY: require('@assets/audios/en/five-en.aac'),
-    letterZ: require('@assets/audios/en/six-en.aac'),
-    
-    // Activities
-    countingFish: require('@assets/audios/en/counting-fish-en.mp3'),
-    islandNumeriya: require('@assets/audios/en/island-numeriya-en.mp3'),
-    
-    // System
-    congrats: require('@assets/audios/en/congrats-en.mp3'),
-    dailyGift: require('@assets/audios/en/daily-gift-en.mp3'),
-    giftWheel: require('@assets/audios/en/gift-wheel-en.mp3'),
-    letsGo: require('@assets/audios/en/lets-go-en.mp3'),
-    navigation: require('@assets/audios/en/navigation-en.mp3'),
-    profile: require('@assets/audios/en/profile-en.mp3'),
-    sleepReminder: require('@assets/audios/en/sleep-reminder-en.mp3'),
-    store: require('@assets/audios/en/store-en.mp3'),
-    tracker: require('@assets/audios/en/tracker-en.mp3'),
-    welcomeTales: require('@assets/audios/en/welcome-tales-en.mp3'),
-    whereToFly: require('@assets/audios/en/where-to-fly-en.mp3'),
-    
-    // Fallback
-    unavailable: require('@assets/audios/en/unavailable-en.mp3')
+    butterflyTale: butterflyTaleEn,
+    cloudsTale: cloudsTaleEn,
+    friendTale: friendTaleEn,
+    heroTale: heroTaleEn,
+    one: oneEn,
+    two: twoEn,
+    three: threeEn,
+    four: fourEn,
+    five: fiveEn,
+    six: sixEn,
+    seven: sevenEn,
+    eight: eightEn,
+    nine: nineEn,
+    ten: tenEn,
+    letterA: oneEn,
+    letterB: twoEn,
+    letterC: threeEn,
+    letterD: fourEn,
+    letterE: fiveEn,
+    letterF: sixEn,
+    letterG: sevenEn,
+    letterH: eightEn,
+    letterI: nineEn,
+    letterJ: tenEn,
+    letterK: oneEn,
+    letterL: twoEn,
+    letterM: threeEn,
+    letterN: fourEn,
+    letterO: fiveEn,
+    letterP: sixEn,
+    letterQ: sevenEn,
+    letterR: eightEn,
+    letterS: nineEn,
+    letterT: tenEn,
+    letterU: oneEn,
+    letterV: twoEn,
+    letterW: threeEn,
+    letterX: fourEn,
+    letterY: fiveEn,
+    letterZ: sixEn,
+    countingFish: countingFishEn,
+    islandNumeriya: islandNumeriyaEn,
+    congrats: congratsEn,
+    dailyGift: dailyGiftEn,
+    giftWheel: giftWheelEn,
+    letsGo: letsGoEn,
+    navigation: navigationEn,
+    profile: profileEn,
+    sleepReminder: sleepReminderEn,
+    store: storeEn,
+    tracker: trackerEn,
+    welcomeTales: welcomeTalesEn,
+    whereToFly: whereToFlyEn,
+    unavailable: unavailableEn,
+    congratsYouWon: congratsYouWonEn,
+    coins: coinsEn,
   },
   uz: {
-    // Tales
-    butterflyTale: require('@assets/audios/uz/butterfly-tale-uz.mp3'),
-    cloudsTale: require('@assets/audios/uz/clouds-tale-uz.mp3'),
-    friendTale: require('@assets/audios/uz/friend-tale-uz.mp3'),
-    heroTale: require('@assets/audios/uz/hero-tale-uz.mp3'),
-    
-    // Numbers
-    one: require('@assets/audios/uz/one-uz.mp3'),
-    two: require('@assets/audios/uz/two-uz.mp3'),
-    three: require('@assets/audios/uz/three-uz.mp3'),
-    four: require('@assets/audios/uz/four-uz.mp3'),
-    five: require('@assets/audios/uz/five-uz.m4a'),
-    six: require('@assets/audios/uz/six-uz.mp3'),
-    seven: require('@assets/audios/uz/seven-uz.mp3'),
-    eight: require('@assets/audios/uz/eight-uz.mp3'),
-    nine: require('@assets/audios/uz/nine-uz.mp3'),
-    ten: require('@assets/audios/uz/ten-uz.mp3'),
-    
-    // Letters (using number audio as fallback for now)
-    letterA: require('@assets/audios/uz/letter-a-uz.m4a'),
-    letterB: require('@assets/audios/uz/one-uz.mp3'),
-    letterC: require('@assets/audios/uz/two-uz.mp3'),
-    letterD: require('@assets/audios/uz/three-uz.mp3'),
-    letterE: require('@assets/audios/uz/four-uz.mp3'),
-    letterF: require('@assets/audios/uz/five-uz.m4a'),
-    letterG: require('@assets/audios/uz/six-uz.mp3'),
-    letterH: require('@assets/audios/uz/seven-uz.mp3'),
-    letterI: require('@assets/audios/uz/eight-uz.mp3'),
-    letterJ: require('@assets/audios/uz/nine-uz.mp3'),
-    letterK: require('@assets/audios/uz/ten-uz.mp3'),
-    letterL: require('@assets/audios/uz/one-uz.mp3'),
-    letterM: require('@assets/audios/uz/two-uz.mp3'),
-    letterN: require('@assets/audios/uz/three-uz.mp3'),
-    letterO: require('@assets/audios/uz/four-uz.mp3'),
-    letterP: require('@assets/audios/uz/five-uz.m4a'),
-    letterQ: require('@assets/audios/uz/six-uz.mp3'),
-    letterR: require('@assets/audios/uz/seven-uz.mp3'),
-    letterS: require('@assets/audios/uz/eight-uz.mp3'),
-    letterT: require('@assets/audios/uz/nine-uz.mp3'),
-    letterU: require('@assets/audios/uz/ten-uz.mp3'),
-    letterV: require('@assets/audios/uz/one-uz.mp3'),
-    letterW: require('@assets/audios/uz/two-uz.mp3'),
-    letterX: require('@assets/audios/uz/three-uz.mp3'),
-    letterY: require('@assets/audios/uz/four-uz.mp3'),
-    letterZ: require('@assets/audios/uz/five-uz.m4a'),
-    
-    // Activities
-    countingFish: require('@assets/audios/uz/counting-fish-uz.m4a'),
-    islandNumeriya: require('@assets/audios/uz/island-numeriya-uz.m4a'),
-    
-    // System
-    congrats: require('@assets/audios/uz/congrats-uz.m4a'),
-    dailyGift: require('@assets/audios/uz/daily-gift-uz.m4a'),
-    giftWheel: require('@assets/audios/uz/gift-wheel-uz.m4a'),
-    letsGo: require('@assets/audios/uz/lets-go-uz.m4a'),
-    navigation: require('@assets/audios/uz/navigation-uz.m4a'),
-    profile: require('@assets/audios/uz/profile-uz.m4a'),
-    sleepReminder: require('@assets/audios/uz/sleep-reminder-uz.m4a'),
-    store: require('@assets/audios/uz/store-uz.m4a'),
-    tracker: require('@assets/audios/uz/tracker-uz.m4a'),
-    welcomeTales: require('@assets/audios/uz/welcome-tales-uz.m4a'),
-    whereToFly: require('@assets/audios/uz/where-to-fly-uz.m4a'),
-    
-    // Fallback
-    unavailable: require('@assets/audios/en/unavailable-en.mp3') // Using English as fallback
-  }
+    butterflyTale: butterflyTaleUz,
+    cloudsTale: cloudsTaleUz,
+    friendTale: friendTaleUz,
+    heroTale: heroTaleUz,
+    one: oneUz,
+    two: twoUz,
+    three: threeUz,
+    four: fourUz,
+    five: fiveUz,
+    six: sixUz,
+    seven: sevenUz,
+    eight: eightUz,
+    nine: nineUz,
+    ten: tenUz,
+    letterA: letterAUz,
+    letterB: oneUz,
+    letterC: twoUz,
+    letterD: threeUz,
+    letterE: fourUz,
+    letterF: fiveUz,
+    letterG: sixUz,
+    letterH: sevenUz,
+    letterI: eightUz,
+    letterJ: nineUz,
+    letterK: tenUz,
+    letterL: oneUz,
+    letterM: twoUz,
+    letterN: threeUz,
+    letterO: fourUz,
+    letterP: fiveUz,
+    letterQ: sixUz,
+    letterR: sevenUz,
+    letterS: eightUz,
+    letterT: nineUz,
+    letterU: tenUz,
+    letterV: oneUz,
+    letterW: twoUz,
+    letterX: threeUz,
+    letterY: fourUz,
+    letterZ: fiveUz,
+    countingFish: countingFishUz,
+    islandNumeriya: islandNumeriyaUz,
+    congrats: congratsUz,
+    dailyGift: dailyGiftUz,
+    giftWheel: giftWheelUz,
+    letsGo: letsGoUz,
+    navigation: navigationUz,
+    profile: profileUz,
+    sleepReminder: sleepReminderUz,
+    store: storeUz,
+    tracker: trackerUz,
+    welcomeTales: welcomeTalesUz,
+    whereToFly: whereToFlyUz,
+    unavailable: unavailableEn, // Using English as fallback
+    congratsYouWon: congratsYouWonUz,
+    coins: coinsUz,
+  },
 };

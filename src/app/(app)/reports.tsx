@@ -1,11 +1,10 @@
-import React, { FC } from 'react';
-import { View, StyleSheet, Image, Dimensions } from 'react-native';
-import { Text } from '@components/Text';
-import { Button } from '@components/Button';
-import { i18n } from 'i18n';
-import { router } from 'expo-router';
-
-const { width } = Dimensions.get('window');
+import React from "react";
+import { View, StyleSheet, Image } from "react-native";
+import { Text } from "@components/Text";
+import { Button } from "@components/Button";
+import { i18n } from "i18n";
+import { router } from "expo-router";
+import { AppIcons } from "@constants/images/images";
 
 export const ReportsScreen: React.FC = () => {
   return (
@@ -16,20 +15,20 @@ export const ReportsScreen: React.FC = () => {
         onPress={() => router.back()}
         style={styles.backButton}
       >
-        {i18n.t('back')}
+        {i18n.t("back")}
       </Button>
 
       <Text variant="heading1" style={styles.title}>
-        {i18n.t('reports')}
+        {i18n.t("reports")}
       </Text>
 
       <View style={styles.profileCircle}>
-        <Image source={require('@assets/images/girl-avatar.png')} style={styles.avatar} />
+        <Image source={AppIcons.girlAvatar} style={styles.avatar} />
       </View>
 
       <View style={styles.reportBox}>
         <Text variant="body" style={styles.label}>
-          {i18n.t('letters')}:
+          {i18n.t("letters")}:
         </Text>
         <Text variant="body" style={styles.value}>
           78%
@@ -38,7 +37,7 @@ export const ReportsScreen: React.FC = () => {
 
       <View style={styles.reportBox}>
         <Text variant="body" style={styles.label}>
-          {i18n.t('numbers')}:
+          {i18n.t("numbers")}:
         </Text>
         <Text variant="body" style={styles.value}>
           94%
@@ -47,7 +46,7 @@ export const ReportsScreen: React.FC = () => {
 
       <View style={styles.reportBox}>
         <Text variant="body" style={styles.label}>
-          {i18n.t('totalPoints')}:
+          {i18n.t("totalPoints")}:
         </Text>
         <Text variant="body" style={styles.value}>
           200 🪙
@@ -56,7 +55,7 @@ export const ReportsScreen: React.FC = () => {
 
       <View style={styles.reportBox}>
         <Text variant="body" style={styles.label}>
-          {i18n.t('overallResult')}:
+          {i18n.t("overallResult")}:
         </Text>
         <Text variant="body" style={styles.value}>
           86%
@@ -64,30 +63,30 @@ export const ReportsScreen: React.FC = () => {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d99ed',
-    alignItems: 'center',
+    backgroundColor: "#1d99ed",
+    alignItems: "center",
     paddingTop: 40,
   },
   backButton: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginLeft: 20,
     marginBottom: 10,
   },
   title: {
     marginBottom: 20,
-    color: '#2F2FA2',
+    color: "#2F2FA2",
   },
   profileCircle: {
     borderRadius: 100,
     borderWidth: 3,
-    borderColor: 'purple',
+    borderColor: "purple",
     padding: 6,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginBottom: 30,
   },
   avatar: {
@@ -95,19 +94,19 @@ const styles = StyleSheet.create({
     height: 80,
   },
   reportBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    width: '85%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    width: "85%",
     padding: 16,
     borderRadius: 40,
     marginBottom: 12,
   },
   label: {
-    color: '#2F2FA2',
+    color: "#2F2FA2",
   },
   value: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

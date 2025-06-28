@@ -1,73 +1,81 @@
-import React, { FC } from 'react';
-import 'react-native-gesture-handler';
-import { Slot, useNavigation, usePathname } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { useFonts } from 'expo-font';
-import { AuthProvider } from '@providers/AuthProvider';
-import { SplashScreen } from 'expo-router';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { View, ActivityIndicator, AppState } from 'react-native';
-import { cleanupAudio, setNavigationState } from '@utils/audio';
-import { ErrorBoundary } from '@components/ErrorBoundary';
-import { initializeErrorReporting } from '@utils/errorReporting';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import React from "react";
+import "react-native-gesture-handler";
+import { Slot, usePathname, useRootNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
+import { AuthProvider } from "@providers/AuthProvider";
+import { SplashScreen } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { View, ActivityIndicator, AppState } from "react-native";
+import { setNavigationState, cleanupAudio } from "@utils/audio";
+import { ErrorBoundary } from "@components/ErrorBoundary";
+import { initializeErrorReporting } from "@utils/errorReporting";
+import SonoRegular from "@assets/fonts/Sono-Regular.ttf";
+import SonoLight from "@assets/fonts/Sono-Light.ttf";
+import SonoExtraLight from "@assets/fonts/Sono-ExtraLight.ttf";
+import SonoMedium from "@assets/fonts/Sono-Medium.ttf";
+import SonoSemiBold from "@assets/fonts/Sono-SemiBold.ttf";
+import SonoBold from "@assets/fonts/Sono-Bold.ttf";
+import SonoExtraBold from "@assets/fonts/Sono-ExtraBold.ttf";
+import SonoProportionalRegular from "@assets/fonts/Sono_Proportional-Regular.ttf";
+import SonoProportionalLight from "@assets/fonts/Sono_Proportional-Light.ttf";
+import SonoProportionalExtraLight from "@assets/fonts/Sono_Proportional-ExtraLight.ttf";
+import SonoProportionalMedium from "@assets/fonts/Sono_Proportional-Medium.ttf";
+import SonoProportionalSemiBold from "@assets/fonts/Sono_Proportional-SemiBold.ttf";
+import SonoProportionalBold from "@assets/fonts/Sono_Proportional-Bold.ttf";
+import SonoProportionalExtraBold from "@assets/fonts/Sono_Proportional-ExtraBold.ttf";
+
+// If you see TypeScript errors about missing module declarations for font files, add a global declaration file (e.g., fonts.d.ts) with:
+// declare module '*.ttf';
+// This is required for static asset imports in React Native/Expo projects.
 
 // Prevent splash screen from auto-hiding
-SplashScreen.preventAutoHideAsync();
+void SplashScreen.preventAutoHideAsync();
 
 // Initialize error reporting
-initializeErrorReporting({
-  enableReporting: !__DEV__, // Only enable in production
-  // Add your error reporting service configuration here
-  // serviceUrl: 'your-sentry-dsn',
-  // apiKey: 'your-api-key',
-});
+initializeErrorReporting();
 
 export const RootLayout: React.FC = () => {
-  const navigation = useNavigation();
   const pathname = usePathname();
+  const rootNavigation = useRootNavigation();
   const [previousPath, setPreviousPath] = useState<string | null>(null);
 
   const [fontsLoaded] = useFonts({
-    // Regular Sono variants
-    'Sono-Regular': require('@assets/fonts/Sono-Regular.ttf'),
-    'Sono-Light': require('@assets/fonts/Sono-Light.ttf'),
-    'Sono-ExtraLight': require('@assets/fonts/Sono-ExtraLight.ttf'),
-    'Sono-Medium': require('@assets/fonts/Sono-Medium.ttf'),
-    'Sono-SemiBold': require('@assets/fonts/Sono-SemiBold.ttf'),
-    'Sono-Bold': require('@assets/fonts/Sono-Bold.ttf'),
-    'Sono-ExtraBold': require('@assets/fonts/Sono-ExtraBold.ttf'),
-    
-    // Proportional variants
-    'Sono_Proportional-Regular': require('@assets/fonts/Sono_Proportional-Regular.ttf'),
-    'Sono_Proportional-Light': require('@assets/fonts/Sono_Proportional-Light.ttf'),
-    'Sono_Proportional-ExtraLight': require('@assets/fonts/Sono_Proportional-ExtraLight.ttf'),
-    'Sono_Proportional-Medium': require('@assets/fonts/Sono_Proportional-Medium.ttf'),
-    'Sono_Proportional-SemiBold': require('@assets/fonts/Sono_Proportional-SemiBold.ttf'),
-    'Sono_Proportional-Bold': require('@assets/fonts/Sono_Proportional-Bold.ttf'),
-    'Sono_Proportional-ExtraBold': require('@assets/fonts/Sono_Proportional-ExtraBold.ttf'),
+    "Sono-Regular": SonoRegular,
+    "Sono-Light": SonoLight,
+    "Sono-ExtraLight": SonoExtraLight,
+    "Sono-Medium": SonoMedium,
+    "Sono-SemiBold": SonoSemiBold,
+    "Sono-Bold": SonoBold,
+    "Sono-ExtraBold": SonoExtraBold,
+    "Sono_Proportional-Regular": SonoProportionalRegular,
+    "Sono_Proportional-Light": SonoProportionalLight,
+    "Sono_Proportional-ExtraLight": SonoProportionalExtraLight,
+    "Sono_Proportional-Medium": SonoProportionalMedium,
+    "Sono_Proportional-SemiBold": SonoProportionalSemiBold,
+    "Sono_Proportional-Bold": SonoProportionalBold,
+    "Sono_Proportional-ExtraBold": SonoProportionalExtraBold,
   });
 
   const [navigationReady, setNavigationReady] = useState(false);
   useEffect(() => {
     if (fontsLoaded) {
       setNavigationReady(true);
-      SplashScreen.hideAsync();
+      void SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
   useEffect(() => {
     if (previousPath) {
       // Check if we're navigating back by comparing path segments
-      const currentSegments = pathname.split('/').filter(Boolean);
-      const previousSegments = previousPath.split('/').filter(Boolean);
-      
+      const currentSegments = pathname.split("/").filter(Boolean);
+      const previousSegments = previousPath.split("/").filter(Boolean);
+
       // If current path has fewer segments than previous, we're going back
       const isBack = currentSegments.length < previousSegments.length;
-      
+
       // Special case: if we're going back to root ('/'), it's always a back navigation
-      if (pathname === '/') {
+      if (pathname === "/") {
         setNavigationState(false);
       } else {
         setNavigationState(isBack);
@@ -77,8 +85,8 @@ export const RootLayout: React.FC = () => {
   }, [pathname, previousPath]);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (nextAppState === 'background') {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "background") {
         setNavigationState(false);
       }
     });
@@ -88,9 +96,20 @@ export const RootLayout: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!rootNavigation) return;
+    // @ts-expect-error: 'beforeRemove' is a valid event for React Navigation
+    const unsubscribe = rootNavigation.addListener?.("beforeRemove", () => {
+      void cleanupAudio();
+    });
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [rootNavigation]);
+
   if (!fontsLoaded || !navigationReady) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -105,6 +124,6 @@ export const RootLayout: React.FC = () => {
       </GestureHandlerRootView>
     </ErrorBoundary>
   );
-}
+};
 
 export default RootLayout;

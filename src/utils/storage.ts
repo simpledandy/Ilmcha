@@ -1,11 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { STORAGE_KEYS } from '../constants/storageKeys';
-import { Platform } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { STORAGE_KEYS } from "../constants/storageKeys";
+import { Platform } from "react-native";
+import { ToastAndroid } from "react-native";
 
 export interface StorageError {
   code: string;
   message: string;
-  originalError?: Error | unknown;
+  originalError?: Error;
 }
 
 export interface UserData {
@@ -26,9 +27,9 @@ class StorageManager {
     return StorageManager.instance;
   }
 
-  private handleError(error: Error | unknown, operation: string): StorageError {
+  private handleError(error: Error, operation: string): StorageError {
     const storageError: StorageError = {
-      code: 'STORAGE_ERROR',
+      code: "STORAGE_ERROR",
       message: `Failed to ${operation}`,
       originalError: error,
     };
@@ -41,8 +42,7 @@ class StorageManager {
   }
 
   private showToast(message: string) {
-    if (Platform.OS === 'android') {
-      const { ToastAndroid } = require('react-native');
+    if (Platform.OS === "android") {
       ToastAndroid.show(message, ToastAndroid.LONG);
     }
     // For iOS, you might want to use a different toast library or custom implementation
@@ -52,9 +52,12 @@ class StorageManager {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
     } catch (error) {
-      const storageError = this.handleError(error, 'save auth token');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "save auth token",
+      );
       this.showToast(storageError.message);
-      throw storageError;
+      throw new Error(storageError.message);
     }
   }
 
@@ -62,7 +65,10 @@ class StorageManager {
     try {
       return await AsyncStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
     } catch (error) {
-      const storageError = this.handleError(error, 'load auth token');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "load auth token",
+      );
       this.showToast(storageError.message);
       return null;
     }
@@ -74,11 +80,17 @@ class StorageManager {
         ...user,
         updatedAt: new Date().toISOString(),
       };
-      await AsyncStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userDataWithTimestamp));
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.USER_DATA,
+        JSON.stringify(userDataWithTimestamp),
+      );
     } catch (error) {
-      const storageError = this.handleError(error, 'save user data');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "save user data",
+      );
       this.showToast(storageError.message);
-      throw storageError;
+      throw new Error(storageError.message);
     }
   }
 
@@ -86,11 +98,21 @@ class StorageManager {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
       if (!data) return null;
-      
-      const parsedData = JSON.parse(data);
-      return parsedData as UserData;
+
+      const parsedData: unknown = JSON.parse(data);
+      if (
+        typeof parsedData === "object" &&
+        parsedData !== null &&
+        "email" in parsedData
+      ) {
+        return parsedData as UserData;
+      }
+      return null;
     } catch (error) {
-      const storageError = this.handleError(error, 'load user data');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "load user data",
+      );
       this.showToast(storageError.message);
       return null;
     }
@@ -103,9 +125,12 @@ class StorageManager {
         STORAGE_KEYS.USER_DATA,
       ]);
     } catch (error) {
-      const storageError = this.handleError(error, 'clear auth data');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "clear auth data",
+      );
       this.showToast(storageError.message);
-      throw storageError;
+      throw new Error(storageError.message);
     }
   }
 
@@ -113,9 +138,12 @@ class StorageManager {
     try {
       await AsyncStorage.clear();
     } catch (error) {
-      const storageError = this.handleError(error, 'clear all data');
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "clear all data",
+      );
       this.showToast(storageError.message);
-      throw storageError;
+      throw new Error(storageError.message);
     }
   }
 
@@ -123,30 +151,27 @@ class StorageManager {
     try {
       const keys = await AsyncStorage.getAllKeys();
       let totalSize = 0;
-      
+
       for (const key of keys) {
         const value = await AsyncStorage.getItem(key);
         if (value) {
           totalSize += new Blob([value]).size;
         }
       }
-      
+
       return totalSize;
     } catch (error) {
       if (__DEV__) {
-        console.error('Error calculating storage size:', error);
+        console.error("Error calculating storage size:", error);
       }
       return 0;
     }
   }
 
-  async migrateData(fromVersion: string, toVersion: string): Promise<void> {
+  async migrateData(_fromVersion: string, _toVersion: string): Promise<void> {
     try {
       // Implement data migration logic here
-      if (__DEV__) {
-        console.log(`Migrating data from ${fromVersion} to ${toVersion}`);
-      }
-      
+
       // Example migration: update user data structure
       const userData = await this.getUserData();
       if (userData && !userData.createdAt) {
@@ -157,8 +182,74 @@ class StorageManager {
         await this.setUserData(updatedUserData);
       }
     } catch (error) {
-      const storageError = this.handleError(error, 'migrate data');
-      throw storageError;
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "migrate data",
+      );
+      throw new Error(storageError.message);
+    }
+  }
+
+  // Station progress methods
+  async setStationProgress(progress: Record<string, unknown>): Promise<void> {
+    try {
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.STATION_PROGRESS,
+        JSON.stringify(progress),
+      );
+    } catch (error) {
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "save station progress",
+      );
+      this.showToast(storageError.message);
+      throw new Error(storageError.message);
+    }
+  }
+
+  async getStationProgress(): Promise<Record<string, unknown> | null> {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.STATION_PROGRESS);
+      if (!data) return null;
+      return JSON.parse(data) as Record<string, unknown>;
+    } catch (error) {
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "load station progress",
+      );
+      this.showToast(storageError.message);
+      return null;
+    }
+  }
+
+  async setIslandProgress(progress: Record<string, unknown>): Promise<void> {
+    try {
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.ISLAND_PROGRESS,
+        JSON.stringify(progress),
+      );
+    } catch (error) {
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "save island progress",
+      );
+      this.showToast(storageError.message);
+      throw new Error(storageError.message);
+    }
+  }
+
+  async getIslandProgress(): Promise<Record<string, unknown> | null> {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.ISLAND_PROGRESS);
+      if (!data) return null;
+      return JSON.parse(data) as Record<string, unknown>;
+    } catch (error) {
+      const storageError = this.handleError(
+        error instanceof Error ? error : new Error(String(error)),
+        "load island progress",
+      );
+      this.showToast(storageError.message);
+      return null;
     }
   }
 }
@@ -173,5 +264,12 @@ export const storage = {
   clearAuth: () => storageManager.clearAuth(),
   clearAllData: () => storageManager.clearAllData(),
   getStorageSize: () => storageManager.getStorageSize(),
-  migrateData: (fromVersion: string, toVersion: string) => storageManager.migrateData(fromVersion, toVersion),
-}; 
+  migrateData: (fromVersion: string, toVersion: string) =>
+    storageManager.migrateData(fromVersion, toVersion),
+  setStationProgress: (progress: Record<string, unknown>) =>
+    storageManager.setStationProgress(progress),
+  getStationProgress: () => storageManager.getStationProgress(),
+  setIslandProgress: (progress: Record<string, unknown>) =>
+    storageManager.setIslandProgress(progress),
+  getIslandProgress: () => storageManager.getIslandProgress(),
+};

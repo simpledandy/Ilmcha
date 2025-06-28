@@ -1,7 +1,13 @@
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming, withSequence } from 'react-native-reanimated';
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withSequence,
+} from "react-native-reanimated";
 
 export function useCountingAnimation(itemCount: number) {
-  const itemScales = useSharedValue(Array(itemCount).fill(1));
+  const itemScales = useSharedValue<number[]>(Array<number>(itemCount).fill(1));
   const feedbackScale = useSharedValue(0);
   const successScale = useSharedValue(0);
 
@@ -9,8 +15,8 @@ export function useCountingAnimation(itemCount: number) {
     const newScales = [...itemScales.value];
     newScales[index] = withSequence(
       withTiming(1.3, { duration: 150 }),
-      withTiming(1, { duration: 150 })
-    );
+      withTiming(1, { duration: 150 }),
+    ) as unknown as number;
     itemScales.value = newScales;
   };
 
@@ -45,4 +51,4 @@ export function useCountingAnimation(itemCount: number) {
     animateSuccess,
     resetFeedback,
   };
-} 
+}

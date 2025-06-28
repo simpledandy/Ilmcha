@@ -1,8 +1,8 @@
 // Error reporting utility for production
 // This can be integrated with services like Sentry, Firebase Crashlytics, or your own error tracking service
 
-import { Platform } from 'react-native';
-import { ContextData, ErrorInfo } from '../types/common';
+import { Platform } from "react-native";
+import { ContextData, ErrorInfo } from "../types/common";
 
 interface ErrorReport {
   error: Error;
@@ -31,15 +31,11 @@ class ErrorReporter {
     return ErrorReporter.instance;
   }
 
-  initialize(config?: {
-    enableReporting?: boolean;
-    serviceUrl?: string;
-    apiKey?: string;
-  }) {
+  initialize() {
     if (this.isInitialized) return;
 
     this.isInitialized = true;
-    
+
     // In production, you would initialize your error reporting service here
     // Example for Sentry:
     // if (config?.enableReporting) {
@@ -53,11 +49,15 @@ class ErrorReporter {
     this.processQueue();
   }
 
-  captureException(error: Error, errorInfo?: ErrorInfo, context?: {
-    userId?: string;
-    sessionId?: string;
-    tags?: Record<string, string>;
-  }) {
+  captureException(
+    error: Error,
+    errorInfo?: ErrorInfo,
+    context?: {
+      userId?: string;
+      sessionId?: string;
+      tags?: Record<string, string>;
+    },
+  ) {
     const errorReport: ErrorReport = {
       error,
       errorInfo,
@@ -68,13 +68,14 @@ class ErrorReporter {
       deviceInfo: {
         platform: Platform.OS,
         version: Platform.Version.toString(),
-        model: Platform.OS === 'ios' ? Platform.constants.systemName : undefined,
+        model:
+          Platform.OS === "ios" ? Platform.constants.systemName : undefined,
       },
     };
 
     if (__DEV__) {
       // In development, log to console
-      console.error('Error captured:', errorReport);
+      console.error("Error captured:", errorReport);
       return;
     }
 
@@ -105,7 +106,7 @@ class ErrorReporter {
     // });
 
     // For now, just log to console in production
-    console.error('Production error report:', errorReport);
+    console.error("Production error report:", errorReport);
   }
 
   private processQueue() {
@@ -117,7 +118,7 @@ class ErrorReporter {
     }
   }
 
-  setUser(userId: string, userInfo?: ContextData) {
+  setUser(_userId: string, _userInfo?: ContextData) {
     // Set user context for error reports
     // Example for Sentry:
     // Sentry.setUser({
@@ -126,13 +127,13 @@ class ErrorReporter {
     // });
   }
 
-  setTag(key: string, value: string) {
+  setTag(_key: string, _value: string) {
     // Set tags for error reports
     // Example for Sentry:
     // Sentry.setTag(key, value);
   }
 
-  setContext(name: string, context: ContextData) {
+  setContext(_name: string, _context: ContextData) {
     // Set context for error reports
     // Example for Sentry:
     // Sentry.setContext(name, context);
@@ -143,22 +144,18 @@ export const errorReporter = ErrorReporter.getInstance();
 
 // Helper function to capture errors with proper typing
 export const captureError = (
-  error: Error, 
-  errorInfo?: ErrorInfo, 
+  error: Error,
+  errorInfo?: ErrorInfo,
   context?: {
     userId?: string;
     sessionId?: string;
     tags?: Record<string, string>;
-  }
+  },
 ) => {
   errorReporter.captureException(error, errorInfo, context);
 };
 
 // Initialize error reporting
-export const initializeErrorReporting = (config?: {
-  enableReporting?: boolean;
-  serviceUrl?: string;
-  apiKey?: string;
-}) => {
-  errorReporter.initialize(config);
-}; 
+export const initializeErrorReporting = () => {
+  errorReporter.initialize();
+};

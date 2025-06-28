@@ -1,4 +1,4 @@
-import { ContextData } from '../types/common';
+import { ContextData } from "../types/common";
 
 interface LogLevel {
   DEBUG: 0;
@@ -29,7 +29,9 @@ class Logger {
 
   private constructor() {
     this.isDevelopment = __DEV__;
-    this.currentLevel = this.isDevelopment ? LOG_LEVELS.DEBUG : LOG_LEVELS.ERROR;
+    this.currentLevel = this.isDevelopment
+      ? LOG_LEVELS.DEBUG
+      : LOG_LEVELS.ERROR;
   }
 
   static getInstance(): Logger {
@@ -47,76 +49,68 @@ class Logger {
     return level >= this.currentLevel;
   }
 
-  private formatMessage(level: string, message: string, context?: LogContext): string {
+  private formatMessage(
+    level: string,
+    message: string,
+    context?: LogContext,
+  ): string {
     const timestamp = new Date().toISOString();
-    const contextStr = context ? ` [${JSON.stringify(context)}]` : '';
+    const contextStr = context ? ` [${JSON.stringify(context)}]` : "";
     return `[${timestamp}] ${level}: ${message}${contextStr}`;
   }
 
-  debug(message: string, context?: LogContext) {
+  debug(_message: string, _context?: LogContext) {
     if (this.shouldLog(LOG_LEVELS.DEBUG)) {
-      const formattedMessage = this.formatMessage('DEBUG', message, context);
-      if (this.isDevelopment) {
-        console.log(formattedMessage);
-      }
+      // Logging disabled in production
     }
   }
 
-  info(message: string, context?: LogContext) {
+  info(_message: string, _context?: LogContext) {
     if (this.shouldLog(LOG_LEVELS.INFO)) {
-      const formattedMessage = this.formatMessage('INFO', message, context);
-      if (this.isDevelopment) {
-        console.info(formattedMessage);
-      }
+      // Logging disabled in production
     }
   }
 
-  warn(message: string, context?: LogContext) {
+  warn(_message: string, _context?: LogContext) {
     if (this.shouldLog(LOG_LEVELS.WARN)) {
-      const formattedMessage = this.formatMessage('WARN', message, context);
-      if (this.isDevelopment) {
-        console.warn(formattedMessage);
-      }
+      // Logging disabled in production
     }
   }
 
-  error(message: string, error?: Error, context?: LogContext) {
+  error(_message: string, _error?: Error, _context?: LogContext) {
     if (this.shouldLog(LOG_LEVELS.ERROR)) {
-      const formattedMessage = this.formatMessage('ERROR', message, context);
-      if (this.isDevelopment) {
-        console.error(formattedMessage, error);
-      }
+      // Logging disabled in production
       // In production, you might want to send this to an error reporting service
     }
   }
 
   // Convenience methods for common use cases
   audio(message: string, audioKey?: string) {
-    this.debug(message, { component: 'Audio', audioKey });
+    this.debug(message, { component: "Audio", audioKey });
   }
 
   navigation(message: string, from?: string, to?: string) {
-    this.info(message, { component: 'Navigation', from, to });
+    this.info(message, { component: "Navigation", from, to });
   }
 
   storage(message: string, operation?: string) {
-    this.debug(message, { component: 'Storage', operation });
+    this.debug(message, { component: "Storage", operation });
   }
 
   animation(message: string, component?: string) {
-    this.debug(message, { component: 'Animation', target: component });
+    this.debug(message, { component: "Animation", target: component });
   }
 
   tracing(message: string, segment?: number) {
-    this.debug(message, { component: 'Tracing', segment });
+    this.debug(message, { component: "Tracing", segment });
   }
 
   reward(message: string, activity?: string) {
-    this.info(message, { component: 'Reward', activity });
+    this.info(message, { component: "Reward", activity });
   }
 }
 
 const logger = Logger.getInstance();
 
 export { logger, Logger, LOG_LEVELS };
-export type { LogContext }; 
+export type { LogContext };

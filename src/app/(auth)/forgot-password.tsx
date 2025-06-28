@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -7,43 +7,39 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { goBack } from '@utils/navigation';
-import { Text } from '@components/Text';
-import { Input } from '@components/Input';
-import { Button } from '@components/Button';
-import { StatusBar } from 'expo-status-bar';
-import { useTranslation } from 'react-i18next';
-import { BackgroundImages, PenguinImages } from '@constants/images/images';
-import { useRouter } from 'expo-router';
-import { useAuth } from '@hooks/useAuth';
+} from "react-native";
+import { goBack } from "@utils/navigation";
+import { Text } from "@components/Text";
+import { Input } from "@components/Input";
+import { Button } from "@components/Button";
+import { StatusBar } from "expo-status-bar";
+import { useTranslation } from "react-i18next";
+import { BackgroundImages, PenguinImages } from "@constants/images/images";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export const ForgotPasswordScreen: React.FC = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleResetPassword = async () => {
     if (!email) {
-      setError(t('emailRequiredError'));
+      setError(t("emailRequiredError"));
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       // TODO: Implement actual password reset logic
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       setSuccess(true);
-    } catch (err) {
-      setError(t('resetError'));
+    } catch {
+      setError(t("resetError"));
     } finally {
       setLoading(false);
     }
@@ -60,16 +56,16 @@ export const ForgotPasswordScreen: React.FC = () => {
     >
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.content}
       >
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text variant="heading2" style={styles.title}>
-            {t('forgotPasswordTitle')}
+            {t("forgotPasswordTitle")}
           </Text>
           <Text variant="body" style={styles.subtitle}>
-            {t('forgotPasswordSubtitle')}
+            {t("forgotPasswordSubtitle")}
           </Text>
         </View>
 
@@ -86,40 +82,38 @@ export const ForgotPasswordScreen: React.FC = () => {
         <View style={styles.formContainer}>
           {success ? (
             <>
-              <Text style={styles.successText}>
-                {t('resetSuccessMessage')}
-              </Text>
+              <Text style={styles.successText}>{t("resetSuccessMessage")}</Text>
               <Button
                 variant="primary"
                 size="large"
                 style={styles.button}
                 onPress={handleBackToLogin}
               >
-                {t('backToLoginButton')}
+                {t("backToLoginButton")}
               </Button>
             </>
           ) : (
             <>
               <Input
-                placeholder={t('emailPlaceholder')}
+                placeholder={t("emailPlaceholder")}
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
-                  setError('');
+                  setError("");
                 }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 error={error}
               />
-              
+
               <Button
                 variant="primary"
                 size="large"
                 style={styles.button}
-                onPress={handleResetPassword}
+                onPress={() => void handleResetPassword()}
                 loading={loading}
               >
-                {t('resetPasswordButton')}
+                {t("resetPasswordButton")}
               </Button>
 
               <Button
@@ -128,7 +122,7 @@ export const ForgotPasswordScreen: React.FC = () => {
                 style={styles.button}
                 onPress={handleBackToLogin}
               >
-                {t('backToLoginButton')}
+                {t("backToLoginButton")}
               </Button>
             </>
           )}
@@ -136,7 +130,7 @@ export const ForgotPasswordScreen: React.FC = () => {
       </KeyboardAvoidingView>
     </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -144,19 +138,19 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: 20,
   },
   textSection: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 60,
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     maxHeight: height * 0.5,
   },
   welcomeImage: {
@@ -165,17 +159,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     marginBottom: 12,
   },
   subtitle: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
+    color: "rgba(255, 255, 255, 0.8)",
+    textAlign: "center",
     paddingHorizontal: 20,
   },
   formContainer: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
@@ -183,12 +177,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   successText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     marginBottom: 24,
     fontSize: 16,
     lineHeight: 24,
   },
 });
 
-export default ForgotPasswordScreen; 
+export default ForgotPasswordScreen;

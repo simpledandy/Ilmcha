@@ -1,7 +1,7 @@
 // src/providers/AuthProvider.tsx
-import React, { createContext, useState, useEffect } from 'react';
-import { replace } from '../utils/navigation';
-import { storage } from '../utils/storage';
+import React, { createContext, useState, useEffect } from "react";
+import { replace } from "../utils/navigation";
+import { storage } from "../utils/storage";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -19,17 +19,18 @@ export interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+  ) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   completeOnboarding: () => Promise<void>;
 }
 
-interface AuthError {
-  code?: string;
-  message: string;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -46,7 +47,7 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
         setIsAuthenticated(true);
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error("Auth check failed:", error);
     } finally {
       setIsLoading(false);
     }
@@ -54,57 +55,61 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
 
   useEffect(() => {
     if (navigationReady) {
-      checkAuth();
+      void checkAuth();
     }
   }, [navigationReady]);
 
   useEffect(() => {
     if (navigationReady && isAuthenticated && user) {
       if (user.needsOnboarding) {
-        replace({ name: '/(app)/onboarding' });
+        replace("/(app)/onboarding");
       } else {
-        replace({ name: '/(app)' });
+        replace("/(app)");
       }
     }
   }, [isAuthenticated, user, navigationReady]);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (email: string, _password: string): Promise<void> => {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const mockUser = { email, needsOnboarding: false };
-      const mockToken = 'mock_token_' + Date.now();
+      const mockToken = "mock_token_" + Date.now();
       await storage.setUserData(mockUser);
       await storage.setAuthToken(mockToken);
       setUser(mockUser);
       setIsAuthenticated(true);
     } catch (error) {
-      throw {
-        message: error instanceof Error ? error.message : 'An unknown error occurred during login.',
-        code: 'LOGIN_ERROR',
-      } as AuthError;
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : "An unknown error occurred during login.",
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signup = async (name: string, email: string, password: string): Promise<{ success: boolean; error?: AuthError }> => {
+  const signup = async (
+    name: string,
+    email: string,
+    _password: string,
+  ): Promise<{ success: boolean; error?: string }> => {
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const mockUser = { name, email, needsOnboarding: true };
-      const mockToken = 'mock_token_' + Date.now();
+      const mockToken = "mock_token_" + Date.now();
       await storage.setUserData(mockUser);
       await storage.setAuthToken(mockToken);
       setUser(mockUser);
       setIsAuthenticated(true);
       return { success: true };
     } catch (err) {
-      const error: AuthError = {
-        code: "SIGNUP_ERROR",
-        message: err.message || "An unknown error occurred",
+      return {
+        success: false,
+        error: err instanceof Error ? err.message : "An unknown error occurred",
       };
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -116,10 +121,10 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
         const updatedUser = { ...user, needsOnboarding: false };
         await storage.setUserData(updatedUser);
         setUser(updatedUser);
-        replace({ name: '/(app)' });
+        replace("/(app)");
       }
     } catch (error) {
-      console.error('Failed to complete onboarding:', error);
+      console.error("Failed to complete onboarding:", error);
     }
   };
 
@@ -128,9 +133,9 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
       await storage.clearAuth();
       setUser(null);
       setIsAuthenticated(false);
-      replace({ name: '/(auth)' });
+      replace("/(auth)");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
-import { PenguinImages } from '@constants/images/images';
-import { useAudioPlayer } from '@hooks/useAudioPlayer';
-import { useFlyingPenguinAnimation } from '@hooks/useFlyingPenguinAnimation';
+import React from "react";
+import { StyleSheet } from "react-native";
+import Animated from "react-native-reanimated";
+import { PenguinImages } from "@constants/images/images";
+import { useAudioPlayer } from "@hooks/useAudioPlayer";
+import { useFlyingPenguinAnimation } from "@hooks/useFlyingPenguinAnimation";
 
 export const FlyingPenguin = () => {
-  useAudioPlayer('whereToFly', { autoPlay: true });
+  useAudioPlayer("whereToFly", { autoPlay: true });
   const { animatedStyle } = useFlyingPenguinAnimation();
 
   return (
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   penguin: {
     width: 200,
     height: 200,
-    position: 'absolute',
+    position: "absolute",
     bottom: 40,
     right: 40,
     zIndex: 5, // Ensure penguin stays above map but below buttons

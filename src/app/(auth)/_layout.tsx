@@ -1,18 +1,16 @@
-import React, { FC } from 'react';
+import React from "react";
 import { Stack } from "expo-router";
-import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '@hooks/useAuth';
-import { Redirect } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
-import { useEffect } from 'react';
-import { router } from 'expo-router';
+import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@hooks/useAuth";
+import { Redirect } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
 
 export const AuthLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -29,9 +27,9 @@ export const AuthLayout: React.FC = () => {
         screenOptions={{
           headerShown: false,
           contentStyle: {
-            backgroundColor: '#007AFF',
+            backgroundColor: "#007AFF",
           },
-          animation: 'fade',
+          animation: "fade",
         }}
       >
         <Stack.Screen name="index" />
@@ -41,6 +39,6 @@ export const AuthLayout: React.FC = () => {
       </Stack>
     </>
   );
-}
+};
 
 export default AuthLayout;

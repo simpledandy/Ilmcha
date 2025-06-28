@@ -21,13 +21,11 @@ module.exports = function (api) {
           alias: {
             '@': '.',
             '@components': './src/components',
-            '@screens': './src/screens',
             '@assets': './assets',
             '@utils': './src/utils',
             '@hooks': './src/hooks',
             '@constants': './src/constants',
             '@theme': './src/theme',
-            '@types': './src/types',
             '@images': './src/constants/images',
             '@fonts': './src/constants/fonts',
             '@icons': './src/constants/icons',

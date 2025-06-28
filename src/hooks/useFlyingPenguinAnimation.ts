@@ -1,19 +1,17 @@
-import React from 'react';
-import { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withRepeat, 
-  withTiming, 
+import React from "react";
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
   withSequence,
-  withDelay,
-  runOnJS,
   cancelAnimation,
   Easing,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 interface AnimationConfig {
   duration?: number;
-  easing?: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut';
+  easing?: "linear" | "easeIn" | "easeOut" | "easeInOut";
   repeatCount?: number;
   reverse?: boolean;
 }
@@ -21,7 +19,7 @@ interface AnimationConfig {
 export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
   const {
     duration = 2000,
-    easing = 'easeInOut',
+    easing = "easeInOut",
     repeatCount = -1, // Infinite
     reverse = true,
   } = config;
@@ -31,21 +29,27 @@ export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
   const scale = useSharedValue(1);
 
   // Animation timing functions
-  const getTimingConfig = (customDuration?: number) => {
-    const timingDuration = customDuration || duration;
-    
-    switch (easing) {
-      case 'linear':
-        return { duration: timingDuration };
-      case 'easeIn':
-        return { duration: timingDuration, easing: Easing.in(Easing.ease) };
-      case 'easeOut':
-        return { duration: timingDuration, easing: Easing.out(Easing.ease) };
-      case 'easeInOut':
-      default:
-        return { duration: timingDuration, easing: Easing.inOut(Easing.ease) };
-    }
-  };
+  const getTimingConfig = React.useCallback(
+    (customDuration?: number) => {
+      const timingDuration = customDuration || duration;
+
+      switch (easing) {
+        case "linear":
+          return { duration: timingDuration };
+        case "easeIn":
+          return { duration: timingDuration, easing: Easing.in(Easing.ease) };
+        case "easeOut":
+          return { duration: timingDuration, easing: Easing.out(Easing.ease) };
+        case "easeInOut":
+        default:
+          return {
+            duration: timingDuration,
+            easing: Easing.inOut(Easing.ease),
+          };
+      }
+    },
+    [duration, easing],
+  );
 
   // Start the animation when the component mounts
   React.useEffect(() => {
@@ -53,30 +57,30 @@ export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
     translateY.value = withRepeat(
       withSequence(
         withTiming(-10, getTimingConfig()),
-        withTiming(10, getTimingConfig())
+        withTiming(10, getTimingConfig()),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
 
     // Gentle rotation with different timing
     rotate.value = withRepeat(
       withSequence(
         withTiming(5, getTimingConfig(3000)),
-        withTiming(-5, getTimingConfig(3000))
+        withTiming(-5, getTimingConfig(3000)),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
 
     // Subtle scale animation for breathing effect
     scale.value = withRepeat(
       withSequence(
         withTiming(1.05, getTimingConfig(4000)),
-        withTiming(0.95, getTimingConfig(4000))
+        withTiming(0.95, getTimingConfig(4000)),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
 
     // Cleanup function to cancel animations on unmount
@@ -85,7 +89,16 @@ export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
       cancelAnimation(rotate);
       cancelAnimation(scale);
     };
-  }, [duration, easing, repeatCount, reverse]);
+  }, [
+    duration,
+    easing,
+    repeatCount,
+    reverse,
+    translateY,
+    rotate,
+    scale,
+    getTimingConfig,
+  ]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -100,45 +113,45 @@ export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
     cancelAnimation(translateY);
     cancelAnimation(rotate);
     cancelAnimation(scale);
-  }, []);
+  }, [translateY, rotate, scale]);
 
   const resumeAnimation = React.useCallback(() => {
     // Restart animations
     translateY.value = withRepeat(
       withSequence(
         withTiming(-10, getTimingConfig()),
-        withTiming(10, getTimingConfig())
+        withTiming(10, getTimingConfig()),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
 
     rotate.value = withRepeat(
       withSequence(
         withTiming(5, getTimingConfig(3000)),
-        withTiming(-5, getTimingConfig(3000))
+        withTiming(-5, getTimingConfig(3000)),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
 
     scale.value = withRepeat(
       withSequence(
         withTiming(1.05, getTimingConfig(4000)),
-        withTiming(0.95, getTimingConfig(4000))
+        withTiming(0.95, getTimingConfig(4000)),
       ),
       repeatCount,
-      reverse
+      reverse,
     );
-  }, [duration, easing, repeatCount, reverse]);
+  }, [repeatCount, reverse, translateY, rotate, scale, getTimingConfig]);
 
   const resetAnimation = React.useCallback(() => {
     translateY.value = 0;
     rotate.value = 0;
     scale.value = 1;
-  }, []);
+  }, [translateY, rotate, scale]);
 
-  return { 
+  return {
     animatedStyle,
     pauseAnimation,
     resumeAnimation,
@@ -148,4 +161,4 @@ export const useFlyingPenguinAnimation = (config: AnimationConfig = {}) => {
     rotate,
     scale,
   };
-}; 
+};

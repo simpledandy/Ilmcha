@@ -1,6 +1,6 @@
-import { colors } from './colors';
-import { typography } from './typography';
-import { StyleSheet } from 'react-native';
+import { colors } from "./colors";
+import { typography } from "./typography";
+import { StyleSheet } from "react-native";
 
 export const inputStyles = StyleSheet.create({
   base: {
@@ -40,4 +40,4 @@ export const inputVariants = {
       error: colors.input.error,
     },
   },
-}; 
+};

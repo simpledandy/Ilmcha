@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,9 @@ import {
   Alert,
   Platform,
   ScrollView,
-  Linking,
-} from 'react-native';
-import { colors } from '@theme/colors';
-import { captureError } from '@utils/errorReporting';
+} from "react-native";
+import { colors } from "@theme/colors";
+import { captureError } from "@utils/errorReporting";
 
 interface Props {
   children: ReactNode;
@@ -38,9 +37,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { 
-      hasError: false, 
-      retryCount: 0, 
+    this.state = {
+      hasError: false,
+      retryCount: 0,
       lastErrorTime: 0,
       isRecovering: false,
     };
@@ -57,14 +56,16 @@ export class ErrorBoundary extends Component<Props, State> {
     // Rate limiting: prevent infinite error loops
     if (now - lastErrorTime < ErrorBoundary.ERROR_RESET_INTERVAL) {
       const errorCount = this.state.retryCount + 1;
-      
+
       if (errorCount > ErrorBoundary.MAX_ERRORS_PER_MINUTE) {
         if (__DEV__) {
-          console.error('Too many errors detected, preventing further error handling');
+          console.error(
+            "Too many errors detected, preventing further error handling",
+          );
         }
         return;
       }
-      
+
       this.setState({ retryCount: errorCount });
     } else {
       this.setState({ retryCount: 1, lastErrorTime: now });
@@ -72,18 +73,22 @@ export class ErrorBoundary extends Component<Props, State> {
 
     // Log the error to console in development
     if (__DEV__) {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
+      console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
 
     // Capture error for reporting with enhanced context
-    captureError(error, errorInfo, {
-      tags: {
-        component: this.props.componentName || 'ErrorBoundary',
-        location: 'app-level',
-        retryCount: this.state.retryCount.toString(),
-        timestamp: new Date().toISOString(),
+    captureError(
+      error,
+      { ...errorInfo, componentStack: errorInfo.componentStack ?? undefined },
+      {
+        tags: {
+          component: this.props.componentName || "ErrorBoundary",
+          location: "app-level",
+          retryCount: this.state.retryCount.toString(),
+          timestamp: new Date().toISOString(),
+        },
       },
-    });
+    );
 
     // Call the onError callback if provided
     this.props.onError?.(error, errorInfo);
@@ -95,9 +100,9 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     // Reset error state when props change (if enabled)
     if (this.props.resetOnPropsChange && prevProps !== this.props) {
-      this.setState({ 
-        hasError: false, 
-        error: undefined, 
+      this.setState({
+        hasError: false,
+        error: undefined,
         errorInfo: undefined,
         retryCount: 0,
         isRecovering: false,
@@ -106,9 +111,9 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   handleReset = () => {
-    this.setState({ 
-      hasError: false, 
-      error: undefined, 
+    this.setState({
+      hasError: false,
+      error: undefined,
       errorInfo: undefined,
       retryCount: 0,
       isRecovering: false,
@@ -116,13 +121,14 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleRetry = () => {
-    const { maxRetries = 3, retryDelay = ErrorBoundary.DEFAULT_RETRY_DELAY } = this.props;
-    
+    const { maxRetries = 3, retryDelay = ErrorBoundary.DEFAULT_RETRY_DELAY } =
+      this.props;
+
     if (this.state.retryCount >= maxRetries) {
       Alert.alert(
-        'Maximum Retries Reached',
-        'Unable to recover from this error. Please restart the app.',
-        [{ text: 'OK' }]
+        "Maximum Retries Reached",
+        "Unable to recover from this error. Please restart the app.",
+        [{ text: "OK" }],
       );
       return;
     }
@@ -137,18 +143,18 @@ export class ErrorBoundary extends Component<Props, State> {
   handleReportError = () => {
     if (this.state.error) {
       Alert.alert(
-        'Error Report',
+        "Error Report",
         `Would you like to report this error?\n\nError: ${this.state.error.message}`,
         [
-          { text: 'Cancel', style: 'cancel' },
-          { 
-            text: 'Report', 
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Report",
             onPress: () => {
               // Here you would typically send the error to your error reporting service
-              Alert.alert('Thank you!', 'Error report submitted.');
-            }
-          }
-        ]
+              Alert.alert("Thank you!", "Error report submitted.");
+            },
+          },
+        ],
       );
     }
   };
@@ -168,19 +174,24 @@ export class ErrorBoundary extends Component<Props, State> {
               <Text style={styles.emoji}>😔</Text>
               <Text style={styles.title}>Oops! Something went wrong</Text>
               <Text style={styles.message}>
-                We're sorry, but something unexpected happened. Please try again.
+                We&apos;re sorry, but something unexpected happened. Our team
+                has been notified.
               </Text>
-              
+
               {this.state.isRecovering && (
                 <View style={styles.recoveringContainer}>
                   <Text style={styles.recoveringText}>Recovering...</Text>
                 </View>
               )}
-              
+
               {__DEV__ && this.state.error && (
                 <View style={styles.errorDetails}>
-                  <Text style={styles.errorTitle}>Error Details (Development):</Text>
-                  <Text style={styles.errorText}>{this.state.error.message}</Text>
+                  <Text style={styles.errorTitle}>
+                    Error Details (Development):
+                  </Text>
+                  <Text style={styles.errorText}>
+                    {this.state.error.message}
+                  </Text>
                   {this.state.errorInfo?.componentStack && (
                     <Text style={styles.stackText}>
                       {this.state.errorInfo.componentStack}
@@ -190,17 +201,27 @@ export class ErrorBoundary extends Component<Props, State> {
               )}
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.primaryButton} onPress={this.handleRetry}>
+                <TouchableOpacity
+                  style={styles.primaryButton}
+                  onPress={this.handleRetry}
+                >
                   <Text style={styles.primaryButtonText}>
-                    Try Again ({this.state.retryCount}/{this.props.maxRetries || 3})
+                    Try Again ({this.state.retryCount}/
+                    {this.props.maxRetries || 3})
                   </Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity style={styles.secondaryButton} onPress={this.handleReset}>
+
+                <TouchableOpacity
+                  style={styles.secondaryButton}
+                  onPress={this.handleReset}
+                >
                   <Text style={styles.secondaryButtonText}>Reset</Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity style={styles.tertiaryButton} onPress={this.handleReportError}>
+
+                <TouchableOpacity
+                  style={styles.tertiaryButton}
+                  onPress={this.handleReportError}
+                >
                   <Text style={styles.tertiaryButtonText}>Report Error</Text>
                 </TouchableOpacity>
               </View>
@@ -221,19 +242,19 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   content: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 30,
-    alignItems: 'center',
+    alignItems: "center",
     maxWidth: 400,
-    width: '100%',
+    width: "100%",
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -244,57 +265,57 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.primary[900],
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
   },
   message: {
     fontSize: 16,
     color: colors.primary[700],
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 24,
     marginBottom: 30,
   },
   recoveringContainer: {
-    backgroundColor: colors.success[50],
+    backgroundColor: colors.success[100],
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   recoveringText: {
     fontSize: 16,
-    color: colors.success[700],
-    fontWeight: '600',
+    color: colors.success[600],
+    fontWeight: "600",
   },
   errorDetails: {
     backgroundColor: colors.error[50],
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
-    width: '100%',
+    width: "100%",
   },
   errorTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.error[800],
     marginBottom: 5,
   },
   errorText: {
     fontSize: 12,
     color: colors.error[700],
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
     marginBottom: 10,
   },
   stackText: {
     fontSize: 10,
     color: colors.error[600],
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
   },
   buttonContainer: {
-    width: '100%',
+    width: "100%",
     gap: 10,
   },
   primaryButton: {
@@ -302,37 +323,37 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   primaryButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   secondaryButton: {
     backgroundColor: colors.background.secondary,
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: colors.primary[300],
+    borderColor: colors.primary[100],
   },
   secondaryButtonText: {
     color: colors.primary[700],
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   tertiaryButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 6,
-    alignItems: 'center',
+    alignItems: "center",
   },
   tertiaryButtonText: {
     color: colors.text.secondary,
     fontSize: 14,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
-}); 
+});

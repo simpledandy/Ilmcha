@@ -1,6 +1,6 @@
-import { audioMap } from '../constants/audio/audioMap';
-import { Audio } from 'expo-av';
-import i18n from 'i18next';
+import { audioMap } from "../constants/audio/audioMap";
+import { Audio } from "expo-av";
+import i18n from "i18next";
 
 class AudioManager {
   private static instance: AudioManager;
@@ -9,6 +9,9 @@ class AudioManager {
   private isNavigatingBack = false;
   private audioQueue: string[] = [];
   private isPlaying = false;
+  private lastPlayTimestamp = 0;
+  private debounceMs = 300;
+  private statusSubscribers: ((status: unknown) => void)[] = [];
 
   static getInstance(): AudioManager {
     if (!AudioManager.instance) {
@@ -21,21 +24,23 @@ class AudioManager {
     this.isNavigatingBack = isBack;
   }
 
-  async playAudio(key: keyof typeof audioMap['en'], forcePlay = false) {
+  async playAudio(
+    key: keyof (typeof audioMap)["en"],
+    forcePlay = false,
+  ): Promise<void> {
+    const now = Date.now();
+    if (!forcePlay && now - this.lastPlayTimestamp < this.debounceMs) {
+      return;
+    }
+    this.lastPlayTimestamp = now;
     try {
       // If we're navigating back and this isn't a forced play, don't play the audio
       if (this.isNavigatingBack && !forcePlay) {
-        if (__DEV__) {
-          console.log('Skipping audio playback due to back navigation:', key);
-        }
         return;
       }
 
       // Don't replay the same audio unless forced
       if (this.lastPlayedAudio === key && !forcePlay) {
-        if (__DEV__) {
-          console.log('Skipping duplicate audio playback:', key);
-        }
         return;
       }
 
@@ -47,10 +52,7 @@ class AudioManager {
 
       await this.stopCurrentAudio();
       await this.loadAndPlayAudio(key);
-    } catch (error) {
-      if (__DEV__) {
-        console.error('Error in playAudio:', error);
-      }
+    } catch {
       await this.cleanupAudio();
     }
   }
@@ -65,64 +67,83 @@ class AudioManager {
         } else {
           await this.currentSound.unloadAsync();
         }
-      } catch (error) {
+      } catch {
         try {
           await this.currentSound.unloadAsync();
-        } catch (cleanupError) {
-          if (__DEV__) {
-            console.log('Error cleaning up sound after stop error:', cleanupError);
-          }
-        }
-        if (__DEV__) {
-          console.log('Error stopping previous audio:', error);
+        } catch {
+          // Silent fail - already trying to cleanup
         }
       }
       this.currentSound = null;
     }
   }
 
-  private async loadAndPlayAudio(key: keyof typeof audioMap['en']) {
+  private async loadAndPlayAudio(
+    key: keyof (typeof audioMap)["en"],
+  ): Promise<void> {
     const lang = i18n.language;
-    
-    if (!audioMap[lang]?.[key]) {
-      if (__DEV__) {
-        console.log(`Audio not found for language ${lang} and key ${key}`);
-      }
+    if (!Object.prototype.hasOwnProperty.call(audioMap, lang)) {
       return;
+    }
+    const typedLang = lang as keyof typeof audioMap;
+
+    // Check if the requested audio exists, if not use "unavailable" as fallback
+    let audioKey = key;
+    if (!audioMap[typedLang]?.[key]) {
+      audioKey = "unavailable" as keyof (typeof audioMap)["en"];
     }
 
     const sound = new Audio.Sound();
     this.currentSound = sound;
     this.isPlaying = true;
-    
+
     try {
-      await sound.loadAsync(audioMap[lang][key]);
-      
+      await sound.loadAsync(
+        audioMap[typedLang][audioKey] as import("expo-av").AVPlaybackSource,
+      );
+
       await Audio.setAudioModeAsync({
         playsInSilentModeIOS: true,
         staysActiveInBackground: true,
         shouldDuckAndroid: true,
       });
-      
+
       await sound.playAsync();
-      this.lastPlayedAudio = key;
+      this.lastPlayedAudio = key; // Keep the original key for logging
+
+      // Wait for playback to finish and track progress
+      await new Promise<void>((resolve) => {
+        const onPlaybackStatusUpdate = (status: unknown) => {
+          if (
+            typeof status === "object" &&
+            status !== null &&
+            "didJustFinish" in status &&
+            "isLoaded" in status
+          ) {
+            this.notifyStatusSubscribers(status);
+            // Type assertion for safe property access
+            const s = status as { didJustFinish: boolean; isLoaded: boolean };
+            if (s.didJustFinish || s.isLoaded === false) {
+              sound.setOnPlaybackStatusUpdate(null);
+              resolve();
+            }
+          }
+        };
+        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      });
+
       this.isPlaying = false;
-      
-      if (__DEV__) {
-        console.log('Successfully playing audio:', key);
-      }
 
       // Play next in queue if available
       if (this.audioQueue.length > 0) {
         const nextKey = this.audioQueue.shift();
         if (nextKey) {
-          setTimeout(() => this.playAudio(nextKey as keyof typeof audioMap['en']), 100);
+          setTimeout(() => {
+            void this.playAudio(nextKey as keyof (typeof audioMap)["en"]);
+          }, 100);
         }
       }
-    } catch (error) {
-      if (__DEV__) {
-        console.log('Error playing audio:', error);
-      }
+    } catch {
       await this.cleanupAudio();
     }
   }
@@ -140,10 +161,72 @@ class AudioManager {
   isAudioPlaying(): boolean {
     return this.isPlaying;
   }
+
+  async playAudioSequence(
+    keys: (keyof (typeof audioMap)["en"])[],
+    debounce = true,
+  ) {
+    const now = Date.now();
+    if (debounce && now - this.lastPlayTimestamp < this.debounceMs) {
+      return;
+    }
+    this.lastPlayTimestamp = now;
+    for (const key of keys) {
+      await this.playAudio(key, true); // forcePlay = true to bypass debounce
+    }
+  }
+
+  async pauseAudio() {
+    if (this.currentSound) {
+      try {
+        await this.currentSound.pauseAsync();
+        this.isPlaying = false;
+      } catch {
+        // Silent fail - audio might already be stopped
+      }
+    }
+  }
+
+  async resumeAudio() {
+    if (this.currentSound) {
+      try {
+        await this.currentSound.playAsync();
+        this.isPlaying = true;
+      } catch {
+        // Silent fail - audio might not be loaded
+      }
+    }
+  }
+
+  subscribeToStatus(subscriber: (status: unknown) => void) {
+    this.statusSubscribers.push(subscriber);
+    // Return unsubscribe function
+    return () => {
+      this.statusSubscribers = this.statusSubscribers.filter(
+        (s) => s !== subscriber,
+      );
+    };
+  }
+
+  private notifyStatusSubscribers(status: unknown) {
+    this.statusSubscribers.forEach((subscriber) => subscriber(status));
+  }
 }
 
 const audioManager = AudioManager.getInstance();
 
-export const setNavigationState = (isBack: boolean) => audioManager.setNavigationState(isBack);
-export const playAudio = (key: keyof typeof audioMap['en'], forcePlay = false) => audioManager.playAudio(key, forcePlay);
+export const setNavigationState = (isBack: boolean) =>
+  audioManager.setNavigationState(isBack);
+export const playAudio = (
+  key: keyof (typeof audioMap)["en"],
+  forcePlay = false,
+) => audioManager.playAudio(key, forcePlay);
 export const cleanupAudio = () => audioManager.cleanupAudio();
+export const playAudioSequence = (
+  keys: (keyof (typeof audioMap)["en"])[],
+  debounce = true,
+) => audioManager.playAudioSequence(keys, debounce);
+export const pauseAudio = () => audioManager.pauseAudio();
+export const resumeAudio = () => audioManager.resumeAudio();
+export const subscribeToAudioStatus = (subscriber: (status: unknown) => void) =>
+  audioManager.subscribeToStatus(subscriber);

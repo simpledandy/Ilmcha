@@ -1,4 +1,11 @@
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence } from 'react-native-reanimated';
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withRepeat,
+  withSequence,
+} from "react-native-reanimated";
 
 export function useTracingAnimation() {
   const targetScale = useSharedValue(1);
@@ -10,10 +17,10 @@ export function useTracingAnimation() {
     targetScale.value = withRepeat(
       withSequence(
         withTiming(1.2, { duration: 200 }),
-        withTiming(1, { duration: 200 })
+        withTiming(1, { duration: 200 }),
       ),
       3,
-      true
+      true,
     );
   };
 
@@ -51,4 +58,4 @@ export function useTracingAnimation() {
     resetSuccess,
     resetHint,
   };
-} 
+}

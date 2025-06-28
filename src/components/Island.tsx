@@ -1,29 +1,30 @@
-import React from 'react';
-import { View, StyleSheet, Pressable, PressableProps } from 'react-native';
-import { Text } from './Text';
-import { colors } from '@theme/colors';
-import { Image } from 'expo-image';
-import { useTranslation } from 'react-i18next';
-import { ImageSource } from '@types/common';
+import React from "react";
+import { Pressable, PressableProps, StyleSheet } from "react-native";
+import { Text } from "./Text";
+import { colors } from "@theme/colors";
+import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
+import { ImageSource } from "../types/common";
+import { BackgroundImages } from "@constants/images/images";
 
 interface IslandProps extends PressableProps {
   title: string;
   subtitle?: string;
-  size?: 'small' | 'medium' | 'large';
-  status?: 'locked' | 'unlocked' | 'completed';
+  size?: "small" | "medium" | "large";
+  status?: "locked" | "unlocked" | "completed";
   imageSource?: ImageSource; // Optional: Add image source prop if needed
 }
 
 export const Island: React.FC<IslandProps> = ({
   title,
   subtitle,
-  size = 'medium',
-  status = 'locked',
-  imageSource = require('@assets/images/backgrounds/islands/numeriya.png'), // Default image
+  size = "medium",
+  status = "locked",
+  imageSource = BackgroundImages.islands.numeriya, // Default image
   ...props
 }) => {
   const { t } = useTranslation();
-  
+
   const islandStyles = {
     small: styles.islandSmall,
     medium: styles.islandMedium,
@@ -55,25 +56,19 @@ export const Island: React.FC<IslandProps> = ({
     >
       <Image
         source={imageSource} // Replace with your image path
-        style={{ width: '100%', height: '100%'}}
+        style={{ width: "100%", height: "100%" }}
         contentFit="contain"
       />
-      <Text 
-        variant="heading3" 
-        style={[
-          styles.title,
-          status === 'locked' && styles.lockedText
-        ]}
+      <Text
+        variant="heading3"
+        style={[styles.title, status === "locked" && styles.lockedText]}
       >
         {t(title)}
       </Text>
       {subtitle && (
-        <Text 
+        <Text
           variant="caption"
-          style={[
-            styles.subtitle,
-            status === 'locked' && styles.lockedText
-          ]}
+          style={[styles.subtitle, status === "locked" && styles.lockedText]}
         >
           {t(subtitle)}
         </Text>
@@ -84,8 +79,8 @@ export const Island: React.FC<IslandProps> = ({
 
 const styles = StyleSheet.create({
   island: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     elevation: 4,
     shadowColor: colors.neutral[900],
     shadowOffset: { width: 0, height: 2 },
@@ -105,11 +100,11 @@ const styles = StyleSheet.create({
     height: 180,
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 4,
   },
   subtitle: {
-    textAlign: 'center',
+    textAlign: "center",
     color: colors.text.secondary,
   },
   lockedText: {
@@ -118,4 +113,4 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
-}); 
+});

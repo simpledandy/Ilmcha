@@ -1,5 +1,10 @@
-import { useEffect } from 'react';
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { useEffect } from "react";
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
 export function useAnimatedModal(isVisible: boolean) {
   const scale = useSharedValue(0);
@@ -13,7 +18,7 @@ export function useAnimatedModal(isVisible: boolean) {
       scale.value = 0;
       opacity.value = 0;
     }
-  }, [isVisible]);
+  }, [isVisible, scale, opacity]);
 
   const modalAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -21,4 +26,4 @@ export function useAnimatedModal(isVisible: boolean) {
   }));
 
   return { modalAnimatedStyle, scale, opacity };
-} 
+}

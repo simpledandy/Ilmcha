@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useMemo } from 'react';
-import { View, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity } from 'react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { Island } from './Island';
-import { colors } from '@theme/colors';
-import { islands } from '@constants/map/mapData';
-import { navigate } from '@utils/navigation';
-import { Image as ExpoImage } from 'expo-image';
-import { clamp } from 'react-native-redash';
-import { Text } from './Text';
-import { BackgroundImages } from '@constants/images/images';
-import { useTranslation } from 'react-i18next';
-import { useAudioPlayer } from '@hooks/useAudioPlayer';
+import React from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
+import { Island } from "./Island";
+import { colors } from "@theme/colors";
+import { islands } from "@constants/map/mapData";
+import { router } from "expo-router";
+import { Image as ExpoImage } from "expo-image";
+import { clamp } from "react-native-redash";
+import { BackgroundImages } from "@constants/images/images";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 // Number of tiles on each side of center
 const TILE_SPREAD = 3; // 3 left, 3 right, 3 up, 3 down
@@ -27,12 +26,14 @@ const MAP_WIDTH = TILE_WIDTH * (TILE_SPREAD * 2 + 1);
 const MAP_HEIGHT = TILE_HEIGHT * (TILE_SPREAD * 2 + 1);
 
 export const MapView = () => {
-  const currentIsland = islands.find((island) => island.id === 'alphabet');
+  const currentIsland = islands.find((island) => island.id === "alphabet");
 
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
-  const initialTranslateX = SCREEN_WIDTH / 2 - (currentIsland?.x ?? MAP_WIDTH / 2);
-  const initialTranslateY = SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2);
+  const initialTranslateX =
+    SCREEN_WIDTH / 2 - (currentIsland?.x ?? MAP_WIDTH / 2);
+  const initialTranslateY =
+    SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2);
   const translateX = useSharedValue(initialTranslateX);
   const translateY = useSharedValue(initialTranslateY);
   const savedTranslateX = useSharedValue(initialTranslateX);
@@ -40,7 +41,7 @@ export const MapView = () => {
 
   const MIN_SCALE = 1;
   const MAX_SCALE = 3;
-  
+
   const pinchGesture = Gesture.Pinch()
     .onUpdate((e) => {
       const nextScale = savedScale.value * e.scale;
@@ -49,18 +50,18 @@ export const MapView = () => {
     .onEnd(() => {
       savedScale.value = scale.value;
     });
-  
+
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       const nextX = savedTranslateX.value + e.translationX;
       const nextY = savedTranslateY.value + e.translationY;
-  
+
       // Limits
       const minX = -MAP_WIDTH + SCREEN_WIDTH;
       const maxX = 0;
       const minY = -MAP_HEIGHT + SCREEN_HEIGHT;
       const maxY = 0;
-  
+
       translateX.value = clamp(nextX, minX, maxX);
       translateY.value = clamp(nextY, minY, maxY);
     })
@@ -96,7 +97,7 @@ export const MapView = () => {
               key={`tile-${row}-${col}`}
               source={BackgroundImages.screens.main}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 width: TILE_WIDTH,
                 height: TILE_HEIGHT,
                 left: (col + TILE_SPREAD) * TILE_WIDTH,
@@ -115,12 +116,14 @@ export const MapView = () => {
               subtitle={island.subtitle}
               size={island.size}
               status={island.status}
-              onPress={island.status === 'unlocked' ? () =>
-                navigate({ name: '/(app)/[island]', params: { island: island.id } })
-              : undefined}
+              onPress={
+                island.status === "unlocked"
+                  ? () => router.push(`/(app)/${island.id}`)
+                  : undefined
+              }
               imageSource={island.imageSource}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: island.x,
                 top: island.y,
               }}
@@ -135,7 +138,7 @@ export const MapView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   mapContainer: {
     width: MAP_WIDTH,

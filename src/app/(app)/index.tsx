@@ -1,14 +1,20 @@
-import React, { FC, useState, useEffect } from 'react';
-import { Image, StyleSheet, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { MapView } from '@components/MapView';
-import { colors } from '@theme/colors';
-import { router } from 'expo-router';
-import { FlyingPenguin } from '@components/FlyingPenguin';
-import { TreasureCollection } from '@components/TreasureCollection';
-import { rewardManager } from '@utils/rewardManager';
-import { Text } from '@components/Text';
-import { useTranslation } from 'react-i18next';
-import { navigate } from '@utils/navigation';
+import React, { useState, useEffect } from "react";
+import {
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { MapView } from "@components/MapView";
+import { colors } from "@theme/colors";
+import { FlyingPenguin } from "@components/FlyingPenguin";
+import { TreasureCollection } from "@components/TreasureCollection";
+import { rewardManager } from "@utils/rewardManager";
+import { Text } from "@components/Text";
+import { useTranslation } from "react-i18next";
+import { navigate } from "@utils/navigation";
+import { AppIcons } from "@constants/images/images";
 
 export const HomeScreen: React.FC = () => {
   const { t } = useTranslation();
@@ -42,11 +48,11 @@ export const HomeScreen: React.FC = () => {
   };
 
   const handleTalePress = () => {
-    navigate({ name: '/tale' });
+    navigate("/tale");
   };
 
   const handleParentalZonePress = () => {
-    navigate({ name: '/parental-zone' });
+    navigate("/parental-zone");
   };
 
   return (
@@ -54,12 +60,9 @@ export const HomeScreen: React.FC = () => {
       {/* Header with buttons */}
       <View style={styles.header}>
         {/* Tales Button */}
-        <TouchableOpacity
-          style={styles.taleButton}
-          onPress={handleTalePress}
-        >
+        <TouchableOpacity style={styles.taleButton} onPress={handleTalePress}>
           <Image
-            source={require('@assets/images/tale-icon.png')}
+            source={AppIcons.taleIcon}
             style={styles.icon}
             resizeMode="contain"
           />
@@ -68,13 +71,21 @@ export const HomeScreen: React.FC = () => {
         {/* Progress Display */}
         <View style={styles.progressContainer}>
           <View style={styles.progressItem}>
-            <Text variant="caption" style={styles.progressLabel}>{t('points')}</Text>
-            <Text variant="body" style={styles.progressValue}>{progress.totalPoints}</Text>
+            <Text variant="caption" style={styles.progressLabel}>
+              {t("points")}
+            </Text>
+            <Text variant="score" style={styles.progressValue}>
+              {progress.totalPoints}
+            </Text>
           </View>
           {progress.currentStreak > 0 && (
             <View style={styles.progressItem}>
-              <Text variant="caption" style={styles.progressLabel}>{t('streak')}</Text>
-              <Text variant="body" style={styles.progressValue}>🔥 {progress.currentStreak}</Text>
+              <Text variant="caption" style={styles.progressLabel}>
+                {t("streak")}
+              </Text>
+              <Text variant="score" style={styles.progressValue}>
+                🔥 {progress.currentStreak}
+              </Text>
             </View>
           )}
         </View>
@@ -85,13 +96,19 @@ export const HomeScreen: React.FC = () => {
           onPress={handleTreasureCollectionPress}
         >
           <Image
-            source={require('@assets/images/chest.png')}
+            source={AppIcons.chest}
             style={styles.icon}
             resizeMode="contain"
           />
           {progress.totalTreasures > 0 && (
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>{progress.totalTreasures}</Text>
+              <Text
+                variant="captionSmall"
+                weight="proportionalBold"
+                style={styles.badgeText}
+              >
+                {progress.totalTreasures}
+              </Text>
             </View>
           )}
         </TouchableOpacity>
@@ -102,7 +119,7 @@ export const HomeScreen: React.FC = () => {
           onPress={handleParentalZonePress}
         >
           <Image
-            source={require('@assets/images/lock-icon.png')}
+            source={AppIcons.lockIcon}
             style={styles.icon}
             resizeMode="contain"
           />
@@ -124,7 +141,7 @@ export const HomeScreen: React.FC = () => {
       />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -132,9 +149,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary[100],
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
     zIndex: 10, // Ensure buttons stay above other elements
   },
@@ -142,45 +159,43 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   progressContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 15,
   },
   progressItem: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 15,
   },
   progressLabel: {
     fontSize: 12,
-    color: '#666',
+    color: "#666",
     marginBottom: 2,
   },
   progressValue: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#4CAF50',
+    color: "#4CAF50",
   },
   treasureButton: {
     zIndex: 10,
-    position: 'relative',
+    position: "relative",
   },
   badge: {
-    position: 'absolute',
+    position: "absolute",
     top: -5,
     right: -5,
-    backgroundColor: '#FF6B35',
+    backgroundColor: "#FF6B35",
     borderRadius: 10,
     minWidth: 20,
     height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   badgeText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontWeight: 'bold',
   },
   settingsButton: {
     zIndex: 10,
@@ -191,7 +206,7 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     flex: 1,
-    position: 'relative', // Needed for absolute positioning of children
+    position: "relative", // Needed for absolute positioning of children
   },
 });
 

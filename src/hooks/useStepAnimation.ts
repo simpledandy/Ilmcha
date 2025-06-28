@@ -1,4 +1,9 @@
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
 export function useStepAnimation(progress: number) {
   const stepOpacity = useSharedValue(0);
@@ -21,4 +26,4 @@ export function useStepAnimation(progress: number) {
   }));
 
   return { stepAnimatedStyle, progressAnimatedStyle, animateStep };
-} 
+}

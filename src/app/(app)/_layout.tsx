@@ -1,11 +1,7 @@
-import React, { FC } from 'react';
-import { Slot, Redirect } from 'expo-router';
-import { useAuth } from '@hooks/useAuth';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Stack } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
-import { useEffect } from 'react';
-import { router } from 'expo-router';
+import React from "react";
+import { Slot, Redirect } from "expo-router";
+import { useAuth } from "@hooks/useAuth";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export const AppLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
@@ -19,6 +15,6 @@ export const AppLayout: React.FC = () => {
       <Slot />
     </GestureHandlerRootView>
   );
-}
+};
 
 export default AppLayout;

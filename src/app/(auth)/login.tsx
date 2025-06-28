@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -8,48 +8,47 @@ import {
   Platform,
   Image,
   Pressable,
-} from 'react-native';
-import { Link, router } from 'expo-router';
-import { Text } from '@components/Text';
-import { Input } from '@components/Input';
-import { Button } from '@components/Button';
-import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '@hooks/useAuth';
-import { useTranslation } from 'react-i18next';
-import { navigate, replace } from '@utils/navigation';
-import { BackgroundImages, PenguinImages } from '@constants/images/images';
+} from "react-native";
+import { Text } from "@components/Text";
+import { Input } from "@components/Input";
+import { Button } from "@components/Button";
+import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import { navigate, replace } from "@utils/navigation";
+import { BackgroundImages, PenguinImages } from "@constants/images/images";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export const LoginScreen: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const { t } = useTranslation();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError(t('loginError'));
+      setError(t("loginError"));
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       await login(email, password);
-      replace({ name: '/'});
-    } catch (err) {
-      setError(t('loginError'));
+      replace("/");
+    } catch {
+      setError(t("loginError"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleSignup = () => {
-    navigate({ name: '/signup' });
+    navigate("/signup");
   };
 
   return (
@@ -59,13 +58,13 @@ export const LoginScreen: React.FC = () => {
     >
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.content}
       >
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text variant="heading2" style={styles.title}>
-            {t('loginTitle')}
+            {t("loginTitle")}
           </Text>
         </View>
 
@@ -81,7 +80,7 @@ export const LoginScreen: React.FC = () => {
         {/* Form Section */}
         <View style={styles.formSection}>
           <Input
-            placeholder={t('emailPlaceholder')}
+            placeholder={t("emailPlaceholder")}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -89,45 +88,38 @@ export const LoginScreen: React.FC = () => {
             error={error}
           />
           <Input
-            placeholder={t('passwordPlaceholder')}
+            placeholder={t("passwordPlaceholder")}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             error={error}
           />
-          
+
           <Button
             variant="secondary"
             size="large"
             style={styles.loginButton}
-            onPress={handleLogin}
+            onPress={() => void handleLogin()}
             loading={loading}
           >
-            {t('loginButton')}
+            {t("loginButton")}
           </Button>
 
           <Pressable
             style={styles.forgotPasswordLink}
-            onPress={() => navigate({ name: '/forgot-password' })}
+            onPress={() => navigate("/forgot-password")}
           >
-            <Text style={styles.forgotPasswordText}>
-              {t('forgotPassword')}
-            </Text>
+            <Text style={styles.forgotPasswordText}>{t("forgotPassword")}</Text>
           </Pressable>
 
-          <Pressable
-            style={styles.signupLink}
-            onPress={handleSignup}
-          >
-            <Text style={styles.signupLinkText}>
-              {t('noAccount')}
-            </Text>
+          <Pressable style={styles.signupLink} onPress={handleSignup}>
+            <Text style={styles.signupLinkText}>{t("noAccount")}</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -139,11 +131,11 @@ const styles = StyleSheet.create({
   textSection: {
     paddingTop: 60,
     paddingHorizontal: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   imageSection: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   formSection: {
     padding: 20,
@@ -154,8 +146,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    color: '#1d99ed',
-    textAlign: 'center',
+    color: "#1d99ed",
+    textAlign: "center",
     marginBottom: 12,
   },
   loginButton: {
@@ -163,21 +155,21 @@ const styles = StyleSheet.create({
   },
   forgotPasswordLink: {
     marginTop: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   forgotPasswordText: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    textDecorationLine: 'underline',
+    color: "rgba(255, 255, 255, 0.8)",
+    textDecorationLine: "underline",
   },
   signupLink: {
     marginTop: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   signupLinkText: {
-    width: '80%',
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
+    width: "80%",
+    color: "rgba(255, 255, 255, 0.8)",
+    textAlign: "center",
   },
 });
 
-export default LoginScreen; 
+export default LoginScreen;

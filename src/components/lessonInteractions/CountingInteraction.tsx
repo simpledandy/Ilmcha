@@ -1,21 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Image,
-} from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, runOnJS } from 'react-native-reanimated';
-import { CountingExercise } from '@constants/lessons/lessonTypes';
-import { Text } from '@components/Text';
-import { useTranslation } from 'react-i18next';
-import { useAudioPlayer } from '@hooks/useAudioPlayer';
-import { useCountingAnimation } from '@hooks/useCountingAnimation';
-import { colors } from '@theme/colors';
-import { textStyles } from '@theme/typography';
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { CountingExercise } from "@constants/lessons/lessonTypes";
+import { Text } from "@components/Text";
+import { useAudioPlayer } from "@hooks/useAudioPlayer";
+import { colors } from "@theme/colors";
+import { Button } from "@components/Button";
+import { useTranslation } from "react-i18next";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface CountingInteractionProps {
   exercise: CountingExercise;
@@ -27,173 +19,148 @@ export const CountingInteraction: React.FC<CountingInteractionProps> = ({
   onComplete,
 }) => {
   const { t } = useTranslation();
-  const [selectedCount, setSelectedCount] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
+  const [selectedCount, setSelectedCount] = useState<number | null>(null);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [showResult, setShowResult] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  // Audio for exercise
-  useAudioPlayer(exercise.audioFile, { autoPlay: true });
+  const audioPlayer = useAudioPlayer(exercise.audioFile, { autoPlay: true });
 
-  // Animation logic
-  const {
-    itemScales,
-    feedbackScale,
-    successScale,
-    feedbackAnimatedStyle,
-    successAnimatedStyle,
-    animateItem,
-    animateFeedback,
-    animateSuccess,
-    resetFeedback,
-  } = useCountingAnimation(exercise.items.length);
+  const handleCountSelect = (count: number) => {
+    setSelectedCount(count);
+    setIsCorrect(count === exercise.targetNumber);
+    setShowResult(true);
+    setAttempts((prev) => prev + 1);
 
-  const handleItemPress = (index: number) => {
-    animateItem(index);
-    setSelectedCount(prev => prev + 1);
-    useAudioPlayer('counting_fish', false).play('counting_fish');
-  };
-
-  const handleSubmit = () => {
-    const isCorrect = selectedCount === exercise.targetNumber;
-    const accuracy = isCorrect ? 1.0 : Math.max(0, 1 - Math.abs(selectedCount - exercise.targetNumber) / exercise.targetNumber);
-    if (isCorrect) {
-      setIsCompleted(true);
-      animateSuccess();
-      useAudioPlayer('congrats', false).play('congrats');
-      setTimeout(() => {
-        onComplete(true, 60, accuracy);
-      }, 2000);
+    // Play success or error sound
+    if (count === exercise.targetNumber) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      void audioPlayer.play("congratsYouWon");
     } else {
-      setShowFeedback(true);
-      animateFeedback();
-      setAttempts(prev => prev + 1);
-      setTimeout(() => {
-        resetFeedback();
-        setShowFeedback(false);
-      }, 2000);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      void audioPlayer.play("unavailable");
     }
+
+    // Auto-advance after showing result
+    setTimeout(() => {
+      const score = count === exercise.targetNumber ? 10 : 1;
+      onComplete(count === exercise.targetNumber, score, 0);
+    }, 2000);
   };
 
   const handleReset = () => {
-    setSelectedCount(0);
-    setShowFeedback(false);
-    resetFeedback();
-    setAttempts(prev => prev + 1);
-  };
-
-  const getItemImage = (type: string) => {
-    switch (type) {
-      case 'fish':
-        return require('@assets/images/counting_bg.png'); // Placeholder
-      case 'star':
-        return require('@assets/images/light.png');
-      case 'coin':
-        return require('@assets/images/chest.png');
-      default:
-        return require('@assets/images/chest.png');
-    }
+    setSelectedCount(null);
+    setIsCorrect(null);
+    setShowResult(false);
+    setAttempts((prev) => prev + 1);
   };
 
   return (
     <View style={styles.container}>
-      {/* Question */}
-      <View style={styles.questionContainer}>
-        <Text variant="heading2" style={styles.questionText}>
-          {exercise.question}
+      {/* Child-friendly header */}
+      <View style={styles.header}>
+        <Text
+          variant="funHeading"
+          weight="proportionalBold"
+          style={styles.questionText}
+        >
+          🐟 {t("howManyFish")}
         </Text>
         <Text variant="body" style={styles.targetText}>
-          Target: {exercise.targetNumber}
+          {t("countToNumber", { number: exercise.targetNumber })}
         </Text>
       </View>
 
-      {/* Items to Count */}
-      <View style={styles.itemsContainer}>
-        {exercise.items.map((item, index) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[
-              styles.item,
-              selectedCount > index && styles.itemSelected
-            ]}
-            onPress={() => handleItemPress(index)}
-            disabled={isCompleted}
-          >
-            <Image
-              source={getItemImage(item.type)}
-              style={styles.itemImage}
-              resizeMode="contain"
-            />
-            {selectedCount > index && (
-              <View style={styles.checkmark}>
-                <Text style={styles.checkmarkText}>✓</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+      {/* Fish display area */}
+      <View style={styles.fishContainer}>
+        {exercise.items.map((item, _index) => (
+          <View key={item.id} style={styles.fishItem}>
+            <Text variant="display" style={styles.fishEmoji}>
+              🐟
+            </Text>
+          </View>
         ))}
       </View>
 
-      {/* Counter */}
-      <View style={styles.counterContainer}>
-        <Text variant="heading1" style={styles.counterText}>
-          {selectedCount}
+      {/* Number selection buttons - Child-friendly design */}
+      <View style={styles.numberContainer}>
+        <Text
+          variant="body"
+          weight="proportionalMedium"
+          style={styles.selectText}
+        >
+          {t("selectCorrectNumber")}
         </Text>
-        <Text variant="body" style={styles.counterLabel}>
-          {t('counted')}
-        </Text>
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.buttonContainer}>
-        {!isCompleted ? (
-          <>
-            <TouchableOpacity 
+        <View style={styles.numberGrid}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+            <TouchableOpacity
+              key={number}
               style={[
-                styles.submitButton,
-                selectedCount === 0 && styles.submitButtonDisabled
+                styles.numberButton,
+                selectedCount === number && styles.selectedNumber,
+                selectedCount === number && isCorrect && styles.correctNumber,
+                selectedCount === number &&
+                  !isCorrect &&
+                  styles.incorrectNumber,
               ]}
-              onPress={handleSubmit}
-              disabled={selectedCount === 0}
+              onPress={() => handleCountSelect(number)}
+              disabled={showResult}
             >
-              <Text variant="button" style={styles.submitButtonText}>
-                {t('submit')}
+              <Text
+                variant="display"
+                weight="proportionalBold"
+                style={[
+                  styles.numberText,
+                  selectedCount === number && styles.selectedNumberText,
+                ]}
+              >
+                {number}
               </Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.resetButton}
-              onPress={handleReset}
-            >
-              <Text variant="button" style={styles.resetButtonText}>
-                {t('reset')}
-              </Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <Animated.View style={[styles.successContainer, successAnimatedStyle]}>
-            <Text variant="heading2" style={styles.successText}>
-              ✨ {t('excellent')}! ✨
-            </Text>
-            <Text variant="body" style={styles.successSubtext}>
-              {t('youCountedCorrectly')} {exercise.targetNumber} {t('items')}
-            </Text>
-          </Animated.View>
-        )}
+          ))}
+        </View>
       </View>
 
-      {/* Feedback */}
-      {showFeedback && (
-        <Animated.View style={[styles.feedbackContainer, feedbackAnimatedStyle]}>
-          <Text variant="body" style={styles.feedbackText}>
-            {t('tryAgain')}
+      {/* Result display */}
+      {showResult && (
+        <View style={styles.resultContainer}>
+          <Text
+            variant="funHeading"
+            weight="proportionalBold"
+            style={[
+              styles.resultText,
+              isCorrect ? styles.correctText : styles.incorrectText,
+            ]}
+          >
+            {isCorrect ? t("correct") : t("tryAgain")}
           </Text>
-        </Animated.View>
+          <Text variant="body" style={styles.resultSubtext}>
+            {isCorrect
+              ? t("countedFishPerfectly", { number: exercise.targetNumber })
+              : t("selectedButThereAre", {
+                  selected: selectedCount,
+                  target: exercise.targetNumber,
+                })}
+          </Text>
+        </View>
       )}
 
-      {/* Progress */}
+      {/* Action buttons */}
+      <View style={styles.buttonContainer}>
+        <Button
+          variant="secondary"
+          onPress={handleReset}
+          style={styles.resetButton}
+          disabled={!showResult}
+        >
+          {t("tryAgainButton")}
+        </Button>
+      </View>
+
+      {/* Progress indicator */}
       <View style={styles.progressContainer}>
         <Text variant="caption" style={styles.progressText}>
-          {t('attempts')}: {attempts + 1}
+          {t("attempts", { count: attempts + 1 })}
         </Text>
       </View>
     </View>
@@ -203,160 +170,148 @@ export const CountingInteraction: React.FC<CountingInteractionProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 20,
+    backgroundColor: colors.background.primary,
   },
-  questionContainer: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  header: {
+    alignItems: "center",
+    backgroundColor: colors.background.tertiary,
     padding: 20,
     borderRadius: 15,
-    marginBottom: 20,
+    marginBottom: 15,
+    width: "100%",
   },
   questionText: {
     fontSize: 24,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
-    color: '#333',
+    color: colors.text.primary,
   },
   targetText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.text.secondary,
   },
-  itemsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 15,
+  fishContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
     maxWidth: SCREEN_WIDTH * 0.9,
+    marginBottom: 20,
   },
-  item: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#f0f8ff',
-    borderRadius: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: '#ddd',
-    position: 'relative',
+  fishItem: {
+    width: 70,
+    height: 70,
+    backgroundColor: colors.background.secondary,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 3,
+    borderColor: colors.border.primary,
+    position: "relative",
   },
-  itemSelected: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#e8f5e8',
+  fishEmoji: {
+    fontSize: 48,
+    color: colors.primary[500],
   },
-  itemImage: {
-    width: 50,
-    height: 50,
-  },
-  checkmark: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    width: 25,
-    height: 25,
-    borderRadius: 12.5,
-    backgroundColor: '#4CAF50',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkmarkText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  counterContainer: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  numberContainer: {
+    alignItems: "center",
+    backgroundColor: colors.background.tertiary,
     padding: 20,
     borderRadius: 15,
+    marginBottom: 20,
+    minWidth: 120,
   },
-  counterText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-  },
-  counterLabel: {
+  selectText: {
     fontSize: 16,
-    color: '#666',
-    marginTop: 5,
+    color: colors.text.secondary,
+    marginBottom: 10,
+  },
+  numberGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 12,
+    maxWidth: SCREEN_WIDTH * 0.9,
+  },
+  numberButton: {
+    width: 70,
+    height: 70,
+    backgroundColor: colors.background.secondary,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 3,
+    borderColor: colors.border.primary,
+    position: "relative",
+  },
+  selectedNumber: {
+    borderColor: colors.success[500],
+    backgroundColor: colors.success[100],
+  },
+  correctNumber: {
+    borderColor: colors.success[500],
+    backgroundColor: colors.success[100],
+  },
+  incorrectNumber: {
+    borderColor: colors.error[500],
+    backgroundColor: colors.error[50],
+  },
+  numberText: {
+    fontSize: 48,
+    color: colors.primary[500],
+  },
+  selectedNumberText: {
+    color: colors.success[500],
+  },
+  resultContainer: {
+    alignItems: "center",
+    backgroundColor: colors.background.tertiary,
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 15,
+  },
+  resultText: {
+    fontSize: 24,
+    color: colors.text.primary,
+    marginBottom: 10,
+  },
+  resultSubtext: {
+    fontSize: 16,
+    color: colors.text.secondary,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 15,
-    alignItems: 'center',
-  },
-  submitButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    borderRadius: 25,
-    minWidth: 120,
-    alignItems: 'center',
-  },
-  submitButtonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    alignItems: "center",
+    marginBottom: 15,
+    justifyContent: "center",
+    width: "100%",
   },
   resetButton: {
-    backgroundColor: '#FF9800',
+    backgroundColor: colors.warning[500],
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 25,
     minWidth: 100,
-    alignItems: 'center',
+    alignItems: "center",
+    flex: 1,
+    maxWidth: 120,
   },
-  resetButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
+  correctText: {
+    color: colors.success[500],
   },
-  successContainer: {
-    alignItems: 'center',
-    backgroundColor: colors.success[500] + '99',
-    padding: 20,
-    borderRadius: 15,
-  },
-  successText: {
-    color: colors.common.white,
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  successSubtext: {
-    color: colors.common.white,
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  feedbackContainer: {
-    position: 'absolute',
-    top: '50%',
-    left: 20,
-    right: 20,
-    backgroundColor: colors.error[50],
-    padding: 20,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: colors.error[500],
-    alignItems: 'center',
-  },
-  feedbackText: {
-    color: colors.error[600],
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  incorrectText: {
+    color: colors.error[500],
   },
   progressContainer: {
-    alignItems: 'center',
+    alignItems: "center",
+    marginTop: 10,
   },
   progressText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.text.secondary,
   },
-}); 
+});

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -8,41 +8,41 @@ import {
   Platform,
   Image,
   Pressable,
-} from 'react-native';
-import { navigate } from '@utils/navigation';
-import { Text } from '@components/Text';
-import { Input } from '@components/Input';
-import { Button } from '@components/Button';
-import { BackgroundImages, PenguinImages } from '@constants/images/images';
-import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '@hooks/useAuth';
-import { useTranslation } from 'react-i18next';
+} from "react-native";
+import { navigate } from "@utils/navigation";
+import { Text } from "@components/Text";
+import { Input } from "@components/Input";
+import { Button } from "@components/Button";
+import { BackgroundImages, PenguinImages } from "@constants/images/images";
+import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export const SignupScreen: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { signup } = useAuth();
   const { t } = useTranslation();
 
   const handleSignup = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      setError(t('allFieldsRequired'));
+      setError(t("allFieldsRequired"));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError(t('passwordsDontMatch'));
+      setError(t("passwordsDontMatch"));
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const result = await signup(name, email, password);
@@ -50,17 +50,17 @@ export const SignupScreen: React.FC = () => {
         // The AuthProvider will handle the navigation to onboarding
         // based on the needsOnboarding flag
       } else {
-        setError(result.error || t('signupError'));
+        setError(result.error || t("signupError"));
       }
-    } catch (err) {
-      setError(t('signupError'));
+    } catch {
+      setError(t("signupError"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogin = () => {
-    navigate({ name: '/login' });
+    navigate("/login");
   };
 
   return (
@@ -70,14 +70,14 @@ export const SignupScreen: React.FC = () => {
     >
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.content}
       >
         {/* Text Section */}
         <View style={styles.textSection}>
-        <Text variant="heading2" style={styles.title}>
-          {t('signupTitle')}
-        </Text>
+          <Text variant="heading2" style={styles.title}>
+            {t("signupTitle")}
+          </Text>
         </View>
 
         {/* Image Section */}
@@ -92,14 +92,14 @@ export const SignupScreen: React.FC = () => {
         {/* Form Section */}
         <View style={styles.formSection}>
           <Input
-            placeholder={t('namePlaceholder')}
+            placeholder={t("namePlaceholder")}
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
             error={error}
           />
           <Input
-            placeholder={t('emailPlaceholder')}
+            placeholder={t("emailPlaceholder")}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -107,14 +107,14 @@ export const SignupScreen: React.FC = () => {
             error={error}
           />
           <Input
-            placeholder={t('passwordPlaceholder')}
+            placeholder={t("passwordPlaceholder")}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             error={error}
           />
           <Input
-            placeholder={t('confirmPasswordPlaceholder')}
+            placeholder={t("confirmPasswordPlaceholder")}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
@@ -125,25 +125,20 @@ export const SignupScreen: React.FC = () => {
             variant="secondary"
             size="large"
             style={styles.signupButton}
-            onPress={handleSignup}
+            onPress={() => void handleSignup()}
             loading={loading}
           >
-            {t('signupButton')}
+            {t("signupButton")}
           </Button>
 
-          <Pressable
-            style={styles.loginLink}
-            onPress={handleLogin}
-          >
-            <Text style={styles.loginLinkText}>
-              {t('haveAccount')}
-            </Text>
+          <Pressable style={styles.loginLink} onPress={handleLogin}>
+            <Text style={styles.loginLinkText}>{t("haveAccount")}</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
     </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -151,21 +146,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: 20,
   },
   textSection: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 20,
   },
   imageSection: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   formSection: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 20,
     paddingBottom: 60,
   },
@@ -175,21 +170,21 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    color: '#1d99ed',
-    textAlign: 'center',
+    color: "#1d99ed",
+    textAlign: "center",
   },
   signupButton: {
     marginTop: 24,
   },
   loginLink: {
     marginTop: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   loginLinkText: {
-    width: '80%',
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
+    width: "80%",
+    color: "rgba(255, 255, 255, 0.8)",
+    textAlign: "center",
   },
 });
 
-export default SignupScreen; 
+export default SignupScreen;
