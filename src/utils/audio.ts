@@ -10,8 +10,12 @@ class AudioManager {
   private audioQueue: string[] = [];
   private isPlaying = false;
   private lastPlayTimestamp = 0;
-  private debounceMs = 300;
+  private debounceMs = 100;
   private statusSubscribers: ((status: unknown) => void)[] = [];
+
+  // Track navigation depth to determine when to play welcome audios
+  private navigationDepth = 0;
+  private welcomeAudioKeys = new Set(["welcomeTales"]);
 
   static getInstance(): AudioManager {
     if (!AudioManager.instance) {
@@ -22,6 +26,11 @@ class AudioManager {
 
   setNavigationState(isBack: boolean) {
     this.isNavigatingBack = isBack;
+    if (isBack) {
+      this.navigationDepth = Math.max(0, this.navigationDepth - 1);
+    } else {
+      this.navigationDepth++;
+    }
   }
 
   async playAudio(
@@ -29,23 +38,43 @@ class AudioManager {
     forcePlay = false,
   ): Promise<void> {
     const now = Date.now();
-    if (!forcePlay && now - this.lastPlayTimestamp < this.debounceMs) {
-      return;
-    }
-    this.lastPlayTimestamp = now;
-    try {
-      // If we're navigating back and this isn't a forced play, don't play the audio
-      if (this.isNavigatingBack && !forcePlay) {
+
+    // Check if this is a welcome audio
+    const isWelcomeAudio = this.welcomeAudioKeys.has(key);
+
+    // For welcome audios, only play if we're not navigating back and we're at the appropriate depth
+    if (isWelcomeAudio && !forcePlay) {
+      // Don't play welcome audio if we're navigating back
+      if (this.isNavigatingBack) {
         return;
       }
 
+      // Don't play welcome audio if we're at a deeper navigation level
+      // (meaning we came from a deeper screen, not from an earlier screen)
+      if (this.navigationDepth > 1) {
+        return;
+      }
+    }
+
+    // Apply minimal debouncing only for non-welcome audios to prevent rapid-fire audio
+    if (
+      !isWelcomeAudio &&
+      !forcePlay &&
+      now - this.lastPlayTimestamp < this.debounceMs
+    ) {
+      return;
+    }
+
+    this.lastPlayTimestamp = now;
+
+    try {
       // Don't replay the same audio unless forced
       if (this.lastPlayedAudio === key && !forcePlay) {
         return;
       }
 
-      // Add to queue if already playing
-      if (this.isPlaying && !forcePlay) {
+      // Add to queue if already playing (but not for welcome audios)
+      if (this.isPlaying && !forcePlay && !isWelcomeAudio) {
         this.audioQueue.push(key);
         return;
       }
@@ -110,6 +139,14 @@ class AudioManager {
 
       await sound.playAsync();
       this.lastPlayedAudio = key; // Keep the original key for logging
+
+      // Notify that audio has started playing
+      this.notifyStatusSubscribers({
+        isLoaded: true,
+        isPlaying: true,
+        positionMillis: 0,
+        durationMillis: 0,
+      });
 
       // Wait for playback to finish and track progress
       await new Promise<void>((resolve) => {

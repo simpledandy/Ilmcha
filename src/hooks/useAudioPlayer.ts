@@ -72,18 +72,33 @@ export function useAudioPlayer(
           isPlaying?: boolean;
           didJustFinish?: boolean;
         };
-        setState((prev) => ({
-          ...prev,
-          positionMillis: audioStatus.positionMillis || 0,
-          durationMillis: audioStatus.durationMillis || 0,
-          isPaused: audioStatus.isLoaded
-            ? !audioStatus.isPlaying && !audioStatus.didJustFinish
-            : false,
-        }));
+
+        setState((prev) => {
+          const newState = {
+            ...prev,
+            positionMillis: audioStatus.positionMillis || 0,
+            durationMillis: audioStatus.durationMillis || 0,
+            isPaused: audioStatus.isLoaded
+              ? !audioStatus.isPlaying && !audioStatus.didJustFinish
+              : false,
+          };
+
+          // Handle audio completion
+          if (audioStatus.didJustFinish && prev.isPlaying) {
+            newState.isPlaying = false;
+            newState.currentAudio = null;
+            // Call onPlayEnd callback
+            if (prev.currentAudio) {
+              onPlayEnd?.(prev.currentAudio);
+            }
+          }
+
+          return newState;
+        });
       }
     });
     return unsubscribe;
-  }, []);
+  }, [onPlayEnd]);
 
   const handlePlay = useCallback(
     async (key: keyof (typeof audioMap)["en"], forcePlay = false) => {
@@ -94,24 +109,21 @@ export function useAudioPlayer(
           ...prev,
           isLoading: true,
         }));
-        setState((prev) => ({
-          ...prev,
-          isPlaying: true,
-          currentAudio: key,
-          hasError: false,
-          errorMessage: null,
-        }));
 
         onPlayStart?.(key);
 
         await playAudio(key, forcePlay);
 
+        // Set loading to false immediately after audio starts playing
         if (mountedRef.current) {
           setState((prev) => ({
             ...prev,
-            isPlaying: false,
+            isLoading: false,
+            isPlaying: true,
+            currentAudio: key,
+            hasError: false,
+            errorMessage: null,
           }));
-          onPlayEnd?.(key);
         }
       } catch (error) {
         if (mountedRef.current) {
@@ -119,6 +131,7 @@ export function useAudioPlayer(
             error instanceof Error ? error.message : "Unknown audio error";
           setState((prev) => ({
             ...prev,
+            isLoading: false,
             isPlaying: false,
             hasError: true,
             errorMessage,
@@ -127,7 +140,7 @@ export function useAudioPlayer(
         }
       }
     },
-    [onPlayStart, onPlayEnd, onError],
+    [onPlayStart, onError],
   );
 
   // Auto-play effect
@@ -185,13 +198,63 @@ export function useAudioPlayer(
     playedRef.current = false;
   }, []);
 
-  const pause = useCallback(() => {
-    void pauseAudio();
-  }, []);
+  const pause = useCallback(async () => {
+    if (!mountedRef.current) return;
 
-  const resume = useCallback(() => {
-    void resumeAudio();
-  }, []);
+    try {
+      await pauseAudio();
+      setState((prev) => ({
+        ...prev,
+        isPaused: true,
+        isLoading: false,
+      }));
+    } catch (error) {
+      if (mountedRef.current) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to pause audio";
+        setState((prev) => ({
+          ...prev,
+          hasError: true,
+          errorMessage,
+          isLoading: false,
+        }));
+        onError?.(errorMessage);
+      }
+    }
+  }, [onError]);
+
+  const resume = useCallback(async () => {
+    if (!mountedRef.current) return;
+
+    try {
+      setState((prev) => ({
+        ...prev,
+        isLoading: true,
+      }));
+
+      await resumeAudio();
+
+      if (mountedRef.current) {
+        setState((prev) => ({
+          ...prev,
+          isPaused: false,
+          isLoading: false,
+        }));
+      }
+    } catch (error) {
+      if (mountedRef.current) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Failed to resume audio";
+        setState((prev) => ({
+          ...prev,
+          hasError: true,
+          errorMessage,
+          isLoading: false,
+        }));
+        onError?.(errorMessage);
+      }
+    }
+  }, [onError]);
 
   return {
     play,

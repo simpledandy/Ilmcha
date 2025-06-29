@@ -6,7 +6,7 @@ import { i18n } from "i18n";
 import { Text } from "@components/Text";
 import { useAudioPlayer } from "@/src/hooks/useAudioPlayer";
 import { tales } from "@/src/constants/tales/tales";
-import { Button } from "@components/Button";
+import { AudioControl } from "@components/AudioControl";
 
 export const TaleScreen: React.FC = () => {
   const { tale } = useLocalSearchParams<{ tale: string }>();
@@ -56,25 +56,23 @@ export const TaleScreen: React.FC = () => {
           </View>
           <View style={styles.buttonRow}>
             {audioPlayer.isPaused || !audioPlayer.isPlaying ? (
-              <Button
-                variant="primary"
+              <AudioControl
+                variant="play"
                 size="small"
                 style={styles.audioButton}
-                onPress={audioPlayer.resume}
+                onPress={() => void audioPlayer.resume()}
                 disabled={audioPlayer.isLoading}
-              >
-                {"▶️ " + i18n.t("play", { defaultValue: "Play" })}
-              </Button>
+                loading={audioPlayer.isLoading && !audioPlayer.isPlaying}
+              />
             ) : (
-              <Button
-                variant="secondary"
+              <AudioControl
+                variant="pause"
                 size="small"
                 style={styles.audioButton}
-                onPress={audioPlayer.pause}
+                onPress={() => void audioPlayer.pause()}
                 disabled={audioPlayer.isLoading}
-              >
-                {"⏸️ " + i18n.t("pause", { defaultValue: "Pause" })}
-              </Button>
+                loading={false}
+              />
             )}
           </View>
         </View>

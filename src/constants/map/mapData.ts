@@ -1,7 +1,6 @@
 import { Dimensions } from "react-native";
 import { ImageSource } from "../../types/common";
 import { BackgroundImages } from "@constants/images/images";
-import { LessonKey } from "../lessons/lessons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -35,23 +34,7 @@ export const islands: IslandData[] = [
     size: "large",
     status: "unlocked",
     imageSource: BackgroundImages.islands.numeriya,
-    lessons: [
-      LessonKey.NumberTracing1,
-      LessonKey.NumberTracing2,
-      LessonKey.NumberTracing3,
-      LessonKey.NumberTracing4,
-      LessonKey.NumberTracing5,
-      LessonKey.NumberTracing6,
-      LessonKey.NumberTracing7,
-      LessonKey.NumberTracing8,
-      LessonKey.NumberTracing9,
-      LessonKey.NumberTracing10,
-      LessonKey.CountingFish3,
-      LessonKey.CountingFish5,
-      LessonKey.CountingFish7,
-      LessonKey.NumberMatching,
-      LessonKey.NumberQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "alphabet",
@@ -62,24 +45,7 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.alibo,
-    lessons: [
-      LessonKey.LetterTracingAEn,
-      LessonKey.LetterTracingBEn,
-      LessonKey.LetterTracingCEn,
-      LessonKey.LetterTracingDEn,
-      LessonKey.LetterTracingEEn,
-      LessonKey.LetterTracingFEn,
-      LessonKey.LetterTracingGEn,
-      LessonKey.LetterTracingHEn,
-      LessonKey.LetterTracingIEn,
-      LessonKey.LetterTracingJEn,
-      LessonKey.WordMatchingABC,
-      LessonKey.WordMatchingDEF,
-      LessonKey.WordMatchingGHI,
-      LessonKey.AlphabetQuizABCDE,
-      LessonKey.AlphabetQuizFGHIJ,
-      LessonKey.ListeningABCDE,
-    ],
+    lessons: [],
   },
   {
     id: "basics",
@@ -90,15 +56,7 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.BasicShapes,
-      LessonKey.BasicColors,
-      LessonKey.BasicAnimals,
-      LessonKey.BasicFood,
-      LessonKey.BasicBodyParts,
-      LessonKey.BasicMatching,
-      LessonKey.BasicQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "colors",
@@ -109,16 +67,7 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.ColorRed,
-      LessonKey.ColorBlue,
-      LessonKey.ColorGreen,
-      LessonKey.ColorYellow,
-      LessonKey.ColorPurple,
-      LessonKey.ColorOrange,
-      LessonKey.ColorMatching,
-      LessonKey.ColorQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "shapes",
@@ -129,16 +78,7 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.ShapeCircle,
-      LessonKey.ShapeSquare,
-      LessonKey.ShapeTriangle,
-      LessonKey.ShapeRectangle,
-      LessonKey.ShapeStar,
-      LessonKey.ShapeHeart,
-      LessonKey.ShapeMatching,
-      LessonKey.ShapeQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "family",
@@ -149,13 +89,7 @@ export const islands: IslandData[] = [
     size: "medium",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.FamilyMembers,
-      LessonKey.FamilyRelations,
-      LessonKey.FamilyActivities,
-      LessonKey.FamilyMatching,
-      LessonKey.FamilyQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "food",
@@ -166,13 +100,7 @@ export const islands: IslandData[] = [
     size: "medium",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.FoodFruits,
-      LessonKey.FoodVegetables,
-      LessonKey.FoodMeals,
-      LessonKey.FoodMatching,
-      LessonKey.FoodQuiz,
-    ],
+    lessons: [],
   },
   {
     id: "conversation",
@@ -183,13 +111,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [
-      LessonKey.Greetings,
-      LessonKey.Feelings,
-      LessonKey.Weather,
-      LessonKey.DailyRoutine,
-      LessonKey.ConversationMatching,
-      LessonKey.ConversationQuiz,
-    ],
+    lessons: [],
   },
 ];

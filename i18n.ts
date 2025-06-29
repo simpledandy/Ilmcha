@@ -156,6 +156,8 @@ const resources = {
 
       // Lesson Types
       lessons: 'Lessons',
+      stations: 'Stations',
+      tasks: 'Tasks',
       easy: 'Easy',
       medium: 'Medium',
       hard: 'Hard',
@@ -395,6 +397,8 @@ const resources = {
 
       // Lesson Types
       lessons: 'Darslar',
+      stations: 'Stansiyalar',
+      tasks: 'Vazifalar',
       easy: 'Oson',
       medium: "O'rtacha",
       hard: 'Qiyin',

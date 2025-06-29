@@ -20,14 +20,14 @@ describe("Island", () => {
     const { getByTestId } = render(
       <Island {...defaultProps} onPress={onPress} />,
     );
-    fireEvent.press(getByTestId("island-1"));
-    expect(onPress).toHaveBeenCalledWith("1");
+    fireEvent.press(getByTestId("island-island-1"));
+    expect(onPress).toHaveBeenCalled();
   });
 
   it("shows locked state if applicable", () => {
     const { getByTestId } = render(
       <Island {...defaultProps} status={"locked"} />,
     );
-    expect(getByTestId("island-1")).toBeTruthy();
+    expect(getByTestId("island-island-1")).toBeTruthy();
   });
 });

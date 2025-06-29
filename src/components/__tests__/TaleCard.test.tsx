@@ -3,7 +3,7 @@ import { render, fireEvent } from "@testing-library/react-native";
 import { TaleCard } from "../TaleCard";
 
 // Mock image import to fix require() style import lint error
-jest.mock("../../assets/images/tale-icon.png", () => "mock-tale-icon");
+jest.mock("../../../assets/images/tale-icon.png", () => "mock-tale-icon");
 
 describe("TaleCard", () => {
   const defaultProps = {

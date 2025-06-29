@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Image, SafeAreaView, View } from "react-native";
 import { replace, goBack } from "@utils/navigation";
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { Text } from "@components/Text";
+import { BackButton } from "@components/BackButton";
 import { i18n } from "i18n";
 import { AppIcons } from "@constants/images/images";
 
@@ -32,9 +27,11 @@ export const Onboarding: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => goBack()}>
-        <Text style={styles.backText}>{i18n.t("back")}</Text>
-      </TouchableOpacity>
+      <BackButton
+        onPress={() => goBack()}
+        size="medium"
+        style={styles.backButton}
+      />
 
       <Text variant="heading1" style={styles.title}>
         {i18n.t("newAccount")}
@@ -109,10 +106,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: 20,
     marginBottom: 20,
-  },
-  backText: {
-    color: "#007AFF",
-    fontSize: 16,
   },
   title: {
     marginVertical: 16,

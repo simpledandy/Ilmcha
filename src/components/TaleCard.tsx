@@ -23,7 +23,11 @@ export const TaleCard: React.FC<TaleCardProps> = ({
   style,
 }) => {
   return (
-    <TouchableOpacity style={[styles.card, style]} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.card, style]}
+      onPress={onPress}
+      testID="tale-card"
+    >
       <Image source={imageSource} style={styles.image} resizeMode="cover" />
       <Text variant="label" style={styles.title}>
         {title}

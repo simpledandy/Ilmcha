@@ -39,6 +39,28 @@ import white from "@assets/images/backgrounds/auth/white.png";
 import blue from "@assets/images/backgrounds/auth/blue.png";
 import oceanBg from "@assets/images/backgrounds/ocean-bg.png";
 
+// Adventure Island Backgrounds
+import numeriyaAdventureBg from "@assets/images/backgrounds/islands/adventure/numeriya-island-bg.png";
+import alifboAdventureBg from "@assets/images/backgrounds/islands/adventure/alifbo-island-bg.png";
+import basicsAdventureBg from "@assets/images/backgrounds/islands/adventure/basics-island-bg.png";
+import colorsAdventureBg from "@assets/images/backgrounds/islands/adventure/colors-island-bg.png";
+import shapesAdventureBg from "@assets/images/backgrounds/islands/adventure/shapes-island-bg.png";
+import familyAdventureBg from "@assets/images/backgrounds/islands/adventure/family-island-bg.png";
+import foodAdventureBg from "@assets/images/backgrounds/islands/adventure/food-island-bg.png";
+import conversationAdventureBg from "@assets/images/backgrounds/islands/adventure/conversation-island-bg.png";
+import defaultAdventureBg from "@assets/images/backgrounds/islands/adventure/default-island-bg.png";
+
+// Adventure Node Backgrounds
+import lessonNode from "@assets/images/backgrounds/islands/adventure/lesson-node.png";
+import lakeNode from "@assets/images/backgrounds/islands/adventure/lake-node.png";
+import caveNode from "@assets/images/backgrounds/islands/adventure/cave-node.png";
+import forestNode from "@assets/images/backgrounds/islands/adventure/forest-node.png";
+import gardenNode from "@assets/images/backgrounds/islands/adventure/garden-node.png";
+import yardNode from "@assets/images/backgrounds/islands/adventure/yard-node.png";
+import castleNode from "@assets/images/backgrounds/islands/adventure/castle-node.png";
+import beachNode from "@assets/images/backgrounds/islands/adventure/beach-node.png";
+import mountainNode from "@assets/images/backgrounds/islands/adventure/mountain-node.png";
+
 export const AppIcons = {
   icon: icon as number,
   favicon: favicon as number,
@@ -82,6 +104,17 @@ export const BackgroundImages = {
     numeriya: numeriya as number,
     alibo: alibo as number,
     blank: blank as number,
+    adventure: {
+      numeriya: numeriyaAdventureBg as number,
+      alifbo: alifboAdventureBg as number,
+      basics: basicsAdventureBg as number,
+      colors: colorsAdventureBg as number,
+      shapes: shapesAdventureBg as number,
+      family: familyAdventureBg as number,
+      food: foodAdventureBg as number,
+      conversation: conversationAdventureBg as number,
+      default: defaultAdventureBg as number,
+    },
   },
   decorations: {},
   auth: {
@@ -90,5 +123,18 @@ export const BackgroundImages = {
   },
   screens: {
     main: oceanBg as number,
+  },
+  adventure: {
+    nodes: {
+      lesson: lessonNode as number,
+      lake: lakeNode as number,
+      cave: caveNode as number,
+      forest: forestNode as number,
+      garden: gardenNode as number,
+      yard: yardNode as number,
+      castle: castleNode as number,
+      beach: beachNode as number,
+      mountain: mountainNode as number,
+    },
   },
 };

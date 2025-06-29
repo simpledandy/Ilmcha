@@ -67,7 +67,7 @@ class ErrorReporter {
       sessionId: context?.sessionId,
       deviceInfo: {
         platform: Platform.OS,
-        version: Platform.Version.toString(),
+        version: Platform.Version?.toString() || "unknown",
         model:
           Platform.OS === "ios" ? Platform.constants.systemName : undefined,
       },

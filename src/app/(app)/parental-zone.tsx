@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Text } from "@components/Text";
 import { Button } from "@components/Button";
+import { BackButton } from "@components/BackButton";
 import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { navigate, goBack } from "@utils/navigation";
@@ -57,9 +58,7 @@ export const ParentalZoneScreen: React.FC = () => {
       <Image source={BackgroundImages.auth.white} style={styles.bgTop} />
 
       <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => goBack()}>
-          <Ionicons name="arrow-back" size={24} color="fef0e1" />
-        </TouchableOpacity>
+        <BackButton onPress={() => goBack()} size="medium" />
         <Text variant="heading1" weight="proportionalBold" style={styles.title}>
           {t("parentalZoneTitle")}
         </Text>
@@ -96,9 +95,7 @@ export const ParentalZoneScreen: React.FC = () => {
       </View>
 
       <View style={styles.buttonsContainer}>
-        <Button variant="secondary" onPress={handleReportsPress}>
-          {t("reports")}
-        </Button>
+        <Button variant="secondary">{t("reports")}</Button>
         <Button variant="secondary">{t("blockFunctions")}</Button>
         <Button variant="secondary">{t("screenTime")}</Button>
         <Button variant="secondary">{t("otherDevices")}</Button>

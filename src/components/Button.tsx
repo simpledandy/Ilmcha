@@ -7,6 +7,7 @@ import {
   StyleProp,
   ActivityIndicator,
   TextStyle,
+  View,
 } from "react-native";
 import { Text } from "./Text";
 import { colors } from "@theme/colors";
@@ -91,7 +92,13 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={textColor} />
+        <View
+          testID="button-loading"
+          accessible
+          accessibilityState={{ disabled: !!disabled }}
+        >
+          <ActivityIndicator color={textColor} />
+        </View>
       ) : (
         <Text
           variant={textVariant}

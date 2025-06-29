@@ -80,6 +80,9 @@ export const RootLayout: React.FC = () => {
       } else {
         setNavigationState(isBack);
       }
+    } else {
+      // First navigation - not going back
+      setNavigationState(false);
     }
     setPreviousPath(pathname);
   }, [pathname, previousPath]);

@@ -52,6 +52,7 @@ export const Island: React.FC<IslandProps> = ({
         statusStyles[status],
         props.disabled && styles.disabled,
       ]}
+      testID={`island-${title.replace(/\s+/g, "-").toLowerCase()}`}
       {...props}
     >
       <Image
