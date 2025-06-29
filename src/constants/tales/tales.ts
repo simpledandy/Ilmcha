@@ -6,7 +6,7 @@ import butterflyTaleImg from "@assets/images/butterfly-tale.png";
 export const tales = [
   {
     id: "snowy-island-hero",
-    image: heroTaleImg as number,
+    image: heroTaleImg,
     audio: "heroTale",
     title: {
       uz: "Qorli orol qahramoni",
@@ -28,7 +28,7 @@ Ilmcha just smiled and said: "Doing good is the happiest game of all!"`,
   },
   {
     id: "mysterious-friend",
-    image: friendTaleImg as number,
+    image: friendTaleImg,
     audio: "friendTale",
     title: {
       uz: "Notanish 'do'st'",
@@ -62,7 +62,7 @@ Seeing him upset, his mother asked what was wrong.
   },
   {
     id: "happy-clouds",
-    image: cloudsTaleImg as number,
+    image: cloudsTaleImg,
     audio: "cloudsTale",
     title: {
       uz: "Quvnoq bulutlar",
@@ -92,7 +92,7 @@ Suddenly, it started to rain — it was the joyful rain of the happy clouds! Chi
   },
   {
     id: "butterfly-sun-quest",
-    image: butterflyTaleImg as number,
+    image: butterflyTaleImg,
     audio: "butterflyTale",
     title: {
       uz: "Quyoshni izlagan Kapalak",

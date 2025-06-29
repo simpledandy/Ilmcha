@@ -9,6 +9,7 @@ class AudioManager {
   private isNavigatingBack = false;
   private audioQueue: string[] = [];
   private isPlaying = false;
+  private isLoaded = false;
   private lastPlayTimestamp = 0;
   private debounceMs = 100;
   private statusSubscribers: ((status: unknown) => void)[] = [];
@@ -68,6 +69,20 @@ class AudioManager {
     this.lastPlayTimestamp = now;
 
     try {
+      // If we're trying to play the same audio that's already loaded, just restart it
+      if (this.lastPlayedAudio === key && this.currentSound && this.isLoaded) {
+        console.log("Restarting same audio from beginning");
+        await this.currentSound.setPositionAsync(0);
+        await this.currentSound.playAsync();
+        this.isPlaying = true;
+        this.notifyStatusSubscribers({
+          isLoaded: true,
+          isPlaying: true,
+          didJustFinish: false,
+        });
+        return;
+      }
+
       // Don't replay the same audio unless forced
       if (this.lastPlayedAudio === key && !forcePlay) {
         return;
@@ -104,6 +119,7 @@ class AudioManager {
         }
       }
       this.currentSound = null;
+      this.isLoaded = false;
     }
   }
 
@@ -125,6 +141,7 @@ class AudioManager {
     const sound = new Audio.Sound();
     this.currentSound = sound;
     this.isPlaying = true;
+    this.isLoaded = false;
 
     try {
       await sound.loadAsync(
@@ -139,6 +156,7 @@ class AudioManager {
 
       await sound.playAsync();
       this.lastPlayedAudio = key; // Keep the original key for logging
+      this.isLoaded = true;
 
       // Notify that audio has started playing
       this.notifyStatusSubscribers({
@@ -148,39 +166,45 @@ class AudioManager {
         durationMillis: 0,
       });
 
-      // Wait for playback to finish and track progress
-      await new Promise<void>((resolve) => {
-        const onPlaybackStatusUpdate = (status: unknown) => {
-          if (
-            typeof status === "object" &&
-            status !== null &&
-            "didJustFinish" in status &&
-            "isLoaded" in status
-          ) {
-            this.notifyStatusSubscribers(status);
-            // Type assertion for safe property access
-            const s = status as { didJustFinish: boolean; isLoaded: boolean };
-            if (s.didJustFinish || s.isLoaded === false) {
-              sound.setOnPlaybackStatusUpdate(null);
-              resolve();
-            }
+      // Set up status update listener for the entire duration
+      sound.setOnPlaybackStatusUpdate((status: unknown) => {
+        if (
+          typeof status === "object" &&
+          status !== null &&
+          "didJustFinish" in status &&
+          "isLoaded" in status
+        ) {
+          this.notifyStatusSubscribers(status);
+          // Type assertion for safe property access
+          const s = status as { didJustFinish: boolean; isLoaded: boolean };
+          if (s.didJustFinish) {
+            // Audio finished playing, but keep the sound object for potential replay
+            this.isPlaying = false;
+            this.notifyStatusSubscribers({
+              isLoaded: true,
+              isPlaying: false,
+              didJustFinish: true,
+            });
           }
-        };
-        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+        } else if (
+          typeof status === "object" &&
+          status !== null &&
+          "isPlaying" in status
+        ) {
+          // Also notify for other status updates (like position changes, pause/resume)
+          this.notifyStatusSubscribers(status);
+          // Update our internal state based on the actual audio status
+          const s = status as { isPlaying: boolean };
+          this.isPlaying = s.isPlaying;
+        }
       });
 
-      this.isPlaying = false;
-
-      // Play next in queue if available
-      if (this.audioQueue.length > 0) {
-        const nextKey = this.audioQueue.shift();
-        if (nextKey) {
-          setTimeout(() => {
-            void this.playAudio(nextKey as keyof (typeof audioMap)["en"]);
-          }, 100);
-        }
-      }
+      // Don't wait for completion - let the status update handle it
+      // This allows pause/resume to work during playback
     } catch {
+      this.isPlaying = false;
+      this.isLoaded = false;
+      this.currentSound = null;
       await this.cleanupAudio();
     }
   }
@@ -189,6 +213,8 @@ class AudioManager {
     await this.stopCurrentAudio();
     this.audioQueue = [];
     this.isPlaying = false;
+    this.isLoaded = false;
+    this.lastPlayedAudio = null;
   }
 
   getCurrentAudioKey(): string | null {
@@ -214,24 +240,71 @@ class AudioManager {
   }
 
   async pauseAudio() {
-    if (this.currentSound) {
+    console.log(
+      "pauseAudio called - currentSound:",
+      !!this.currentSound,
+      "isLoaded:",
+      this.isLoaded,
+    );
+    if (this.currentSound && this.isLoaded) {
       try {
         await this.currentSound.pauseAsync();
         this.isPlaying = false;
-      } catch {
+        console.log("Audio paused successfully");
+        // Notify subscribers about the pause
+        this.notifyStatusSubscribers({
+          isLoaded: true,
+          isPlaying: false,
+          didJustFinish: false,
+        });
+      } catch (error) {
+        console.log("Error pausing audio:", error);
         // Silent fail - audio might already be stopped
       }
+    } else {
+      console.log("Cannot pause - no sound or not loaded");
     }
   }
 
   async resumeAudio() {
-    if (this.currentSound) {
+    console.log(
+      "resumeAudio called - currentSound:",
+      !!this.currentSound,
+      "isLoaded:",
+      this.isLoaded,
+    );
+    if (this.currentSound && this.isLoaded) {
       try {
+        // If audio has finished, restart from the beginning
+        const status = await this.currentSound.getStatusAsync();
+        console.log("Audio status:", status);
+        if (
+          status &&
+          "isLoaded" in status &&
+          status.isLoaded &&
+          (status.didJustFinish ||
+            (typeof status.durationMillis === "number" &&
+              status.positionMillis >= status.durationMillis))
+        ) {
+          console.log("Restarting from beginning");
+          await this.currentSound.setPositionAsync(0);
+        }
+
         await this.currentSound.playAsync();
         this.isPlaying = true;
-      } catch {
+        console.log("Audio resumed successfully");
+        // Notify subscribers about the resume
+        this.notifyStatusSubscribers({
+          isLoaded: true,
+          isPlaying: true,
+          didJustFinish: false,
+        });
+      } catch (error) {
+        console.log("Error resuming audio:", error);
         // Silent fail - audio might not be loaded
       }
+    } else {
+      console.log("Cannot resume - no sound or not loaded");
     }
   }
 

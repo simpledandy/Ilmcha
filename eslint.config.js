@@ -1,5 +1,4 @@
 const js = require("@eslint/js");
-const prettier = require("eslint-config-prettier");
 const react = require("eslint-plugin-react");
 const reactHooks = require("eslint-plugin-react-hooks");
 const typescript = require("@typescript-eslint/eslint-plugin");
@@ -32,8 +31,6 @@ module.exports = [
       "jest.setup.js",
     ],
   },
-  // Base Prettier config
-  prettier,
   // Base config for all linted files
   {
     plugins: {

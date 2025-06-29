@@ -109,11 +109,7 @@ class StorageManager {
       }
       return null;
     } catch (error) {
-      const storageError = this.handleError(
-        error instanceof Error ? error : new Error(String(error)),
-        "load user data",
-      );
-      this.showToast(storageError.message);
+      console.error("Error getting user data:", error);
       return null;
     }
   }
@@ -189,72 +185,10 @@ class StorageManager {
       throw new Error(storageError.message);
     }
   }
-
-  // Station progress methods
-  async setStationProgress(progress: Record<string, unknown>): Promise<void> {
-    try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.STATION_PROGRESS,
-        JSON.stringify(progress),
-      );
-    } catch (error) {
-      const storageError = this.handleError(
-        error instanceof Error ? error : new Error(String(error)),
-        "save station progress",
-      );
-      this.showToast(storageError.message);
-      throw new Error(storageError.message);
-    }
-  }
-
-  async getStationProgress(): Promise<Record<string, unknown> | null> {
-    try {
-      const data = await AsyncStorage.getItem(STORAGE_KEYS.STATION_PROGRESS);
-      if (!data) return null;
-      return JSON.parse(data) as Record<string, unknown>;
-    } catch (error) {
-      const storageError = this.handleError(
-        error instanceof Error ? error : new Error(String(error)),
-        "load station progress",
-      );
-      this.showToast(storageError.message);
-      return null;
-    }
-  }
-
-  async setIslandProgress(progress: Record<string, unknown>): Promise<void> {
-    try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.ISLAND_PROGRESS,
-        JSON.stringify(progress),
-      );
-    } catch (error) {
-      const storageError = this.handleError(
-        error instanceof Error ? error : new Error(String(error)),
-        "save island progress",
-      );
-      this.showToast(storageError.message);
-      throw new Error(storageError.message);
-    }
-  }
-
-  async getIslandProgress(): Promise<Record<string, unknown> | null> {
-    try {
-      const data = await AsyncStorage.getItem(STORAGE_KEYS.ISLAND_PROGRESS);
-      if (!data) return null;
-      return JSON.parse(data) as Record<string, unknown>;
-    } catch (error) {
-      const storageError = this.handleError(
-        error instanceof Error ? error : new Error(String(error)),
-        "load island progress",
-      );
-      this.showToast(storageError.message);
-      return null;
-    }
-  }
 }
 
-const storageManager = StorageManager.getInstance();
+// Export singleton instance and utility functions
+export const storageManager = StorageManager.getInstance();
 
 export const storage = {
   setAuthToken: (token: string) => storageManager.setAuthToken(token),
@@ -266,10 +200,49 @@ export const storage = {
   getStorageSize: () => storageManager.getStorageSize(),
   migrateData: (fromVersion: string, toVersion: string) =>
     storageManager.migrateData(fromVersion, toVersion),
-  setStationProgress: (progress: Record<string, unknown>) =>
-    storageManager.setStationProgress(progress),
-  getStationProgress: () => storageManager.getStationProgress(),
-  setIslandProgress: (progress: Record<string, unknown>) =>
-    storageManager.setIslandProgress(progress),
-  getIslandProgress: () => storageManager.getIslandProgress(),
+};
+
+// User data management
+export const saveUserData = async (userData: UserData): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(
+      STORAGE_KEYS.USER_DATA,
+      JSON.stringify(userData),
+    );
+  } catch (error) {
+    console.error("Error saving user data:", error);
+    throw error;
+  }
+};
+
+export const getUserData = async (): Promise<UserData | null> => {
+  try {
+    const data = await AsyncStorage.getItem(STORAGE_KEYS.USER_DATA);
+    if (!data) return null;
+
+    const parsedData: unknown = JSON.parse(data);
+    if (
+      typeof parsedData === "object" &&
+      parsedData !== null &&
+      "email" in parsedData
+    ) {
+      return parsedData as UserData;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting user data:", error);
+    return null;
+  }
+};
+
+export const clearUserData = async (): Promise<void> => {
+  try {
+    await AsyncStorage.multiRemove([
+      STORAGE_KEYS.AUTH_TOKEN,
+      STORAGE_KEYS.USER_DATA,
+    ]);
+  } catch (error) {
+    console.error("Error clearing user data:", error);
+    throw error;
+  }
 };

@@ -7,6 +7,7 @@ import { Text } from "@components/Text";
 import { useAudioPlayer } from "@/src/hooks/useAudioPlayer";
 import { tales } from "@/src/constants/tales/tales";
 import { AudioControl } from "@components/AudioControl";
+import { audioMap } from "@/src/constants/audio/audioMap";
 
 export const TaleScreen: React.FC = () => {
   const { tale } = useLocalSearchParams<{ tale: string }>();
@@ -55,21 +56,57 @@ export const TaleScreen: React.FC = () => {
             </Text>
           </View>
           <View style={styles.buttonRow}>
-            {audioPlayer.isPaused || !audioPlayer.isPlaying ? (
+            {audioPlayer.isCompleted ? (
+              <AudioControl
+                variant="replay"
+                size="small"
+                style={styles.audioButton}
+                onPress={() => {
+                  console.log("Replay button pressed - restarting audio");
+                  // Restart the audio from the beginning
+                  void audioPlayer.play(
+                    story.audio as keyof (typeof audioMap)["en"],
+                  );
+                }}
+                disabled={audioPlayer.isLoading}
+                loading={audioPlayer.isLoading}
+              />
+            ) : !audioPlayer.isPlaying ? (
               <AudioControl
                 variant="play"
                 size="small"
                 style={styles.audioButton}
-                onPress={() => void audioPlayer.resume()}
+                onPress={() => {
+                  console.log(
+                    "Play button pressed - isPaused:",
+                    audioPlayer.isPaused,
+                    "currentAudio:",
+                    audioPlayer.currentAudio,
+                  );
+                  if (audioPlayer.currentAudio) {
+                    // If we have a current audio, resume it
+                    console.log("Resuming current audio");
+                    void audioPlayer.resume();
+                  } else {
+                    // If no current audio, play the story audio
+                    console.log("Playing new audio");
+                    void audioPlayer.play(
+                      story.audio as keyof (typeof audioMap)["en"],
+                    );
+                  }
+                }}
                 disabled={audioPlayer.isLoading}
-                loading={audioPlayer.isLoading && !audioPlayer.isPlaying}
+                loading={audioPlayer.isLoading}
               />
             ) : (
               <AudioControl
                 variant="pause"
                 size="small"
                 style={styles.audioButton}
-                onPress={() => void audioPlayer.pause()}
+                onPress={() => {
+                  console.log("Pause button pressed");
+                  void audioPlayer.pause();
+                }}
                 disabled={audioPlayer.isLoading}
                 loading={false}
               />

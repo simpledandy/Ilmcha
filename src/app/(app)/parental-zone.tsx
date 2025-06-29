@@ -46,13 +46,6 @@ export const ParentalZoneScreen: React.FC = () => {
     setSelectedIndex(index);
   };
 
-  const handleReportsPress = () => {
-    const selectedChild = dummyChildren[selectedIndex];
-    if (selectedChild) {
-      navigate("/reports", { childId: selectedChild.id });
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Image source={BackgroundImages.auth.white} style={styles.bgTop} />

@@ -1,6 +1,141 @@
 // Jest setup file for React Native testing
 import '@testing-library/jest-native/extend-expect';
 
+// Mock all image and asset imports
+jest.mock('@assets/images/icon.png', () => 'icon.png');
+jest.mock('@assets/images/favicon.png', () => 'favicon.png');
+jest.mock('@assets/images/adaptive-icon.png', () => 'adaptive-icon.png');
+jest.mock('@assets/images/splash-icon.png', () => 'splash-icon.png');
+jest.mock('@assets/images/tale-icon.png', () => 'tale-icon.png');
+jest.mock('@assets/images/lock-icon.png', () => 'lock-icon.png');
+jest.mock('@assets/images/chest.png', () => 'chest.png');
+jest.mock('@assets/images/chest-open.png', () => 'chest-open.png');
+jest.mock('@assets/images/light.png', () => 'light.png');
+jest.mock('@assets/images/number-five.png', () => 'number-five.png');
+jest.mock('@assets/images/cloud-left.png', () => 'cloud-left.png');
+jest.mock('@assets/images/cloud-right.png', () => 'cloud-right.png');
+jest.mock('@assets/images/counting_bg.png', () => 'counting_bg.png');
+jest.mock('@assets/images/boy-avatar.png', () => 'boy-avatar.png');
+jest.mock('@assets/images/girl-avatar.png', () => 'girl-avatar.png');
+jest.mock('@assets/images/add-icon.png', () => 'add-icon.png');
+jest.mock('@assets/images/empty-avatar.png', () => 'empty-avatar.png');
+jest.mock('@assets/images/island.png', () => 'island.png');
+jest.mock('@assets/images/backgrounds/stories_bg.png', () => 'stories_bg.png');
+jest.mock('@assets/images/penguin/waving-pink.png', () => 'waving-pink.png');
+jest.mock('@assets/images/penguin/waving-gray.png', () => 'waving-gray.png');
+jest.mock('@assets/images/penguin/with-laptop-questioning-pink.png', () => 'with-laptop-questioning-pink.png');
+jest.mock('@assets/images/penguin/with-laptop-questioning-green.png', () => 'with-laptop-questioning-green.png');
+jest.mock('@assets/images/penguin/holding-pencil-pink.png', () => 'holding-pencil-pink.png');
+jest.mock('@assets/images/penguin/holding-pencil-green.png', () => 'holding-pencil-green.png');
+jest.mock('@assets/images/penguin/flying-open-eye-pink.png', () => 'flying-open-eye-pink.png');
+jest.mock('@assets/images/penguin/waving-explorer.png', () => 'waving-explorer.png');
+jest.mock('@assets/images/backgrounds/islands/numeriya.png', () => 'numeriya.png');
+jest.mock('@assets/images/backgrounds/islands/alifbo.png', () => 'alifbo.png');
+jest.mock('@assets/images/backgrounds/islands/blank.png', () => 'blank.png');
+jest.mock('@assets/images/backgrounds/auth/white.png', () => 'white.png');
+jest.mock('@assets/images/backgrounds/auth/blue.png', () => 'blue.png');
+jest.mock('@assets/images/backgrounds/ocean-bg.png', () => 'ocean-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/numeriya-island-bg.png', () => 'numeriya-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/alifbo-island-bg.png', () => 'alifbo-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/basics-island-bg.png', () => 'basics-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/colors-island-bg.png', () => 'colors-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/shapes-island-bg.png', () => 'shapes-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/family-island-bg.png', () => 'family-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/food-island-bg.png', () => 'food-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/conversation-island-bg.png', () => 'conversation-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/default-island-bg.png', () => 'default-island-bg.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/lesson-node.png', () => 'lesson-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/lake-node.png', () => 'lake-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/cave-node.png', () => 'cave-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/forest-node.png', () => 'forest-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/garden-node.png', () => 'garden-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/yard-node.png', () => 'yard-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/castle-node.png', () => 'castle-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/beach-node.png', () => 'beach-node.png');
+jest.mock('@assets/images/backgrounds/islands/adventure/mountain-node.png', () => 'mountain-node.png');
+
+// Mock all audio files
+jest.mock('@assets/audios/en/butterfly-tale-en.mp3', () => 'butterfly-tale-en.mp3');
+jest.mock('@assets/audios/en/clouds-tale-en.mp3', () => 'clouds-tale-en.mp3');
+jest.mock('@assets/audios/en/coins-en.mp3', () => 'coins-en.mp3');
+jest.mock('@assets/audios/en/congrats-en.mp3', () => 'congrats-en.mp3');
+jest.mock('@assets/audios/en/congrats-you-won-en.mp3', () => 'congrats-you-won-en.mp3');
+jest.mock('@assets/audios/en/counting-fish-en.mp3', () => 'counting-fish-en.mp3');
+jest.mock('@assets/audios/en/daily-gift-en.mp3', () => 'daily-gift-en.mp3');
+jest.mock('@assets/audios/en/eight-en.aac', () => 'eight-en.aac');
+jest.mock('@assets/audios/en/five-en.aac', () => 'five-en.aac');
+jest.mock('@assets/audios/en/four-en.aac', () => 'four-en.aac');
+jest.mock('@assets/audios/en/friend-tale-en.mp3', () => 'friend-tale-en.mp3');
+jest.mock('@assets/audios/en/gift-wheel-en.mp3', () => 'gift-wheel-en.mp3');
+jest.mock('@assets/audios/en/hero-tale-en.mp3', () => 'hero-tale-en.mp3');
+jest.mock('@assets/audios/en/island-numeriya-en.mp3', () => 'island-numeriya-en.mp3');
+jest.mock('@assets/audios/en/lets-go-en.mp3', () => 'lets-go-en.mp3');
+jest.mock('@assets/audios/en/navigation-en.mp3', () => 'navigation-en.mp3');
+jest.mock('@assets/audios/en/nine-en.aac', () => 'nine-en.aac');
+jest.mock('@assets/audios/en/one-en.aac', () => 'one-en.aac');
+jest.mock('@assets/audios/en/profile-en.mp3', () => 'profile-en.mp3');
+jest.mock('@assets/audios/en/seven-en.aac', () => 'seven-en.aac');
+jest.mock('@assets/audios/en/six-en.aac', () => 'six-en.aac');
+jest.mock('@assets/audios/en/sleep-reminder-en.mp3', () => 'sleep-reminder-en.mp3');
+jest.mock('@assets/audios/en/store-en.mp3', () => 'store-en.mp3');
+jest.mock('@assets/audios/en/ten-en.aac', () => 'ten-en.aac');
+jest.mock('@assets/audios/en/three-en.aac', () => 'three-en.aac');
+jest.mock('@assets/audios/en/tracker-en.mp3', () => 'tracker-en.mp3');
+jest.mock('@assets/audios/en/two-en.aac', () => 'two-en.aac');
+jest.mock('@assets/audios/en/unavailable-en.mp3', () => 'unavailable-en.mp3');
+jest.mock('@assets/audios/en/welcome-tales-en.mp3', () => 'welcome-tales-en.mp3');
+jest.mock('@assets/audios/en/where-to-fly-en.mp3', () => 'where-to-fly-en.mp3');
+
+// Mock Uzbek audio files
+jest.mock('@assets/audios/uz/butterfly-tale-uz.mp3', () => 'butterfly-tale-uz.mp3');
+jest.mock('@assets/audios/uz/clouds-tale-uz.mp3', () => 'clouds-tale-uz.mp3');
+jest.mock('@assets/audios/uz/coins-uz.m4a', () => 'coins-uz.m4a');
+jest.mock('@assets/audios/uz/congrats-uz.m4a', () => 'congrats-uz.m4a');
+jest.mock('@assets/audios/uz/congrats-you-won-uz.m4a', () => 'congrats-you-won-uz.m4a');
+jest.mock('@assets/audios/uz/counting-fish-uz.m4a', () => 'counting-fish-uz.m4a');
+jest.mock('@assets/audios/uz/daily-gift-uz.m4a', () => 'daily-gift-uz.m4a');
+jest.mock('@assets/audios/uz/eight-uz.mp3', () => 'eight-uz.mp3');
+jest.mock('@assets/audios/uz/five-count-uz.m4a', () => 'five-count-uz.m4a');
+jest.mock('@assets/audios/uz/five-uz.m4a', () => 'five-uz.m4a');
+jest.mock('@assets/audios/uz/four-uz.mp3', () => 'four-uz.mp3');
+jest.mock('@assets/audios/uz/friend-tale-uz.mp3', () => 'friend-tale-uz.mp3');
+jest.mock('@assets/audios/uz/gift-wheel-uz.m4a', () => 'gift-wheel-uz.m4a');
+jest.mock('@assets/audios/uz/hero-tale-uz.mp3', () => 'hero-tale-uz.mp3');
+jest.mock('@assets/audios/uz/home-uz.m4a', () => 'home-uz.m4a');
+jest.mock('@assets/audios/uz/island-numeriya-uz.m4a', () => 'island-numeriya-uz.m4a');
+jest.mock('@assets/audios/uz/lets-go-uz.m4a', () => 'lets-go-uz.m4a');
+jest.mock('@assets/audios/uz/letter-a-uz.m4a', () => 'letter-a-uz.m4a');
+jest.mock('@assets/audios/uz/navigation-uz.m4a', () => 'navigation-uz.m4a');
+jest.mock('@assets/audios/uz/nine-uz.mp3', () => 'nine-uz.mp3');
+jest.mock('@assets/audios/uz/one-uz.mp3', () => 'one-uz.mp3');
+jest.mock('@assets/audios/uz/profile-uz.m4a', () => 'profile-uz.m4a');
+jest.mock('@assets/audios/uz/seven-uz.mp3', () => 'seven-uz.mp3');
+jest.mock('@assets/audios/uz/six-uz.mp3', () => 'six-uz.mp3');
+jest.mock('@assets/audios/uz/sleep-reminder-uz.m4a', () => 'sleep-reminder-uz.m4a');
+jest.mock('@assets/audios/uz/store-uz.m4a', () => 'store-uz.m4a');
+jest.mock('@assets/audios/uz/ten-uz.mp3', () => 'ten-uz.mp3');
+jest.mock('@assets/audios/uz/three-uz.mp3', () => 'three-uz.mp3');
+jest.mock('@assets/audios/uz/tracker-uz.m4a', () => 'tracker-uz.m4a');
+jest.mock('@assets/audios/uz/two-uz.mp3', () => 'two-uz.mp3');
+jest.mock('@assets/audios/uz/welcome-tales-uz.m4a', () => 'welcome-tales-uz.m4a');
+jest.mock('@assets/audios/uz/where-to-fly-uz.m4a', () => 'where-to-fly-uz.m4a');
+
+// Mock font files
+jest.mock('@assets/fonts/Sono_Proportional-Bold.ttf', () => 'Sono_Proportional-Bold.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-ExtraBold.ttf', () => 'Sono_Proportional-ExtraBold.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-ExtraLight.ttf', () => 'Sono_Proportional-ExtraLight.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-Light.ttf', () => 'Sono_Proportional-Light.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-Medium.ttf', () => 'Sono_Proportional-Medium.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-Regular.ttf', () => 'Sono_Proportional-Regular.ttf');
+jest.mock('@assets/fonts/Sono_Proportional-SemiBold.ttf', () => 'Sono_Proportional-SemiBold.ttf');
+jest.mock('@assets/fonts/Sono-Bold.ttf', () => 'Sono-Bold.ttf');
+jest.mock('@assets/fonts/Sono-ExtraBold.ttf', () => 'Sono-ExtraBold.ttf');
+jest.mock('@assets/fonts/Sono-ExtraLight.ttf', () => 'Sono-ExtraLight.ttf');
+jest.mock('@assets/fonts/Sono-Light.ttf', () => 'Sono-Light.ttf');
+jest.mock('@assets/fonts/Sono-Medium.ttf', () => 'Sono-Medium.ttf');
+jest.mock('@assets/fonts/Sono-Regular.ttf', () => 'Sono-Regular.ttf');
+jest.mock('@assets/fonts/Sono-SemiBold.ttf', () => 'Sono-SemiBold.ttf');
+
 // Mock react-native-reanimated at the very top
 jest.mock('react-native-reanimated', () => {
   const mockSharedValue = (initialValue) => {
@@ -104,6 +239,15 @@ jest.mock('expo-splash-screen', () => ({
   preventAutoHideAsync: jest.fn(),
   hideAsync: jest.fn(),
 }));
+
+// Mock expo-image
+jest.mock('expo-image', () => {
+  const React = require('react');
+  const { Image } = require('react-native');
+  return {
+    Image: Image,
+  };
+});
 
 // Mock expo-constants
 jest.mock('expo-constants', () => ({
@@ -259,11 +403,6 @@ expect.extend({
     }
   },
 });
-
-// Mock expo-image
-jest.mock('expo-image', () => ({
-  Image: 'Image',
-}));
 
 // Mock expo-av
 jest.mock("expo-av", () => ({

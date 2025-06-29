@@ -54,20 +54,17 @@ describe("AudioControl", () => {
     expect(mockOnPress).toHaveBeenCalledTimes(1);
   });
 
-  it.skip("does not call onPress when disabled", () => {
+  it("does not call onPress when disabled", () => {
     const { getByText } = render(
       <AudioControl onPress={mockOnPress} disabled={true} />,
     );
-    // Find the closest TouchableOpacity ancestor
-    const button = getByText("▶️").parent;
-    if (
-      button &&
-      button.props &&
-      typeof button.props.disabled !== "undefined"
-    ) {
-      expect(button.props.disabled).toBe(true);
-    }
-    fireEvent.press(getByText("▶️"));
+
+    // The button should be rendered but disabled
+    const button = getByText("▶️");
+    expect(button).toBeTruthy();
+
+    // Try to press the button - it should not call onPress when disabled
+    fireEvent.press(button);
     expect(mockOnPress).not.toHaveBeenCalled();
   });
 

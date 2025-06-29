@@ -24,7 +24,6 @@ export const Onboarding: React.FC = () => {
       replace("/(app)");
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <BackButton

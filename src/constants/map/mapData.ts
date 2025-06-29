@@ -21,7 +21,6 @@ export interface IslandData {
   size: "small" | "medium" | "large";
   status: "locked" | "unlocked" | "completed";
   imageSource?: ImageSource;
-  lessons?: string[];
 }
 
 export const islands: IslandData[] = [
@@ -34,7 +33,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "unlocked",
     imageSource: BackgroundImages.islands.numeriya,
-    lessons: [],
   },
   {
     id: "alphabet",
@@ -45,7 +43,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.alibo,
-    lessons: [],
   },
   {
     id: "basics",
@@ -56,7 +53,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
   {
     id: "colors",
@@ -67,7 +63,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
   {
     id: "shapes",
@@ -78,7 +73,6 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
   {
     id: "family",
@@ -89,7 +83,6 @@ export const islands: IslandData[] = [
     size: "medium",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
   {
     id: "food",
@@ -100,7 +93,6 @@ export const islands: IslandData[] = [
     size: "medium",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
   {
     id: "conversation",
@@ -111,6 +103,5 @@ export const islands: IslandData[] = [
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,
-    lessons: [],
   },
 ];

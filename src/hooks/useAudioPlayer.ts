@@ -16,6 +16,7 @@ interface AudioPlayerState {
   errorMessage: string | null;
   isLoading: boolean;
   isPaused: boolean;
+  isCompleted: boolean;
   positionMillis: number;
   durationMillis: number;
 }
@@ -40,6 +41,7 @@ export function useAudioPlayer(
     errorMessage: null,
     isLoading: false,
     isPaused: false,
+    isCompleted: false,
     positionMillis: 0,
     durationMillis: 0,
   });
@@ -78,18 +80,29 @@ export function useAudioPlayer(
             ...prev,
             positionMillis: audioStatus.positionMillis || 0,
             durationMillis: audioStatus.durationMillis || 0,
-            isPaused: audioStatus.isLoaded
-              ? !audioStatus.isPlaying && !audioStatus.didJustFinish
-              : false,
           };
 
           // Handle audio completion
           if (audioStatus.didJustFinish && prev.isPlaying) {
             newState.isPlaying = false;
+            newState.isPaused = false;
+            newState.isCompleted = true;
             newState.currentAudio = null;
             // Call onPlayEnd callback
             if (prev.currentAudio) {
               onPlayEnd?.(prev.currentAudio);
+            }
+          } else if (audioStatus.isLoaded !== undefined) {
+            // Update playing state based on audio status
+            newState.isPlaying = audioStatus.isPlaying || false;
+            // Only set as paused if it's loaded, not playing, and not just finished
+            newState.isPaused =
+              audioStatus.isLoaded &&
+              !audioStatus.isPlaying &&
+              !audioStatus.didJustFinish;
+            // Reset completion state when audio is playing or paused (not completed)
+            if (audioStatus.isPlaying || newState.isPaused) {
+              newState.isCompleted = false;
             }
           }
 
@@ -108,6 +121,8 @@ export function useAudioPlayer(
         setState((prev) => ({
           ...prev,
           isLoading: true,
+          isPaused: false,
+          isCompleted: false,
         }));
 
         onPlayStart?.(key);
@@ -123,6 +138,8 @@ export function useAudioPlayer(
             currentAudio: key,
             hasError: false,
             errorMessage: null,
+            isPaused: false,
+            isCompleted: false,
           }));
         }
       } catch (error) {
@@ -135,6 +152,8 @@ export function useAudioPlayer(
             isPlaying: false,
             hasError: true,
             errorMessage,
+            isPaused: false,
+            isCompleted: false,
           }));
           onError?.(errorMessage);
         }
@@ -192,6 +211,7 @@ export function useAudioPlayer(
       errorMessage: null,
       isLoading: false,
       isPaused: false,
+      isCompleted: false,
       positionMillis: 0,
       durationMillis: 0,
     });
@@ -206,6 +226,7 @@ export function useAudioPlayer(
       setState((prev) => ({
         ...prev,
         isPaused: true,
+        isPlaying: false,
         isLoading: false,
       }));
     } catch (error) {
@@ -238,6 +259,7 @@ export function useAudioPlayer(
         setState((prev) => ({
           ...prev,
           isPaused: false,
+          isPlaying: true,
           isLoading: false,
         }));
       }

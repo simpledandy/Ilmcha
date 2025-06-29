@@ -33,7 +33,7 @@ export const MapView = () => {
   const initialTranslateX =
     SCREEN_WIDTH / 2 - (currentIsland?.x ?? MAP_WIDTH / 2);
   const initialTranslateY =
-    SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2);
+    SCREEN_HEIGHT / 2 - (currentIsland?.y ?? MAP_HEIGHT / 2) - 180;
   const translateX = useSharedValue(initialTranslateX);
   const translateY = useSharedValue(initialTranslateY);
   const savedTranslateX = useSharedValue(initialTranslateX);
