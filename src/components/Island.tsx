@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, PressableProps } from 'react-native';
 import { Text } from './Text';
-import { colors } from '@theme/colors';
+import { colors } from '../theme/colors';
+import { Image } from 'expo-image';
+import i18n from '../../i18n';
 
 interface IslandProps extends PressableProps {
   title: string;
   subtitle?: string;
   size?: 'small' | 'medium' | 'large';
   status?: 'locked' | 'unlocked' | 'completed';
+  imageSource?: any; // Optional: Add image source prop if needed
 }
 
 export const Island: React.FC<IslandProps> = ({
@@ -15,6 +18,7 @@ export const Island: React.FC<IslandProps> = ({
   subtitle,
   size = 'medium',
   status = 'locked',
+  imageSource = require('@assets/images/backgrounds/islands/numeriya.png'), // Default image
   ...props
 }) => {
   const islandStyles = {
@@ -46,6 +50,11 @@ export const Island: React.FC<IslandProps> = ({
       ]}
       {...props}
     >
+      <Image
+        source={imageSource} // Replace with your image path
+        style={{ width: '100%', height: '100%'}}
+        contentFit="contain"
+      />
       <Text 
         variant="heading3" 
         style={[
@@ -53,7 +62,7 @@ export const Island: React.FC<IslandProps> = ({
           status === 'locked' && styles.lockedText
         ]}
       >
-        {title}
+        {i18n.t(title)}
       </Text>
       {subtitle && (
         <Text 
@@ -63,7 +72,7 @@ export const Island: React.FC<IslandProps> = ({
             status === 'locked' && styles.lockedText
           ]}
         >
-          {subtitle}
+          {i18n.t(subtitle)}
         </Text>
       )}
     </Pressable>
@@ -72,8 +81,6 @@ export const Island: React.FC<IslandProps> = ({
 
 const styles = StyleSheet.create({
   island: {
-    borderRadius: 20,
-    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,

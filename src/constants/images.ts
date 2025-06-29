@@ -1,27 +1,24 @@
 export const AppIcons = {
-  icon: require('@assets/images/icon.png'),
-  favicon: require('@assets/images/favicon.png'),
-  adaptiveIcon: require('@assets/images/adaptive-icon.png'),
-  splashIcon: require('@assets/images/splash-icon.png'),
+  icon: require('../../assets/images/icon.png'),
+  favicon: require('../../assets/images/favicon.png'),
+  adaptiveIcon: require('../../assets/images/adaptive-icon.png'),
+  splashIcon: require('../../assets/images/splash-icon.png'),
 };
 
 // Penguin Character
 export const PenguinImages = {
   poses: {
-    // Add your penguin poses here as you add them
-    // Example:
-    // standing: require('../../assets/images/penguin/poses/standing.png'),
-    welcomingPink: require('@assets/images/penguin/poses/welcoming-pink.png'),
-    welcomingGray: require('@assets/images/penguin/poses/welcoming-gray.png'),
-    registering: require('@assets/images/penguin/poses/registering.png'),
-    holdingPencil: require('@assets/images/penguin/poses/holding-pencil.png'),
-    flyingOnPlane: require('@assets/images/penguin/poses/flying-on-plane.png'),
+    wavingPink: require('../../assets/images/penguin/waving-pink.png'),
+    wavingGray: require('../../assets/images/penguin/waving-gray.png'),
+    withLaptopPink: require('../../assets/images/penguin/with-laptop-questioning-pink.png'),
+    withLaptopGreen: require('../../assets/images/penguin/with-laptop-questioning-green.png'),
+    holdingPencilPink: require('../../assets/images/penguin/holding-pencil-pink.png'),
+    holdingPencilGreen: require('../../assets/images/penguin/holding-pencil-green.png'),
+    flyingOnPlane: require('../../assets/images/penguin/flying-open-eye-pink.png'),
+
   },
   animations: {
-    // Add your penguin animations here as you add them
-    // Example:
-    // walking: require('../../assets/images/penguin/animations/walking.png'),
-    // jumping: require('../../assets/images/penguin/animations/jumping.png'),
+    
   },
 };
 
@@ -31,9 +28,9 @@ export const BackgroundImages = {
     // Add your island backgrounds here as you add them
     // Example:
     // level1: require('../../assets/images/backgrounds/islands/level1.png'),
-    numeriya: require('@assets/images/backgrounds/islands/numeriya.png'),
-    alibo: require('@assets/images/backgrounds/islands/alifbo.png'),
-    blank: require('@assets/images/backgrounds/islands/blank.png'),
+    numeriya: require('../../assets/images/backgrounds/islands/numeriya.png'),
+    alibo: require('../../assets/images/backgrounds/islands/alifbo.png'),
+    blank: require('../../assets/images/backgrounds/islands/blank.png'),
   },
   decorations: {
     // Add your decorative elements here as you add them
@@ -44,12 +41,12 @@ export const BackgroundImages = {
   auth: {
     // Add your auth images here as you add them
     // Example:
-    // welcome: require('@assets/images/auth/welcome.png'),
-    white: require('@assets/images/backgrounds/auth/white.png'),
-    blue: require('@assets/images/backgrounds/auth/blue.png'),
+    // welcome: require('../../assets/images/auth/welcome.png'),
+    white: require('../../assets/images/backgrounds/auth/white.png'),
+    blue: require('../../assets/images/backgrounds/auth/blue.png'),
   },
   screens: {
-    main: require('@assets/images/backgrounds/main-bg.png')
+    main: require('../../assets/images/backgrounds/ocean-bg.png')
   }
 };
 

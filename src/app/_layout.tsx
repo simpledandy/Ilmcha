@@ -1,16 +1,32 @@
 import 'react-native-gesture-handler';
-import { Slot } from 'expo-router';
-import { useEffect } from 'react';
+import { Slot, useNavigation, usePathname } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
-import { AuthProvider } from '@providers/AuthProvider';
+import { AuthProvider } from '../providers/AuthProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { View, ActivityIndicator, AppState } from 'react-native';
+import { cleanupAudio, setNavigationState } from '../utils/audio';
+import { ErrorBoundary } from '../components/ErrorBoundary';
+import { initializeErrorReporting } from '../utils/errorReporting';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
+// Initialize error reporting
+initializeErrorReporting({
+  enableReporting: !__DEV__, // Only enable in production
+  // Add your error reporting service configuration here
+  // serviceUrl: 'your-sentry-dsn',
+  // apiKey: 'your-api-key',
+});
+
 export default function RootLayout() {
-  const [loaded] = useFonts({
+  const navigation = useNavigation();
+  const pathname = usePathname();
+  const [previousPath, setPreviousPath] = useState<string | null>(null);
+
+  const [fontsLoaded] = useFonts({
     // Regular Sono variants
     'Sono-Regular': require('@assets/fonts/Sono-Regular.ttf'),
     'Sono-Light': require('@assets/fonts/Sono-Light.ttf'),
@@ -30,19 +46,60 @@ export default function RootLayout() {
     'Sono_Proportional-ExtraBold': require('@assets/fonts/Sono_Proportional-ExtraBold.ttf'),
   });
 
+  const [navigationReady, setNavigationReady] = useState(false);
   useEffect(() => {
-    if (loaded) {
+    if (fontsLoaded) {
+      setNavigationReady(true);
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) return null;
+  useEffect(() => {
+    if (previousPath) {
+      // Check if we're navigating back by comparing path segments
+      const currentSegments = pathname.split('/').filter(Boolean);
+      const previousSegments = previousPath.split('/').filter(Boolean);
+      
+      // If current path has fewer segments than previous, we're going back
+      const isBack = currentSegments.length < previousSegments.length;
+      
+      // Special case: if we're going back to root ('/'), it's always a back navigation
+      if (pathname === '/') {
+        setNavigationState(false);
+      } else {
+        setNavigationState(isBack);
+      }
+    }
+    setPreviousPath(pathname);
+  }, [pathname, previousPath]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'background') {
+        setNavigationState(false);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  if (!fontsLoaded || !navigationReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
-        <Slot />
-      </AuthProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AuthProvider navigationReady={navigationReady}>
+          <Slot />
+        </AuthProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

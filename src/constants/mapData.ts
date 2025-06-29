@@ -1,10 +1,15 @@
 import { Dimensions } from 'react-native';
+import i18n from '@/i18n';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-// Make the map 2x2 screens in size
-export const MAP_WIDTH = SCREEN_WIDTH * 2;
-export const MAP_HEIGHT = SCREEN_HEIGHT * 2;
+const TILE_SPREAD = 3; // 3 left, 3 right, 3 up, 3 down
+
+const TILE_WIDTH = SCREEN_WIDTH;
+const TILE_HEIGHT = SCREEN_WIDTH * 0.5105; // Maintain aspect ratio
+
+const MAP_WIDTH = TILE_WIDTH * (TILE_SPREAD * 2 + 1);
+const MAP_HEIGHT = TILE_HEIGHT * (TILE_SPREAD * 2 + 1);
 
 export interface IslandData {
   id: string;
@@ -14,52 +19,88 @@ export interface IslandData {
   y: number;
   size: 'small' | 'medium' | 'large';
   status: 'locked' | 'unlocked' | 'completed';
+  imageSource?: any;
 }
 
 export const islands: IslandData[] = [
   {
-    id: 'basics',
-    title: 'Salomlashish',
-    subtitle: 'Greetings & Basics',
+    id: 'numbers',
+    title: 'islandNumbersTitle',
+    subtitle: 'islandNumbersSubtitle',
     x: MAP_WIDTH * 0.25,
-    y: MAP_HEIGHT * 0.25,
+    y: MAP_HEIGHT * 0.4,
     size: 'large',
     status: 'unlocked',
+    imageSource: require('@assets/images/backgrounds/islands/numeriya.png'),
   },
   {
-    id: 'numbers',
-    title: 'Raqamlar',
-    subtitle: 'Numbers',
-    x: MAP_WIDTH * 0.6,
-    y: MAP_HEIGHT * 0.3,
-    size: 'medium',
+    id: 'alphabet',
+    title: 'islandAlphabetTitle',
+    subtitle: 'islandAlphabetSubtitle',
+    x: MAP_WIDTH * 0.3,
+    y: MAP_HEIGHT * 0.2,
+    size: 'large',
     status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/alifbo.png'),
+  },
+  {
+    id: 'basics',
+    title: 'islandBasicsTitle',
+    subtitle: 'islandBasicsSubtitle',
+    x: MAP_WIDTH * 0.7,
+    y: MAP_HEIGHT * 0.3,
+    size: 'large',
+    status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
+  },
+  {
+    id: 'colors',
+    title: 'islandColorsTitle', 
+    subtitle: 'islandColorsSubtitle',
+    x: MAP_WIDTH * 0.3,
+    y: MAP_HEIGHT * 0.6,
+    size: 'large',
+    status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
+  },
+  {
+    id: 'shapes',
+    title: 'islandShapesTitle',
+    subtitle: 'islandShapesSubtitle',
+    x: MAP_WIDTH * 0.6,
+    y: MAP_HEIGHT * 0.7,
+    size: 'large',
+    status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
   },
   {
     id: 'family',
-    title: 'Oila',
-    subtitle: 'Family',
-    x: MAP_WIDTH * 0.2,
-    y: MAP_HEIGHT * 0.7,
+    title: 'islandFamilyTitle',
+    subtitle: 'islandFamilySubtitle',
+    x: MAP_WIDTH * 0.1,
+    y: MAP_HEIGHT * 0.5,
     size: 'medium',
     status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
   },
   {
     id: 'food',
-    title: 'Taom',
-    subtitle: 'Food & Drinks',
-    x: MAP_WIDTH * 0.7,
+    title: 'islandFoodTitle',
+    subtitle: 'islandFoodSubtitle',
+    x: MAP_WIDTH * 0.8,
     y: MAP_HEIGHT * 0.6,
     size: 'medium',
     status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
   },
   {
     id: 'conversation',
-    title: 'Suhbat',
-    subtitle: 'Conversations',
-    x: MAP_WIDTH * 0.8,
+    title: 'islandConversationTitle',
+    subtitle: 'islandConversationSubtitle',
+    x: MAP_WIDTH * 0.5,
     y: MAP_HEIGHT * 0.8,
     size: 'large',
     status: 'locked',
+    imageSource: require('@assets/images/backgrounds/islands/blank.png'),
   },
-]; 
+];

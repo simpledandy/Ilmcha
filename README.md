@@ -1,4 +1,3 @@
-```
 # Ilmcha
 
 ## Technologies Used
@@ -32,4 +31,3 @@ Follow the steps below to set up the project locally and run:
 - Now you can try it out!
 
 Thank you for using Ilmcha! 🚀
-```

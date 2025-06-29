@@ -14,10 +14,12 @@ import Input from '@components/Input';
 import Button from '@components/Button';
 import Images from '@constants/images';
 import { StatusBar } from 'expo-status-bar';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get('window');
 
 export default function ForgotPasswordScreen() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,7 +27,7 @@ export default function ForgotPasswordScreen() {
 
   const handleResetPassword = async () => {
     if (!email) {
-      setError('Email kiritilishi shart');
+      setError(t('emailRequiredError'));
       return;
     }
 
@@ -37,7 +39,7 @@ export default function ForgotPasswordScreen() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       setSuccess(true);
     } catch (err) {
-      setError('Xatolik yuz berdi. Qaytadan urinib ko\'ring');
+      setError(t('resetError'));
     } finally {
       setLoading(false);
     }
@@ -60,17 +62,17 @@ export default function ForgotPasswordScreen() {
         {/* Text Section */}
         <View style={styles.textSection}>
           <Text variant="heading2" style={styles.title}>
-            Parolni tiklash
+            {t('forgotPasswordTitle')}
           </Text>
           <Text variant="body" style={styles.subtitle}>
-            Email manzilingizni kiriting. Biz sizga parolni tiklash bo'yicha ko'rsatmalarni yuboramiz.
+            {t('forgotPasswordSubtitle')}
           </Text>
         </View>
 
         {/* Image Section */}
         <View style={styles.imageContainer}>
           <Image
-            source={Images.penguin.poses.holdingPencil}
+            source={Images.penguin.poses.holdingPencilPink}
             style={styles.welcomeImage}
             resizeMode="contain"
           />
@@ -81,7 +83,7 @@ export default function ForgotPasswordScreen() {
           {success ? (
             <>
               <Text style={styles.successText}>
-                Parolni tiklash bo'yicha ko'rsatmalar emailingizga yuborildi
+                {t('resetSuccessMessage')}
               </Text>
               <Button
                 variant="primary"
@@ -89,13 +91,13 @@ export default function ForgotPasswordScreen() {
                 style={styles.button}
                 onPress={handleBackToLogin}
               >
-                Loginga qaytish
+                {t('backToLoginButton')}
               </Button>
             </>
           ) : (
             <>
               <Input
-                placeholder="Email manzilingiz"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -113,7 +115,7 @@ export default function ForgotPasswordScreen() {
                 onPress={handleResetPassword}
                 loading={loading}
               >
-                Parolni tiklash
+                {t('resetPasswordButton')}
               </Button>
 
               <Button
@@ -122,7 +124,7 @@ export default function ForgotPasswordScreen() {
                 style={styles.button}
                 onPress={handleBackToLogin}
               >
-                Ortga qaytish
+                {t('backToLoginButton')}
               </Button>
             </>
           )}

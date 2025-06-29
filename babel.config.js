@@ -31,12 +31,6 @@ module.exports = function (api) {
             '@images': './src/constants/images',
             '@fonts': './src/constants/fonts',
             '@icons': './src/constants/icons',
-            '@images': './src/constants/images',
-            '@fonts': './src/constants/fonts',
-            '@icons': './src/constants/icons',
-            '@utils': './src/utils',
-            '@hooks': './src/hooks',
-            '@constants': './src/constants',
             '@providers': './src/providers'
           },
         },

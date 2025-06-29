@@ -10,12 +10,13 @@ import {
   Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
-import Text from '@components/Text';
-import Input from '@components/Input';
-import Button from '@components/Button';
-import Images from '@constants/images';
+import Text from '../../components/Text';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import Images from '../../constants/images';
 import { StatusBar } from 'expo-status-bar';
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
+import i18n from '../../../i18n';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,12 +31,12 @@ export default function SignupScreen() {
 
   const handleSignup = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      setError('Barcha maydonlar to\'ldirilishi shart');
+      setError(i18n.t('allFieldsRequired'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Parollar mos kelmadi');
+      setError(i18n.t('passwordsDontMatch'));
       return;
     }
 
@@ -43,10 +44,15 @@ export default function SignupScreen() {
     setError('');
 
     try {
-      await signup(name, email, password);
-      router.replace('./'); // Replace with your main app route
+      const result = await signup(name, email, password);
+      if (result.success) {
+        // The AuthProvider will handle the navigation to onboarding
+        // based on the needsOnboarding flag
+      } else {
+        setError(result.error || i18n.t('signupError'));
+      }
     } catch (err) {
-      setError('Ro\'yxatdan o\'tishda xatolik yuz berdi');
+      setError(i18n.t('signupError'));
     } finally {
       setLoading(false);
     }
@@ -68,18 +74,15 @@ export default function SignupScreen() {
       >
         {/* Text Section */}
         <View style={styles.textSection}>
-          <Text variant="heading2" style={styles.title}>
-            Yangi sarguzashtga tayyormisiz?
-          </Text>
-          <Text variant="body" style={styles.subtitle}>
-            Ilmchada o'z hisobingizni yarating
-          </Text>
+        <Text variant="heading2" style={styles.title}>
+          {i18n.t('signupTitle')}
+        </Text>
         </View>
 
         {/* Image Section */}
         <View style={styles.imageSection}>
           <Image
-            source={Images.penguin.poses.registering}
+            source={Images.penguin.poses.withLaptopGreen}
             style={styles.welcomeImage}
             resizeMode="contain"
           />
@@ -88,14 +91,14 @@ export default function SignupScreen() {
         {/* Form Section */}
         <View style={styles.formSection}>
           <Input
-            placeholder="Ismingiz"
+            placeholder={i18n.t('namePlaceholder')}
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
             error={error}
           />
           <Input
-            placeholder="Email"
+            placeholder={i18n.t('emailPlaceholder')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -103,28 +106,28 @@ export default function SignupScreen() {
             error={error}
           />
           <Input
-            placeholder="Parol"
+            placeholder={i18n.t('passwordPlaceholder')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             error={error}
           />
           <Input
-            placeholder="Parolni tasdiqlang"
+            placeholder={i18n.t('confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
             error={error}
           />
-          
+
           <Button
-            variant="primary"
+            variant="secondary"
             size="large"
             style={styles.signupButton}
             onPress={handleSignup}
             loading={loading}
           >
-            Ro'yxatdan o'tish
+            {i18n.t('signupButton')}
           </Button>
 
           <Pressable
@@ -132,7 +135,7 @@ export default function SignupScreen() {
             onPress={handleLogin}
           >
             <Text style={styles.loginLinkText}>
-              Akkauntingiz bormi? Kiring
+              {i18n.t('haveAccount')}
             </Text>
           </Pressable>
         </View>
@@ -154,31 +157,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 20,
   },
   imageSection: {
-    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   formSection: {
     width: '100%',
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 60,
   },
   welcomeImage: {
-    width: width * 0.8,
-    height: height * 0.3,
+    width: width * 0.6,
+    height: height * 0.2,
     marginBottom: 24,
   },
   title: {
-    color: 'white',
+    color: '#1d99ed',
     textAlign: 'center',
-  },
-  subtitle: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
-    maxWidth: '80%',
   },
   signupButton: {
     marginTop: 24,
@@ -188,6 +185,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginLinkText: {
+    width: '80%',
     color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
   },
 }); 
