@@ -8,16 +8,16 @@ import { ImageSource } from "../types/common";
 import { BackgroundImages } from "@constants/images/images";
 
 interface IslandProps extends PressableProps {
-  title: string;
-  subtitle?: string;
+  titleKey: string;
+  subtitleKey?: string;
   size?: "small" | "medium" | "large";
   status?: "locked" | "unlocked" | "completed";
   imageSource?: ImageSource; // Optional: Add image source prop if needed
 }
 
 export const Island: React.FC<IslandProps> = ({
-  title,
-  subtitle,
+  titleKey,
+  subtitleKey,
   size = "medium",
   status = "locked",
   imageSource = BackgroundImages.islands.numeriya, // Default image
@@ -52,7 +52,7 @@ export const Island: React.FC<IslandProps> = ({
         statusStyles[status],
         props.disabled && styles.disabled,
       ]}
-      testID={`island-${title.replace(/\s+/g, "-").toLowerCase()}`}
+      testID={`island-${titleKey}`}
       {...props}
     >
       <Image
@@ -64,14 +64,14 @@ export const Island: React.FC<IslandProps> = ({
         variant="heading3"
         style={[styles.title, status === "locked" && styles.lockedText]}
       >
-        {t(title)}
+        {t(titleKey)}
       </Text>
-      {subtitle && (
+      {subtitleKey && (
         <Text
           variant="caption"
           style={[styles.subtitle, status === "locked" && styles.lockedText]}
         >
-          {t(subtitle)}
+          {t(subtitleKey)}
         </Text>
       )}
     </Pressable>

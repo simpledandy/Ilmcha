@@ -1,22 +1,15 @@
-const React = require("react");
+import React from 'react';
 
-const chain = {
-  onUpdate: () => chain,
-  onEnd: () => chain,
-  onStart: () => chain,
-  minPointers: () => chain,
-  maxPointers: () => chain,
-  enabled: () => chain,
-  simultaneousWithExternalGesture: () => chain,
-  requireExternalGestureToFail: () => chain,
+const gestureHandler = {
+  onGestureEvent: () => {},
+  onHandlerStateChange: () => {},
 };
 
-module.exports = {
-  GestureDetector: ({ children }) =>
-    React.createElement("View", null, children),
-  Gesture: {
-    Pinch: () => chain,
-    Pan: () => chain,
-    Simultaneous: () => chain,
-  },
+export const PanGestureHandler = ({ children }) => <>{children}</>;
+export const State = {};
+export const Gesture = {
+  Pan: () => gestureHandler,
+  Fling: () => gestureHandler,
+  Tap: () => gestureHandler,
 };
+export const GestureDetector = ({ children }) => <>{children}</>;

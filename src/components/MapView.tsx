@@ -112,8 +112,8 @@ export const MapView = () => {
           {islands.map((island) => (
             <Island
               key={island.id}
-              title={island.title}
-              subtitle={island.subtitle}
+              titleKey={island.titleKey}
+              subtitleKey={island.subtitleKey}
               size={island.size}
               status={island.status}
               onPress={

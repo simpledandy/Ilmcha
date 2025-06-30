@@ -14,8 +14,8 @@ const MAP_HEIGHT = TILE_HEIGHT * (TILE_SPREAD * 2 + 1);
 
 export interface IslandData {
   id: string;
-  title: string;
-  subtitle: string;
+  titleKey: string;
+  subtitleKey: string;
   x: number;
   y: number;
   size: "small" | "medium" | "large";
@@ -26,8 +26,8 @@ export interface IslandData {
 export const islands: IslandData[] = [
   {
     id: "numbers",
-    title: "islandNumbersTitle",
-    subtitle: "islandNumbersSubtitle",
+    titleKey: "islandNumbersTitle",
+    subtitleKey: "islandNumbersSubtitle",
     x: MAP_WIDTH * 0.25,
     y: MAP_HEIGHT * 0.4,
     size: "large",
@@ -36,8 +36,8 @@ export const islands: IslandData[] = [
   },
   {
     id: "alphabet",
-    title: "islandAlphabetTitle",
-    subtitle: "islandAlphabetSubtitle",
+    titleKey: "islandAlphabetTitle",
+    subtitleKey: "islandAlphabetSubtitle",
     x: MAP_WIDTH * 0.3,
     y: MAP_HEIGHT * 0.2,
     size: "large",
@@ -45,19 +45,9 @@ export const islands: IslandData[] = [
     imageSource: BackgroundImages.islands.alibo,
   },
   {
-    id: "basics",
-    title: "islandBasicsTitle",
-    subtitle: "islandBasicsSubtitle",
-    x: MAP_WIDTH * 0.7,
-    y: MAP_HEIGHT * 0.3,
-    size: "large",
-    status: "locked",
-    imageSource: BackgroundImages.islands.blank,
-  },
-  {
     id: "colors",
-    title: "islandColorsTitle",
-    subtitle: "islandColorsSubtitle",
+    titleKey: "islandColorsTitle",
+    subtitleKey: "islandColorsSubtitle",
     x: MAP_WIDTH * 0.3,
     y: MAP_HEIGHT * 0.6,
     size: "large",
@@ -66,40 +56,10 @@ export const islands: IslandData[] = [
   },
   {
     id: "shapes",
-    title: "islandShapesTitle",
-    subtitle: "islandShapesSubtitle",
+    titleKey: "islandShapesTitle",
+    subtitleKey: "islandShapesSubtitle",
     x: MAP_WIDTH * 0.6,
     y: MAP_HEIGHT * 0.7,
-    size: "large",
-    status: "locked",
-    imageSource: BackgroundImages.islands.blank,
-  },
-  {
-    id: "family",
-    title: "islandFamilyTitle",
-    subtitle: "islandFamilySubtitle",
-    x: MAP_WIDTH * 0.1,
-    y: MAP_HEIGHT * 0.5,
-    size: "medium",
-    status: "locked",
-    imageSource: BackgroundImages.islands.blank,
-  },
-  {
-    id: "food",
-    title: "islandFoodTitle",
-    subtitle: "islandFoodSubtitle",
-    x: MAP_WIDTH * 0.8,
-    y: MAP_HEIGHT * 0.6,
-    size: "medium",
-    status: "locked",
-    imageSource: BackgroundImages.islands.blank,
-  },
-  {
-    id: "conversation",
-    title: "islandConversationTitle",
-    subtitle: "islandConversationSubtitle",
-    x: MAP_WIDTH * 0.5,
-    y: MAP_HEIGHT * 0.8,
     size: "large",
     status: "locked",
     imageSource: BackgroundImages.islands.blank,

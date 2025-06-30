@@ -61,6 +61,10 @@ import castleNode from "@assets/images/backgrounds/islands/adventure/castle-node
 import beachNode from "@assets/images/backgrounds/islands/adventure/beach-node.png";
 import mountainNode from "@assets/images/backgrounds/islands/adventure/mountain-node.png";
 
+import pathStart from "@assets/images/path-start.png";
+import pathMiddle from "@assets/images/path-middle.png";
+import pathEnd from "@assets/images/path-end.png";
+
 export const AppIcons = {
   icon: icon,
   favicon: favicon,
@@ -137,4 +141,14 @@ export const BackgroundImages = {
       mountain: mountainNode,
     },
   },
+};
+
+export const LessonImages = {
+  countingFish: countingBg,
+};
+
+export const IslandPathImages = {
+  start: pathStart,
+  middle: pathMiddle,
+  end: pathEnd,
 };

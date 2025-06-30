@@ -4,7 +4,7 @@ import { Island } from "../Island";
 
 describe("Island", () => {
   const defaultProps = {
-    title: "Island 1",
+    titleKey: "islandTitle",
     subtitle: "Subtitle 1",
     status: "unlocked" as const,
     onPress: jest.fn(),
@@ -12,7 +12,7 @@ describe("Island", () => {
 
   it("renders without crashing", () => {
     const { getByText } = render(<Island {...defaultProps} />);
-    expect(getByText("Island 1")).toBeTruthy();
+    expect(getByText("islandTitle")).toBeTruthy();
   });
 
   it("handles onPress", () => {
@@ -20,7 +20,7 @@ describe("Island", () => {
     const { getByTestId } = render(
       <Island {...defaultProps} onPress={onPress} />,
     );
-    fireEvent.press(getByTestId("island-island-1"));
+    fireEvent.press(getByTestId("island-islandTitle"));
     expect(onPress).toHaveBeenCalled();
   });
 
@@ -28,6 +28,6 @@ describe("Island", () => {
     const { getByTestId } = render(
       <Island {...defaultProps} status={"locked"} />,
     );
-    expect(getByTestId("island-island-1")).toBeTruthy();
+    expect(getByTestId("island-islandTitle")).toBeTruthy();
   });
 });
