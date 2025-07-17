@@ -2,6 +2,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import { storage } from '../utils/storage';
+import { signIn, signUp, supabase } from '../utils/supabaseClient'; // <-- import your Supabase helpers
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -38,11 +39,9 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
 
   const checkAuth = async () => {
     try {
-      const userData = await storage.getUserData();
-      const token = await storage.getAuthToken();
-
-      if (userData && token) {
-        setUser(userData);
+      const session = supabase.auth.getSession ? (await supabase.auth.getSession()).data.session : null;
+      if (session && session.user) {
+        setUser({ email: session.user.email ?? '', needsOnboarding: false });
         setIsAuthenticated(true);
       }
     } catch (error) {
@@ -69,18 +68,16 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
   }, [isAuthenticated, user, navigationReady]);
 
   const login = async (email: string, password: string): Promise<void> => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const mockUser = { email, needsOnboarding: false };
-      const mockToken = 'mock_token_' + Date.now();
-      await storage.setUserData(mockUser);
-      await storage.setAuthToken(mockToken);
-      setUser(mockUser);
+      const { user: supaUser, error } = await signIn(email, password);
+      if (error || !supaUser) throw error || new Error('No user returned');
+      setUser({ email: supaUser.email ?? '', needsOnboarding: false });
       setIsAuthenticated(true);
-    } catch (error) {
+      // Optionally store session/token if you want
+    } catch (error: any) {
       throw {
-        message: error instanceof Error ? error.message : 'An unknown error occurred during login.',
+        message: error?.message || 'An unknown error occurred during login.',
         code: 'LOGIN_ERROR',
       } as AuthError;
     } finally {
@@ -88,23 +85,20 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
     }
   };
 
-  const signup = async (name: string, email: string, password: string): Promise<{ success: boolean; error?: AuthError }> => {
+  const signup = async (name: string, email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const mockUser = { name, email, needsOnboarding: true };
-      const mockToken = 'mock_token_' + Date.now();
-      await storage.setUserData(mockUser);
-      await storage.setAuthToken(mockToken);
-      setUser(mockUser);
+      const { user: supaUser, error } = await signUp(email, password);
+      if (error || !supaUser) throw error || new Error('No user returned');
+      setUser({ name, email: supaUser.email ?? '', needsOnboarding: true });
       setIsAuthenticated(true);
       return { success: true };
-    } catch (err) {
+    } catch (err: any) {
       const error: AuthError = {
         code: "SIGNUP_ERROR",
-        message: err.message || "An unknown error occurred",
+        message: err?.message || "An unknown error occurred",
       };
-      throw error;
+      return { success: false, error: error.message };
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +108,6 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
     try {
       if (user) {
         const updatedUser = { ...user, needsOnboarding: false };
-        await storage.setUserData(updatedUser);
         setUser(updatedUser);
         router.replace('/(app)');
       }
@@ -125,7 +118,7 @@ export function AuthProvider({ children, navigationReady }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await storage.clearAuth();
+      await supabase.auth.signOut();
       setUser(null);
       setIsAuthenticated(false);
       router.replace('/(auth)');

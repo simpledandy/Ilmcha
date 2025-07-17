@@ -17,6 +17,7 @@ import Images from '../../constants/images';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '../../hooks/useAuth'
 import i18n from '../../../i18n';
+import { createClient } from '@supabase/supabase-js';
 
 const { width, height } = Dimensions.get('window');
 
