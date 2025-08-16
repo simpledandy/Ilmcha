@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "types": [],
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@components": [
+        "./src/components/index.ts"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@assets/*": [
+        "./assets/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@constants": [
+        "./src/constants/index.ts"
+      ],
+      "@constants/*": [
+        "./src/constants/*"
+      ],
+      "@theme/*": [
+        "./src/theme/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ],
+      "@providers/*": [
+        "./src/providers/*"
+      ],
+      "@i18n": [
+        "./i18n.ts"
+      ]
+    },
+    "jsx": "react-native",
+    "esModuleInterop": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "extends": "expo/tsconfig.base"
+}
