@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '100%',
-    contentFit: 'cover',
+    resizeMode: 'cover',
   },
   headerRow: {
     flexDirection: 'row',
@@ -350,13 +350,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: width * 0.4,
-    contentFit: 'contain',
+    resizeMode: 'contain',
   },
   cloudRight: {
     position: 'absolute',
     bottom: 0,
     right: 0,
     width: width * 0.4,
-    contentFit: 'contain',
+    resizeMode: 'contain',
   },
 });

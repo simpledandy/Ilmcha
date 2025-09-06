@@ -1,6 +1,8 @@
 // src/hooks/useProgress.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { getIslandTopics } from "@/src/utils/islands";
+import { IslandId } from "../types/common";
 
 type Progress = {
   unlockedTopics: string[];
@@ -8,7 +10,7 @@ type Progress = {
 
 const STORAGE_KEY = "progress";
 
-export function useProgress(islandId: string) {
+export function useProgress(islandId: IslandId) {
   const [progress, setProgress] = useState<Progress>({ unlockedTopics: [] });
 
   useEffect(() => {
@@ -18,11 +20,19 @@ export function useProgress(islandId: string) {
       const raw = await AsyncStorage.getItem(`${STORAGE_KEY}:${islandId}`);
       if (!mounted) return;
 
+      const topics = getIslandTopics(islandId);
+      const firstTopic = topics[0];
+
       if (raw) {
-        setProgress(JSON.parse(raw));
+        const parsed = JSON.parse(raw) as Progress;
+        // Always guarantee first topic is unlocked
+        const ensured = {
+          unlockedTopics: [...new Set([firstTopic, ...parsed.unlockedTopics])],
+        };
+        setProgress(ensured);
       } else {
-        // First time visiting → ensure first topic unlocked
-        setProgress({ unlockedTopics: [] });
+        // First time visiting → unlock first topic by default
+        setProgress({ unlockedTopics: [firstTopic] });
       }
     })();
 

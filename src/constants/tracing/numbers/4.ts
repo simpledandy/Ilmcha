@@ -4,8 +4,8 @@ export const four: Segment[] = [
   // Diagonal
   {
     points: [
+      { x: 0.55, y: 0.2 },
       { x: 0.25, y: 0.7 },
-      { x: 0.55, y: 0.2 }
     ],
     isCritical: true
   },

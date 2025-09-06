@@ -7,9 +7,10 @@ import { Intro, Tracing, Arranging, CelebrationOverlay } from '@components';
 import { ParticleShape } from '@components/CelebrationOverlay';
 import { useProgress } from '@/src/hooks/useProgress';
 import { getNextTopic } from '@/src/utils/islands';
+import { IslandId } from '@/src/types/common';
 
 export default function AdventureScreen() {
-  const { island, topic } = useLocalSearchParams<{ island: string; topic: string }>();
+  const { island, topic } = useLocalSearchParams<{ island: IslandId; topic: string }>();
   const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const [celebrating, setCelebrating] = useState(false);
@@ -31,10 +32,11 @@ export default function AdventureScreen() {
       const next = getNextTopic(island, topic);
       if (next) {
         await unlockTopic(next);
-        router.replace({
-          pathname: '../island/adventure',
+        /*router.replace({
+          pathname: '../island/',
           params: { island, topic: next },
-        });
+        });*/
+        router.back(); // Go back to island screen
       } else {
         // No next → return to island map
         router.replace({ pathname: '../island', params: { island } });

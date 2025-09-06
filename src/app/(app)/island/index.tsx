@@ -4,7 +4,7 @@ import { useProgress } from "@/src/hooks/useProgress";
 import { AppImage } from "@components";
 import { colors } from "@theme/colors";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -15,18 +15,49 @@ import Animated, {
 } from "react-native-reanimated";
 import { Adventure } from "@/src/components/Adventure";
 import { getIslandTopics, getCurrentTopic } from "@/src/utils/islands";
+import { IslandId } from "@/src/types/common";
+import { CelebrationOverlay, ParticleShape } from "@components/CelebrationOverlay";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const ADV_HEIGHT = SCREEN_HEIGHT * 0.5;
 
 export default function Island() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams<{ id: IslandId }>();
   const router = useRouter();
   const scrollY = useSharedValue(0);
   const { progress } = useProgress(id);
 
-  const topics = getIslandTopics(id as keyof typeof BackgroundImages['islands']);
+  const topics = getIslandTopics(id as keyof typeof BackgroundImages["islands"]);
   const lastUnlocked = getCurrentTopic(id, progress.unlockedTopics);
+
+  const listRef = useRef<Animated.FlatList<string>>(null);
+
+  // 🔑 Local state to trigger overlay
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [newlyUnlocked, setNewlyUnlocked] = useState<string | null>(null);
+
+  // detect when a new topic was unlocked
+  useEffect(() => {
+    if (!lastUnlocked) return;
+
+    // Only animate if it's the *latest addition* in progress
+    if (progress.unlockedTopics.length > 1) {
+      const justUnlocked = progress.unlockedTopics[progress.unlockedTopics.length - 1];
+      if (justUnlocked === lastUnlocked) {
+        setNewlyUnlocked(justUnlocked);
+        setShowCelebration(true);
+      }
+    }
+
+    // scroll near the unlocked topic
+    const index = topics.findIndex((t) => t === lastUnlocked);
+    if (index !== -1) {
+      listRef.current?.scrollToIndex({
+        index: Math.max(0, index - 1),
+        animated: false,
+      });
+    }
+  }, [lastUnlocked, progress.unlockedTopics, topics]);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -48,10 +79,7 @@ export default function Island() {
         Extrapolate.CLAMP
       );
       return {
-        transform: [
-          { translateY: scrollY.value }, // 👈 move with list
-          { scale },
-        ],
+        transform: [{ translateY: scrollY.value }, { scale }],
       };
     });
 
@@ -65,8 +93,8 @@ export default function Island() {
       <Animated.View
         pointerEvents="none"
         style={[
-          StyleSheet.absoluteFill,   // full screen box
-          { zIndex: 0, bottom: 0 },  // anchor to bottom edge
+          StyleSheet.absoluteFill,
+          { zIndex: 0, bottom: 0 },
           bgStyle,
         ]}
       >
@@ -76,14 +104,13 @@ export default function Island() {
             source={img}
             style={[
               styles.pathImage,
-              { position: "absolute", bottom: idx * pathMiddleHeight }, // 👈 stack upward from bottom
+              { position: "absolute", bottom: idx * pathMiddleHeight },
             ]}
           />
         ))}
       </Animated.View>
     );
   };
-
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background.primary }}>
@@ -92,11 +119,12 @@ export default function Island() {
 
       {/* Foreground adventures */}
       <Animated.FlatList
+        ref={listRef}
         data={topics}
         keyExtractor={(topic) => topic}
         inverted
         renderItem={({ item: topic, index }) => {
-          const unlocked = progress.unlockedTopics.includes(topic) || index === 0;
+          const unlocked = progress.unlockedTopics.includes(topic);
           const highlighted = lastUnlocked === topic;
 
           return (
@@ -127,6 +155,17 @@ export default function Island() {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       />
+
+      {/* Celebration when a new lesson is unlocked */}
+      {showCelebration && (
+        <CelebrationOverlay
+          shape={"star" as ParticleShape}
+          onFinish={() => {
+            setShowCelebration(false);
+            setNewlyUnlocked(null);
+          }}
+        />
+      )}
     </View>
   );
 }

@@ -17,7 +17,7 @@ const COLORS = {
   currentGuide: '#FFD166',
   completedPalette: ['#06D6A0', '#e4ff6bff', '#8E44AD', '#2ECC71', '#E67E22'],
   userPath: '#118AB2',
-  startDot: '#EF476F',
+  startDot: '#ff8808ff',
   background: '#FAFAFF',
 };
 
@@ -66,16 +66,16 @@ export const Tracing: React.FC<AdventureProps> = ({ islandId, topic, onComplete 
             />
           ))}
 
-          <StartDot
-            position={startDotPos}
-            scale={startDotScale as unknown as number}
-            color={COLORS.startDot}
-          />
-
           <UserPath
             path={userPath}
             color={COLORS.userPath}
             opacity={pathOpacity as unknown as number}
+          />
+
+          <StartDot
+            position={startDotPos}
+            scale={(startDotScale as any)._value ?? 1}
+            color={COLORS.startDot}
           />
         </Svg>
       </View>

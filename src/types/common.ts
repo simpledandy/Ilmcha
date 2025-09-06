@@ -28,3 +28,4 @@ export type AdventureProps = {
   topic: string;
   onComplete?: () => void;
 }
+export type IslandId = "numbers" | "letters" | "shapes";

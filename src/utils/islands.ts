@@ -23,7 +23,7 @@ export function getTopicImage(islandId: keyof typeof BackgroundImages['islands']
 export function getCurrentTopic(islandId: string, unlockedTopics: string[]): string | undefined {
   const topics = getIslandTopics(islandId);
   const unlockedInOrder = topics.filter((t) => unlockedTopics.includes(t));
-  return unlockedInOrder[unlockedInOrder.length - 1] || topics[0];
+  return unlockedInOrder[unlockedInOrder.length - 1];
 }
 
 /**
